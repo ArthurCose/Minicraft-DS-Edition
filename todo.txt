@@ -1,0 +1,16 @@
+dynamically choose how many times to call tick
+  cap this value
+
+crafting
+furniture entities
+
+pause
+adjust spawn location logic
+drop button (add to instructions as well)
+
+
+multiplayer!
+respawning/beds
+
+try hardware rendering
+figure out what should go on the bottom screen

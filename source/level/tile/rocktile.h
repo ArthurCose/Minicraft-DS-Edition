@@ -1,0 +1,16 @@
+#pragma once
+
+#include "tile.h"
+
+class RockTile : public Tile
+{
+public:
+  RockTile(int id);
+
+  void tick(Level &level, int xt, int yt) override;
+  void render(Screen &screen, Level &level, int x, int y) override;
+  bool mayPass(Level &level, int x, int y, Entity &e) override;
+  bool interact(Level &level, int xt, int yt, Player &player, Item &item, int attackDir) override;
+  void hurt(Level &level, int x, int y, Mob &source, int dmg, int attackDir) override;
+  void hurt(Level &level, int x, int y, int dmg);
+};
