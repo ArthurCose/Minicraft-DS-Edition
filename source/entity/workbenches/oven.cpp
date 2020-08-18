@@ -22,3 +22,8 @@ bool Oven::use(Game &game, Level &level, Player &player, int attackDir)
   game.setMenu(std::make_unique<CraftingMenu>(ovenRecipes, player));
   return true;
 }
+
+std::shared_ptr<Furniture> Oven::clone()
+{
+  return std::make_shared<Oven>();
+}

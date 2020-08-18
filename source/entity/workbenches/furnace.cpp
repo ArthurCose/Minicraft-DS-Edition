@@ -23,3 +23,8 @@ bool Furnace::use(Game &game, Level &level, Player &player, int attackDir)
   game.setMenu(std::make_unique<CraftingMenu>(furnaceRecipes, player));
   return true;
 }
+
+std::shared_ptr<Furniture> Furnace::clone()
+{
+  return std::make_shared<Furnace>();
+}

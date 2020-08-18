@@ -37,3 +37,8 @@ bool Anvil::use(Game &game, Level &level, Player &player, int attackDir)
   game.setMenu(std::make_unique<CraftingMenu>(anvilRecipes, player));
   return true;
 }
+
+std::shared_ptr<Furniture> Anvil::clone()
+{
+  return std::make_shared<Anvil>();
+}
