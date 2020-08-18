@@ -1,8 +1,8 @@
 #include "slime.h"
 
-#include "../level/level.h"
-#include "../gfx/screen.h"
-#include "../gfx/color.h"
+#include "../../level/level.h"
+#include "../../gfx/screen.h"
+#include "../../gfx/color.h"
 
 Slime::Slime(int lvl)
 {

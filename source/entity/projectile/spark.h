@@ -1,8 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "mob.h"
-#include "entity.h"
+#include "../entity.h"
 
 class Spark : public Entity
 {

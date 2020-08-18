@@ -1,9 +1,9 @@
 #include "spark.h"
 
 #include <memory>
-#include "../level/level.h"
-#include "../gfx/screen.h"
-#include "../gfx/color.h"
+#include "../../level/level.h"
+#include "../../gfx/screen.h"
+#include "../../gfx/color.h"
 
 Spark::Spark(std::shared_ptr<Entity> owner, double xa, double ya)
     : owner_weak(owner)

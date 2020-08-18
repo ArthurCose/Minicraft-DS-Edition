@@ -1,8 +1,8 @@
 #include "zombie.h"
 
-#include "../level/level.h"
-#include "../gfx/screen.h"
-#include "../gfx/color.h"
+#include "../../level/level.h"
+#include "../../gfx/screen.h"
+#include "../../gfx/color.h"
 
 Zombie::Zombie(int lvl)
 {

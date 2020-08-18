@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mob.h"
+#include "../mob.h"
 
 class AirWizard : public Mob
 {

@@ -5,9 +5,9 @@
 #include "levelgen/underground.h"
 #include "levelgen/sky.h"
 #include "tile/tile.h"
-#include "../entity/airwizard.h"
-#include "../entity/slime.h"
-#include "../entity/zombie.h"
+#include "../entity/hostile/airwizard.h"
+#include "../entity/hostile/slime.h"
+#include "../entity/hostile/zombie.h"
 
 Level::Level(int w, int h, int depth, Level &parentLevel)
     : Level(w, h, depth)

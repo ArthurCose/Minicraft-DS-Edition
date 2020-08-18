@@ -1,6 +1,6 @@
 #include "infinitefalltile.h"
 
-#include "../../entity/airwizard.h"
+#include "../../entity/hostile/airwizard.h"
 
 InfiniteFallTile::InfiniteFallTile(int id) : Tile(id) {}
 

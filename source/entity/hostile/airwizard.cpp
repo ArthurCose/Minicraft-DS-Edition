@@ -1,8 +1,8 @@
 #include "airwizard.h"
 
-#include "spark.h"
-#include "../sound/sound.h"
-#include "../level/level.h"
+#include "../projectile/spark.h"
+#include "../../sound/sound.h"
+#include "../../level/level.h"
 
 AirWizard::AirWizard()
 {

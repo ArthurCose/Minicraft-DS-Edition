@@ -1,22 +1,22 @@
 #pragma once
 
-#include "mob.h"
+#include "../mob.h"
 
-class Slime : public Mob
+class Zombie : public Mob
 {
 private:
   int xa = 0;
   int ya = 0;
-  int jumpTime = 0;
   int lvl;
+  int randomWalkTime = 0;
 
 public:
-  Slime(int lvl);
+  Zombie(int lvl);
 
   void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
   void render(Screen &screen) override;
-  void touchedBy(Level &level, Entity &entity) override;
+  void touchedBy(Level &level, Entity &entity);
 
 protected:
-  void die(Game &game, Level &level) override;
+  void die(Game &game, Level &level);
 };

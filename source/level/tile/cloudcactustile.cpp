@@ -3,7 +3,7 @@
 #include "../../gfx/color.h"
 #include "../../item/resourceitem.h"
 #include "../../item/toolitem.h"
-#include "../../entity/airwizard.h"
+#include "../../entity/hostile/airwizard.h"
 #include "../../entity/itementity.h"
 #include "../../entity/particle/smashparticle.h"
 #include "../../entity/particle/textparticle.h"
