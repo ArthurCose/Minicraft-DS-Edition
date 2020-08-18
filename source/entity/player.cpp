@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include <memory>
+#include <functional>
 #include <nds.h>
 #include "../level/level.h"
 #include "../item/furnitureitem.h"
@@ -417,31 +418,49 @@ bool Player::findStartPos(Level &level)
     int x, y;
   };
 
-  std::vector<Position> spawnablePositions;
-  spawnablePositions.reserve(100);
-
-  for (int y = 0; y < level.h; y++)
-  {
-    for (int x = 0; x < level.w; x++)
-    {
-      if (level.getTile(x, y) == Tile::grass)
-      {
-        spawnablePositions.push_back({x, y});
-      }
-    }
-  }
-
   Position spawn;
 
-  if (spawnablePositions.size() > 0)
+  auto findAcceptablePos = [&](std::function<bool(Tile *)> acceptableStart) {
+    std::vector<Position> spawnablePositions;
+    spawnablePositions.reserve(100);
+
+    for (int y = 0; y < level.h; y++)
+    {
+      for (int x = 0; x < level.w; x++)
+      {
+        if (acceptableStart(level.getTile(x, y)))
+        {
+          spawnablePositions.push_back({x, y});
+        }
+      }
+    }
+
+    if (spawnablePositions.size() > 0)
+    {
+      int index = random.nextInt(spawnablePositions.size());
+      spawn = spawnablePositions[index];
+      return true;
+    }
+
+    return false;
+  };
+
+  // attempt to start on a grass tile
+  bool foundAcceptableStart = findAcceptablePos([](Tile *tile) { return tile == Tile::grass; });
+
+  if (!foundAcceptableStart)
   {
-    int index = random.nextInt(spawnablePositions.size());
-    spawn = spawnablePositions[index];
+    // accept any walkable space
+    foundAcceptableStart = findAcceptablePos([&](Tile *tile) {
+      return tile != Tile::water &&
+             tile != Tile::lava &&
+             tile->mayPass(level, x, y, *this);
+    });
   }
-  else
+
+  if (!foundAcceptableStart)
   {
-    // no spawnable positions, spawn anywhere
-    // todo: ->mayPass(*this) check?
+    // accept anything
     spawn.x = random.nextInt(level.w);
     spawn.y = random.nextInt(level.h);
   }
