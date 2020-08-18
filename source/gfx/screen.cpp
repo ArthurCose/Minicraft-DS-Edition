@@ -95,7 +95,7 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
       else if (x == x1)
         renderTile(x * 8, y * 8, 2 + 13 * 32, borderColor, 1);
       else
-        renderTile(x * 8, y * 8, 2 + 13 * 32, backgroundColor, 1);
+        renderTile(x * 8, y * 8, 0, backgroundColor, 1);
     }
   }
 
