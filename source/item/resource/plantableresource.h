@@ -14,5 +14,5 @@ private:
 public:
   PlantableResource(std::string name, int sprite, int color, unsigned char targetTile, std::vector<unsigned char> sourceTiles);
 
-  bool interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) override;
+  bool interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) const override;
 };

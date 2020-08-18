@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "../menu/listitem.h"
 
 class Screen;
@@ -30,7 +31,9 @@ public:
 
   virtual int getAttackDamageBonus(Entity &e) { return 0; }
 
-  virtual std::string getName() { return ""; }
+  virtual std::string getName() { return "ERROR"; }
 
   virtual bool matches(Item &item) { return item.getName() == getName(); }
+
+  virtual std::shared_ptr<Item> clone() { return std::make_shared<Item>(); }
 };

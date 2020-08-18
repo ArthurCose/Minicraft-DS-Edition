@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "entity.h"
 #include "player.h"
 
@@ -17,6 +18,7 @@ public:
   void render(Screen &screen) override;
   bool blocks(Entity &e) override;
   void take(Player &player);
+  virtual std::shared_ptr<Furniture> clone();
 
 protected:
   void touchedBy(Level &level, Entity &entity) override;

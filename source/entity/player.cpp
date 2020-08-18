@@ -393,10 +393,10 @@ void Player::render(Screen &screen)
 
   if (furnitureItem)
   {
-    Furniture furniture = furnitureItem->furniture;
-    furniture.x = x;
-    furniture.y = yo;
-    furniture.render(screen);
+    auto furniture = furnitureItem->furniture;
+    furniture->x = x;
+    furniture->y = yo;
+    furniture->render(screen);
   }
 }
 
@@ -486,7 +486,7 @@ int Player::getLightRadius()
   {
     if (auto furnitureItem = std::dynamic_pointer_cast<FurnitureItem>(activeItem))
     {
-      int rr = furnitureItem->furniture.getLightRadius();
+      int rr = furnitureItem->furniture->getLightRadius();
       if (rr > r)
         r = rr;
     }

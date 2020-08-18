@@ -1,11 +1,11 @@
 #include "resourceitem.h"
 
-ResourceItem::ResourceItem(Resource resource)
+ResourceItem::ResourceItem(const Resource *resource)
     : resource(resource)
 {
 }
 
-ResourceItem::ResourceItem(Resource resource, int count)
+ResourceItem::ResourceItem(const Resource *resource, int count)
     : resource(resource)
 {
   this->count = count;
@@ -13,23 +13,23 @@ ResourceItem::ResourceItem(Resource resource, int count)
 
 int ResourceItem::getColor()
 {
-  return resource.color;
+  return resource->color;
 }
 
 int ResourceItem::getSprite()
 {
-  return resource.sprite;
+  return resource->sprite;
 }
 
 void ResourceItem::renderIcon(Screen &screen, int x, int y)
 {
-  screen.renderTile(x, y, resource.sprite, resource.color, 0);
+  screen.renderTile(x, y, resource->sprite, resource->color, 0);
 }
 
 void ResourceItem::renderInventory(Screen &screen, int x, int y)
 {
-  screen.renderTile(x, y, resource.sprite, resource.color, 0);
-  screen.renderText(resource.name, x + 32, y, Color::get(-1, 555, 555, 555));
+  screen.renderTile(x, y, resource->sprite, resource->color, 0);
+  screen.renderText(resource->name, x + 32, y, Color::get(-1, 555, 555, 555));
 
   int cc = count;
   if (cc > 999)
@@ -40,12 +40,12 @@ void ResourceItem::renderInventory(Screen &screen, int x, int y)
 
 std::string ResourceItem::getName()
 {
-  return resource.name;
+  return resource->name;
 }
 
 bool ResourceItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir)
 {
-  if (resource.interactOn(tile, level, xt, yt, player, attackDir))
+  if (resource->interactOn(tile, level, xt, yt, player, attackDir))
   {
     count--;
     return true;

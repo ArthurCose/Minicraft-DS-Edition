@@ -8,11 +8,11 @@
 class ResourceItem : public Item
 {
 public:
-  Resource resource;
+  const Resource *resource;
   int count = 1;
 
-  ResourceItem(Resource resource);
-  ResourceItem(Resource resource, int count);
+  ResourceItem(const Resource *resource);
+  ResourceItem(const Resource *resource, int count);
 
   int getColor() override;
   int getSprite() override;

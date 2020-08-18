@@ -7,15 +7,15 @@
 #include "../../entity/particle/textparticle.h"
 #include "../../gfx/screen.h"
 
-OreTile::OreTile(int id, Resource toDrop)
+OreTile::OreTile(int id, const Resource *toDrop)
     : Tile(id), toDrop(toDrop)
 {
-  this->color = toDrop.color & 0xffff00;
+  this->color = toDrop->color & 0xffff00;
 }
 
 void OreTile::render(Screen &screen, Level &level, int x, int y)
 {
-  color = (toDrop.color & 0xffffff00) + Color::get(level.dirtColor);
+  color = (toDrop->color & 0xffffff00) + Color::get(level.dirtColor);
   screen.renderTile(x * 16 + 0, y * 16 + 0, 17 + 1 * 32, color, 0);
   screen.renderTile(x * 16 + 8, y * 16 + 0, 18 + 1 * 32, color, 0);
   screen.renderTile(x * 16 + 0, y * 16 + 8, 17 + 2 * 32, color, 0);

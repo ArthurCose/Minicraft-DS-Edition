@@ -8,7 +8,7 @@ PlantableResource::PlantableResource(std::string name, int sprite, int color, un
   this->sourceTiles = sourceTiles;
 }
 
-bool PlantableResource::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir)
+bool PlantableResource::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) const
 {
   for (auto sourceTile : sourceTiles)
   {

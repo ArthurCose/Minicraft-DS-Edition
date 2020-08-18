@@ -12,12 +12,6 @@ Furniture::Furniture(std::string name)
   yr = 3;
 }
 
-Furniture::Furniture(Furniture &f)
-    : Furniture(f.name)
-{
-  Entity::copy((Entity &)f);
-}
-
 void Furniture::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
 {
   if (pushDir == 0)
@@ -52,7 +46,7 @@ void Furniture::take(Player &player)
   {
     remove();
     player.inventory.add(0, player.activeItem);
-    player.activeItem = std::make_shared<FurnitureItem>(*this);
+    player.activeItem = std::make_shared<FurnitureItem>(clone());
   }
 }
 
@@ -66,3 +60,12 @@ void Furniture::touchedBy(Level &level, Entity &entity)
     pushTime = 10;
   }
 }
+
+std::shared_ptr<Furniture> Furniture::clone()
+{
+  auto furniture = std::make_shared<Furniture>(name);
+  furniture->col = col;
+  furniture->sprite = sprite;
+
+  return furniture;
+};

@@ -28,13 +28,13 @@ void Inventory::add(int slot, std::shared_ptr<Item> item)
   }
 }
 
-std::shared_ptr<ResourceItem> Inventory::findResource(Resource &resource)
+std::shared_ptr<ResourceItem> Inventory::findResource(const Resource *resource)
 {
   for (auto item : items)
   {
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(item))
     {
-      if (resourceItem->resource.name == resource.name)
+      if (resourceItem->resource->name == resource->name)
         return resourceItem;
     }
   }
@@ -42,7 +42,7 @@ std::shared_ptr<ResourceItem> Inventory::findResource(Resource &resource)
   return NULL;
 }
 
-bool Inventory::hasResources(Resource &r, int count)
+bool Inventory::hasResources(const Resource *r, int count)
 {
   auto ri = findResource(r);
   if (ri == NULL)
@@ -50,7 +50,7 @@ bool Inventory::hasResources(Resource &r, int count)
   return ri->count >= count;
 }
 
-bool Inventory::removeResource(Resource &r, int count)
+bool Inventory::removeResource(const Resource *r, int count)
 {
   auto ri = findResource(r);
 
