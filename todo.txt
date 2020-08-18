@@ -1,11 +1,9 @@
 dynamically choose how many times to call tick
   cap this value
 
-crafting
-furniture entities
+separate attack and use with items
 
 pause
-adjust spawn location logic
 drop button (add to instructions as well)
 
 
