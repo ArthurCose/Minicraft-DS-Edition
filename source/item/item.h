@@ -13,9 +13,11 @@ class ItemEntity;
 class Item : public ListItem
 {
 public:
-  virtual int getColor() { return 0; }
+  virtual std::string getName() const { return "ERROR"; }
 
-  virtual int getSprite() { return 0; }
+  virtual int getColor() const { return 0; }
+
+  virtual int getSprite() const { return 0; }
 
   virtual void onTake(ItemEntity &itemEntity) {}
 
@@ -31,9 +33,7 @@ public:
 
   virtual int getAttackDamageBonus(Entity &e) { return 0; }
 
-  virtual std::string getName() { return "ERROR"; }
-
-  virtual bool matches(Item &item) { return item.getName() == getName(); }
+  virtual bool matches(const Item &item) { return item.getName() == getName(); }
 
   virtual std::shared_ptr<Item> clone() { return std::make_shared<Item>(); }
 };

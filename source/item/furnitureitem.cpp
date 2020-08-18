@@ -3,12 +3,17 @@
 FurnitureItem::FurnitureItem(std::shared_ptr<Furniture> furniture)
     : furniture(furniture) {}
 
-int FurnitureItem::getColor()
+std::string FurnitureItem::getName() const
+{
+  return furniture->name;
+}
+
+int FurnitureItem::getColor() const
 {
   return furniture->col;
 }
 
-int FurnitureItem::getSprite()
+int FurnitureItem::getSprite() const
 {
   return furniture->sprite + 10 * 32;
 }
@@ -49,11 +54,6 @@ bool FurnitureItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player 
 bool FurnitureItem::isDepleted()
 {
   return placed;
-}
-
-std::string FurnitureItem::getName()
-{
-  return furniture->name;
 }
 
 std::shared_ptr<Item> FurnitureItem::clone()

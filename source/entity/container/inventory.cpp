@@ -81,11 +81,11 @@ bool Inventory::removeItem(Item &item)
   return false;
 }
 
-int Inventory::count(Item &item)
+int Inventory::count(const Item &item)
 {
   // unsafe hack to avoid exceptions
   // dont pass this pointer
-  if (auto resourceItem = dynamic_cast<ResourceItem *>(&item))
+  if (auto resourceItem = dynamic_cast<const ResourceItem *>(&item))
   {
     auto ri = findResource(resourceItem->resource);
 

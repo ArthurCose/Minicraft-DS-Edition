@@ -5,18 +5,23 @@ ResourceItem::ResourceItem(const Resource *resource)
 {
 }
 
+std::string ResourceItem::getName() const
+{
+  return resource->name;
+}
+
 ResourceItem::ResourceItem(const Resource *resource, int count)
     : resource(resource)
 {
   this->count = count;
 }
 
-int ResourceItem::getColor()
+int ResourceItem::getColor() const
 {
   return resource->color;
 }
 
-int ResourceItem::getSprite()
+int ResourceItem::getSprite() const
 {
   return resource->sprite;
 }
@@ -36,11 +41,6 @@ void ResourceItem::renderInventory(Screen &screen, int x, int y)
     cc = 999;
 
   screen.renderText(std::to_string(cc), x + 8, y, Color::get(-1, 444, 444, 444));
-}
-
-std::string ResourceItem::getName()
-{
-  return resource->name;
 }
 
 bool ResourceItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir)

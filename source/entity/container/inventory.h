@@ -16,7 +16,7 @@ public:
   bool hasResources(const Resource *r, int count);
   bool removeResource(const Resource *r, int count);
   bool removeItem(Item &item);
-  int count(Item &item);
+  int count(const Item &item);
 
 private:
   std::shared_ptr<ResourceItem> findResource(const Resource *resource);

@@ -19,12 +19,17 @@ ToolItem::ToolItem(ToolType *type, int level)
   this->level = level;
 }
 
-int ToolItem::getColor()
+std::string ToolItem::getName() const
+{
+  return LEVEL_NAMES[level] + " " + type->name;
+}
+
+int ToolItem::getColor() const
 {
   return LEVEL_COLORS[level];
 }
 
-int ToolItem::getSprite()
+int ToolItem::getSprite() const
 {
   return type->sprite + 5 * 32;
 }
@@ -38,11 +43,6 @@ void ToolItem::renderInventory(Screen &screen, int x, int y)
 {
   screen.renderTile(x, y, getSprite(), getColor(), 0);
   screen.renderText(getName(), x + 8, y, Color::get(-1, 555, 555, 555));
-}
-
-std::string ToolItem::getName()
-{
-  return LEVEL_NAMES[level] + " " + type->name;
 }
 
 bool ToolItem::canAttack()
@@ -63,9 +63,9 @@ int ToolItem::getAttackDamageBonus(Entity &e)
   return 1;
 }
 
-bool ToolItem::matches(Item &item)
+bool ToolItem::matches(const Item &item)
 {
-  if (auto other = dynamic_cast<ToolItem *>(&item))
+  if (auto other = dynamic_cast<const ToolItem *>(&item))
   {
     if (other->type != type)
       return false;
