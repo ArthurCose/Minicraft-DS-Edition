@@ -5,6 +5,8 @@ separate attack and use with items
 
 pause
 drop button (add to instructions as well)
+add a way to sort items (select + A in inventory?)
+cycle items with L/R
 
 
 multiplayer!
@@ -12,3 +14,4 @@ respawning/beds
 
 try hardware rendering
 figure out what should go on the bottom screen
+adjust menu layout + sizes
