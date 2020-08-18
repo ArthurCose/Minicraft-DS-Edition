@@ -1,5 +1,6 @@
 #include "workbench.h"
 
+#include "../lighting/lantern.h"
 #include "oven.h"
 #include "furnace.h"
 #include "anvil.h"
@@ -9,7 +10,7 @@
 #include "../../menu/furniture/craftingmenu.h"
 
 static std::vector<std::shared_ptr<Recipe>> workbenchRecipes = {
-    // std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Lantern>()), std::vector<ResourceItem>({ResourceItem(Resource::wood, 5), ResourceItem(Resource::slime, 10), ResourceItem(Resource::glass, 4)})),
+    std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Lantern>()), std::vector<ResourceItem>({ResourceItem(Resource::wood, 5), ResourceItem(Resource::slime, 10), ResourceItem(Resource::glass, 4)})),
     std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Oven>()), std::vector<ResourceItem>({ResourceItem(Resource::stone, 15)})),
     std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Furnace>()), std::vector<ResourceItem>({ResourceItem(Resource::stone, 20)})),
     std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Workbench>()), std::vector<ResourceItem>({ResourceItem(Resource::wood, 20)})),
