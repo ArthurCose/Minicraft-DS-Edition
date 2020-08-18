@@ -1,14 +1,13 @@
 #include "screen.h"
 
 #include <cctype>
+#include <gl2d.h>
 #include "color.h"
 
 static const int SHEET_SIDE_LENGTH = 256;
 
-static const int BIT_MIRROR_X = 0x01;
-static const int BIT_MIRROR_Y = 0x02;
-
 unsigned short Screen::palette[256];
+std::unique_ptr<SpriteSheet> Screen::spriteSheet = NULL;
 
 static const int dither[16] = {
     0,
@@ -29,21 +28,15 @@ static const int dither[16] = {
     5,
 };
 
-Screen::Screen(int w, int h, unsigned short const *sheet)
+Screen::Screen(int w, int h)
     : w(w), h(h)
 {
   pixels.resize(w * h, 0);
-  this->sheet = sheet;
 }
 
 void Screen::clear(int color)
 {
-  if (color >= 255)
-  {
-    return;
-  }
-
-  pixels.assign(w * h, palette[color]);
+  glBoxFilled(0, 0, w, h, palette[color]);
 }
 
 void Screen::setOffset(int xOffset, int yOffset)
@@ -52,49 +45,9 @@ void Screen::setOffset(int xOffset, int yOffset)
   this->yOffset = yOffset;
 }
 
-void Screen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)
+void Screen::renderTile(int xp, int yp, int tile, int colors, int bits)
 {
-  xp -= xOffset;
-  yp -= yOffset;
-
-  bool mirrorX = (bits & BIT_MIRROR_X) > 0;
-  bool mirrorY = (bits & BIT_MIRROR_Y) > 0;
-
-  int tileX = tile % 32;
-  int tileY = tile / 32;
-  int tileOffset = tileX * 8 + tileY * 8 * SHEET_SIDE_LENGTH;
-
-  int colors[4] = {
-      (compressedColors >> (0 * 8)) & 255,
-      (compressedColors >> (1 * 8)) & 255,
-      (compressedColors >> (2 * 8)) & 255,
-      (compressedColors >> (3 * 8)) & 255};
-
-  for (int y = 0; y < 8; y++)
-  {
-    int ys = y;
-    if (mirrorY)
-      ys = 7 - y;
-    if (y + yp < 0 || y + yp >= h)
-      continue;
-    for (int x = 0; x < 8; x++)
-    {
-      if (x + xp < 0 || x + xp >= w)
-        continue;
-
-      int xs = x;
-      if (mirrorX)
-        xs = 7 - x;
-
-      int colorIndex = (sheet[xs + ys * SHEET_SIDE_LENGTH + tileOffset] & 31) / 10;
-      int col = colors[colorIndex];
-
-      if (col < 255)
-      {
-        pixels[(x + xp) + (y + yp) * w] = palette[col];
-      }
-    }
-  }
+  spriteSheet->renderTile(*this, xp, yp, tile, colors, bits);
 }
 
 std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=/\\%()<>:;     ";
@@ -151,6 +104,8 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
 
 void Screen::renderLight(int x, int y, int r)
 {
+  // todo: hardware rendering
+
   x -= xOffset;
   y -= yOffset;
   int x0 = x - r;
@@ -179,8 +134,9 @@ void Screen::renderLight(int x, int y, int r)
       if (dist <= r * r)
       {
         int br = 255 - dist * 255 / (r * r);
+
         if (pixels[xx + yy * w] < br)
-          pixels[xx + yy * w] = br;
+          glPutPixel(xx, yy, palette[br]);
       }
     }
   }
@@ -188,6 +144,7 @@ void Screen::renderLight(int x, int y, int r)
 
 void Screen::overlay(Screen &screen2, int xa, int ya)
 {
+  // todo: hardware rendering
   int i = 0;
   for (int y = 0; y < h; y++)
   {

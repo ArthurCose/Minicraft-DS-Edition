@@ -12,6 +12,5 @@ cycle items with L/R
 multiplayer!
 respawning/beds
 
-try hardware rendering
 figure out what should go on the bottom screen
 adjust menu layout + sizes

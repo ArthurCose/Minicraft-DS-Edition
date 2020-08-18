@@ -8,8 +8,8 @@
 
 const std::string Game::NAME = "Minicraft DS";
 
-Game::Game() : screen(SCREEN_WIDTH, SCREEN_HEIGHT, iconsBitmap),
-               lightScreen(SCREEN_WIDTH, SCREEN_HEIGHT, iconsBitmap)
+Game::Game() : screen(SCREEN_WIDTH, SCREEN_HEIGHT),
+               lightScreen(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
   setMenu(std::make_unique<TitleMenu>());
 }
@@ -85,19 +85,12 @@ void Game::render()
   {
     menu->render(screen);
   }
-
-  dmaCopy(&screen.pixels[0], VRAM_A, SCREEN_WIDTH * SCREEN_HEIGHT * 2);
 }
 
 void Game::renderHud()
 {
   const int hudTop = screen.h - 8;
   const int staminaBarLeft = screen.w - 10 * 8;
-
-  for (int x = 10; x < staminaBarLeft / 8; x++)
-  {
-    screen.renderTile(x * 8, hudTop, 0 + 12 * 32, Color::get(000, 000, 000, 000), 0);
-  }
 
   for (int i = 0; i < 10; i++)
   {

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <string>
+#include "spritesheet.h"
 
 class Screen
 {
@@ -12,15 +14,15 @@ class Screen
 	 */
 public:
   static unsigned short palette[256];
+  static std::unique_ptr<SpriteSheet> spriteSheet;
 
   int xOffset = 0;
   int yOffset = 0;
 
   const int w, h;
   std::vector<unsigned short> pixels;
-  const unsigned short *sheet;
 
-  Screen(int w, int h, unsigned short const *sheet);
+  Screen(int w, int h);
 
   void clear(int color);
   void setOffset(int xOffset, int yOffset);
