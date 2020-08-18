@@ -1,6 +1,7 @@
+#include "level.h"
+
 #include <algorithm>
 
-#include "level.h"
 #include "levelgen/overworld.h"
 #include "levelgen/underground.h"
 #include "levelgen/sky.h"
@@ -61,7 +62,7 @@ Level::Level(int w, int h, int depth)
   }
 
   GeneratedLevel generatedData;
-  Random random;
+  Random random = Random();
 
   if (depth == 0)
     generatedData = generateOverworld(random, w, h);
