@@ -94,7 +94,7 @@ void Game::renderHud()
   const int hudTop = screen.h - 8;
   const int staminaBarLeft = screen.w - 10 * 8;
 
-  for (int x = 10; x < staminaBarLeft; x++)
+  for (int x = 10; x < staminaBarLeft / 8; x++)
   {
     screen.renderTile(x * 8, hudTop, 0 + 12 * 32, Color::get(000, 000, 000, 000), 0);
   }
