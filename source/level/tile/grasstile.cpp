@@ -74,7 +74,7 @@ bool GrassTile::interact(Level &level, int xt, int yt, Player &player, Item &ite
 {
   if (auto tool = dynamic_cast<ToolItem *>(&item))
   {
-    if (tool->type == &ToolType::pickaxe)
+    if (tool->type == &ToolType::shovel)
     {
       if (player.payStamina(4 - tool->level))
       {
