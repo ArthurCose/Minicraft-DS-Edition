@@ -1,6 +1,6 @@
 #pragma once
 
-#include "menu.h"
+#include "../menu.h"
 
 class LevelTransitionMenu : public Menu
 {

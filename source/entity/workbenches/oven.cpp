@@ -2,7 +2,7 @@
 
 #include "../../item/resourceitem.h"
 #include "../../item/resource/foodresource.h"
-#include "../../menu/craftingmenu.h"
+#include "../../menu/furniture/craftingmenu.h"
 
 static std::vector<std::shared_ptr<Recipe>> ovenRecipes = {
     std::make_shared<Recipe>(std::make_unique<ResourceItem>(FoodResource::bread), std::vector<ResourceItem>({ResourceItem(Resource::wheat, 4)})),

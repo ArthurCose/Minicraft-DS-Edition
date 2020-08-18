@@ -5,7 +5,7 @@
 #include "anvil.h"
 #include "../../item/toolitem.h"
 #include "../../item/furnitureitem.h"
-#include "../../menu/craftingmenu.h"
+#include "../../menu/furniture/craftingmenu.h"
 
 static std::vector<std::shared_ptr<Recipe>> workbenchRecipes = {
     // std::make_shared<Recipe>(std::make_unique<FurnitureItem>(std::make_shared<Lantern>()), std::vector<ResourceItem>({ResourceItem(Resource::wood, 5), ResourceItem(Resource::slime, 10), ResourceItem(Resource::glass, 4)})),

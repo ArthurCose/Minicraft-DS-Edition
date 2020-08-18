@@ -3,8 +3,8 @@
 #include <nds.h>
 #include <vector>
 #include "titlemenu.h"
-#include "../gfx/screen.h"
-#include "../gfx/color.h"
+#include "../../gfx/screen.h"
+#include "../../gfx/color.h"
 
 void InstructionsMenu::tick(Game &game)
 {

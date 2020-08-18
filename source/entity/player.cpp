@@ -8,7 +8,7 @@
 #include "../item/powergloveitem.h"
 #include "workbenches/workbench.h"
 #include "particle/textparticle.h"
-#include "../menu/inventorymenu.h"
+#include "../menu/player/inventorymenu.h"
 
 Player::Player()
 {

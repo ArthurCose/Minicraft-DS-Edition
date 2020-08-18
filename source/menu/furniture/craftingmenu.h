@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "menu.h"
-#include "../item/crafting/recipe.h"
+#include "../menu.h"
+#include "../../item/crafting/recipe.h"
 
 class CraftingMenu : public Menu
 {

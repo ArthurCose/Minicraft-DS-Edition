@@ -1,8 +1,8 @@
 #pragma once
 
-#include "menu.h"
+#include "../menu.h"
 
-class AboutMenu : public Menu
+class InstructionsMenu : public Menu
 {
 public:
   void tick(Game &game) override;

@@ -1,12 +1,11 @@
 #pragma once
 
-#include "menu.h"
 #include "resultsmenu.h"
 
-class DeadMenu : public ResultsMenu
+class WonMenu : public ResultsMenu
 {
 public:
-  DeadMenu(int time, int score);
+  WonMenu(int time, int score);
 
   void render(Screen &screen) override;
 };

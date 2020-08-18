@@ -3,9 +3,9 @@
 #include <vector>
 #include <string>
 #include <nds.h>
-#include "../gfx/color.h"
-#include "../sound/sound.h"
-#include "generatemenu.h"
+#include "../../gfx/color.h"
+#include "../../sound/sound.h"
+#include "../world/generatemenu.h"
 #include "instructionsmenu.h"
 #include "aboutmenu.h"
 

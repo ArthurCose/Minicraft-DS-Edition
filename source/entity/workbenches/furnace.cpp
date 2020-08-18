@@ -2,7 +2,7 @@
 
 #include "../../item/resourceitem.h"
 #include "../../item/resource/resource.h"
-#include "../../menu/craftingmenu.h"
+#include "../../menu/furniture/craftingmenu.h"
 
 static std::vector<std::shared_ptr<Recipe>> furnaceRecipes = {
     std::make_shared<Recipe>(std::make_unique<ResourceItem>(Resource::ironIngot), std::vector<ResourceItem>({ResourceItem(Resource::ironOre, 4), ResourceItem(Resource::coal, 1)})),

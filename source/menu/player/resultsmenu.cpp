@@ -1,6 +1,6 @@
 #include "resultsmenu.h"
 
-#include "titlemenu.h"
+#include "../main/titlemenu.h"
 
 ResultsMenu::ResultsMenu(int time, int score)
 {

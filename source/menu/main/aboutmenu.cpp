@@ -2,8 +2,8 @@
 
 #include <nds.h>
 #include "titlemenu.h"
-#include "../gfx/screen.h"
-#include "../gfx/color.h"
+#include "../../gfx/screen.h"
+#include "../../gfx/color.h"
 
 void AboutMenu::tick(Game &game)
 {

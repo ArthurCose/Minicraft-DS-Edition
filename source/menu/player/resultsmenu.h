@@ -1,6 +1,6 @@
 #pragma once
 
-#include "menu.h"
+#include "../menu.h"
 
 // base class for DeadMenu and WonMenu
 class ResultsMenu : public Menu

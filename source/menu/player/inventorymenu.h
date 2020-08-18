@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../entity/player.h"
-#include "menu.h"
+#include "../menu.h"
+#include "../../entity/player.h"
 
 class InventoryMenu : public Menu
 {

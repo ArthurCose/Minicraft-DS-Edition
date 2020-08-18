@@ -1,7 +1,7 @@
 #include "anvil.h"
 
 #include "../../item/toolitem.h"
-#include "../../menu/craftingmenu.h"
+#include "../../menu/furniture/craftingmenu.h"
 
 static std::vector<std::shared_ptr<Recipe>> anvilRecipes = {
     std::make_shared<Recipe>(std::make_unique<ToolItem>(&ToolType::sword, 2), std::vector<ResourceItem>({ResourceItem(Resource::wood, 5), ResourceItem(Resource::ironIngot, 5)})),
