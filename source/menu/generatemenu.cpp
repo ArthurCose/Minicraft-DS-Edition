@@ -80,7 +80,8 @@ void GenerateMenu::render(Screen &screen)
   for (int i = 0; i < totalSteps; i++)
     screen.renderTile(
         screen.w / 2 - totalSteps * 4 + i * 8,
-        screen.h / 2 + 16, 0,
+        screen.h / 2 + 16,
+        0,
         i < currentStep ? barColors : barBackgroundColors,
         0);
 }
