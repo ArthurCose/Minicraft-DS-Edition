@@ -12,7 +12,7 @@ InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 
 void InventoryMenu::tick(Game &game)
 {
-  if (game.justTapped(KEY_X))
+  if (game.justTapped(KEY_X) || game.justTapped(KEY_B) || game.justTapped(KEY_START))
     close(game);
 
   if (game.justTapped(KEY_UP))

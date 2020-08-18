@@ -7,7 +7,7 @@
 
 void AboutMenu::tick(Game &game)
 {
-  if (game.justTapped(KEY_A))
+  if (game.justTapped(KEY_A) || game.justTapped(KEY_B))
   {
     close(game);
   }
@@ -23,8 +23,6 @@ static std::vector<std::string> aboutText = {
     "For the 22'nd ludum",
     "dare competition in",
     "december 2011.",
-    "it is dedicated to",
-    "his father. <3",
 };
 
 void AboutMenu::render(Screen &screen)

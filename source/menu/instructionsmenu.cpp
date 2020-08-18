@@ -8,7 +8,7 @@
 
 void InstructionsMenu::tick(Game &game)
 {
-  if (game.justTapped(KEY_A))
+  if (game.justTapped(KEY_A) || game.justTapped(KEY_B))
   {
     close(game);
   }
