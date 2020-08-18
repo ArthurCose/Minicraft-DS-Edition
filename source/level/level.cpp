@@ -263,13 +263,13 @@ void Level::add(std::shared_ptr<Entity> entity)
 
 void Level::remove(std::shared_ptr<Entity> e)
 {
-  auto entities = entitiesInTiles[e->x + e->y * w];
-
-  auto ePosition = std::find(entities.begin(), entities.end(), e);
-
-  if (ePosition != entities.end())
+  for (size_t i = 0; i < entities.size(); i++)
   {
-    entities.erase(ePosition);
+    if (entities[i].get() == e.get())
+    {
+      entities.erase(entities.begin() + i);
+      break;
+    }
   }
 
   int xto = e->x >> 4;
@@ -291,11 +291,13 @@ void Level::removeEntity(int x, int y, std::shared_ptr<Entity> e)
 
   auto &entitiesInTile = entitiesInTiles[x + y * w];
 
-  auto ePosition = std::find(entitiesInTile.begin(), entitiesInTile.end(), e);
-
-  if (ePosition != entitiesInTile.end())
+  for (size_t i = 0; i < entitiesInTile.size(); i++)
   {
-    entitiesInTile.erase(ePosition);
+    if (entitiesInTile[i].get() == e.get())
+    {
+      entitiesInTile.erase(entitiesInTile.begin() + i);
+      break;
+    }
   }
 }
 
