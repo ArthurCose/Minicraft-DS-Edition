@@ -205,14 +205,14 @@ void Level::renderLight(Screen &screen, int xScroll, int yScroll)
   screen.setOffset(0, 0);
 }
 
-bool compare(std::shared_ptr<Entity> &e0, std::shared_ptr<Entity> &e1)
+static bool compareY(std::shared_ptr<Entity> &e0, std::shared_ptr<Entity> &e1)
 {
-  return e1->y < e0->y;
+  return e0->y < e1->y;
 }
 
 void Level::sortAndRender(Screen &screen, std::vector<std::shared_ptr<Entity>> list)
 {
-  std::sort(list.begin(), list.end(), compare);
+  std::sort(list.begin(), list.end(), compareY);
 
   for (auto &e : list)
   {
