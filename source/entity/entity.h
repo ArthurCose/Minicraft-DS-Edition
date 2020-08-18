@@ -40,13 +40,6 @@ public:
   virtual bool isBlockableBy(Mob &mob) { return true; }
   virtual void touchItem(ItemEntity &itemEntity) {}
   virtual bool canSwim() { return false; }
-  virtual bool use(Player &player, int attackDir) { return false; }
+  virtual bool use(Game &game, Level &level, Player &player, int attackDir) { return false; }
   virtual int getLightRadius() { return 0; }
-  virtual void copy(Entity &e)
-  {
-    e.x = x;
-    e.y = y;
-    e.xr = xr;
-    e.yr = yr;
-  }
 };

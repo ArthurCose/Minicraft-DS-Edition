@@ -24,4 +24,5 @@ public:
   bool canAttack() override;
   int getAttackDamageBonus(Entity &e);
   bool matches(const Item &item) override;
+  std::shared_ptr<Item> clone() override;
 };

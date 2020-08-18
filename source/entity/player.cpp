@@ -6,6 +6,7 @@
 #include "../level/level.h"
 #include "../item/furnitureitem.h"
 #include "../item/powergloveitem.h"
+#include "workbenches/workbench.h"
 #include "particle/textparticle.h"
 #include "../menu/inventorymenu.h"
 
@@ -15,7 +16,7 @@ Player::Player()
   y = 24;
   stamina = maxStamina;
 
-  // inventory.add(std::make_shared<FurnitureItem>(new Workbench()));
+  inventory.add(std::make_shared<FurnitureItem>(std::make_shared<Workbench>()));
   inventory.add(std::make_shared<PowerGloveItem>());
 }
 
@@ -113,46 +114,13 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
 
   if (game.justTapped(KEY_A))
   {
-    use(level);
+    use(game, level);
   }
 
   // todo: pause, fix instructionsmenu
 
   if (attackTime > 0)
     attackTime--;
-}
-
-bool Player::use(Level &level)
-{
-  int yo = -2;
-  if (dir == 0 && use(level, x - 8, y + 4 + yo, x + 8, y + 12 + yo))
-    return true;
-  if (dir == 1 && use(level, x - 8, y - 12 + yo, x + 8, y - 4 + yo))
-    return true;
-  if (dir == 3 && use(level, x + 4, y - 8 + yo, x + 12, y + 8 + yo))
-    return true;
-  if (dir == 2 && use(level, x - 12, y - 8 + yo, x - 4, y + 8 + yo))
-    return true;
-
-  int xt = x >> 4;
-  int yt = (y + yo) >> 4;
-  int r = 12;
-  if (attackDir == 0)
-    yt = (y + r + yo) >> 4;
-  if (attackDir == 1)
-    yt = (y - r + yo) >> 4;
-  if (attackDir == 2)
-    xt = (x - r) >> 4;
-  if (attackDir == 3)
-    xt = (x + r) >> 4;
-
-  if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
-  {
-    if (level.getTile(xt, yt)->use(level, xt, yt, *this, attackDir))
-      return true;
-  }
-
-  return false;
 }
 
 void Player::attack(Level &level)
@@ -246,14 +214,47 @@ void Player::attack(Level &level)
   }
 }
 
-bool Player::use(Level &level, int x0, int y0, int x1, int y1)
+bool Player::use(Game &game, Level &level)
+{
+  int yo = -2;
+  if (dir == 0 && use(game, level, x - 8, y + 4 + yo, x + 8, y + 12 + yo))
+    return true;
+  if (dir == 1 && use(game, level, x - 8, y - 12 + yo, x + 8, y - 4 + yo))
+    return true;
+  if (dir == 3 && use(game, level, x + 4, y - 8 + yo, x + 12, y + 8 + yo))
+    return true;
+  if (dir == 2 && use(game, level, x - 12, y - 8 + yo, x - 4, y + 8 + yo))
+    return true;
+
+  int xt = x >> 4;
+  int yt = (y + yo) >> 4;
+  int r = 12;
+  if (attackDir == 0)
+    yt = (y + r + yo) >> 4;
+  if (attackDir == 1)
+    yt = (y - r + yo) >> 4;
+  if (attackDir == 2)
+    xt = (x - r) >> 4;
+  if (attackDir == 3)
+    xt = (x + r) >> 4;
+
+  if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
+  {
+    if (level.getTile(xt, yt)->use(level, xt, yt, *this, attackDir))
+      return true;
+  }
+
+  return false;
+}
+
+bool Player::use(Game &game, Level &level, int x0, int y0, int x1, int y1)
 {
   auto entities = level.getEntities(x0, y0, x1, y1);
 
   for (auto e : entities)
   {
     if (e.get() != this)
-      if (e->use(*this, attackDir))
+      if (e->use(game, level, *this, attackDir))
         return true;
   }
 

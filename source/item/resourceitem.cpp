@@ -54,3 +54,8 @@ bool ResourceItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player &
 }
 
 bool ResourceItem::isDepleted() { return count <= 0; }
+
+std::shared_ptr<Item> ResourceItem::clone()
+{
+  return std::make_shared<ResourceItem>(resource);
+}

@@ -34,9 +34,9 @@ private:
   int onStairDelay;
   bool swimming;
 
-  bool use(Level &level);
   void attack(Level &level);
-  bool use(Level &level, int x0, int y0, int x1, int y1);
+  bool use(Game &game, Level &level);
+  bool use(Game &game, Level &level, int x0, int y0, int x1, int y1);
   bool interact(Level &level, int x0, int y0, int x1, int y1);
   void hurt(Level &level, int x0, int y0, int x1, int y1);
   int getAttackDamage(Entity &e);

@@ -75,3 +75,8 @@ bool ToolItem::matches(const Item &item)
   }
   return false;
 }
+
+std::shared_ptr<Item> ToolItem::clone()
+{
+  return std::make_shared<ToolItem>(type, level);
+}
