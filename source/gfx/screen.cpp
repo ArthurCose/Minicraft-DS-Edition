@@ -54,9 +54,18 @@ std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=/\\%()<
 
 void Screen::renderText(std::string msg, int x, int y, int col)
 {
+  bool renderBackground = (col & 255) != 255;
+  int backgroundColor = ((col & 255) << 16) | ((col & 255) << 8);
+
   for (size_t i = 0; i < msg.length(); i++)
   {
+    if (renderBackground)
+    {
+      renderTile(x + i * 8, y, 0, backgroundColor, 0);
+    }
+
     int ix = chars.find(std::toupper(msg[i]));
+
     if (ix >= 0)
     {
       renderTile(x + i * 8, y, ix + 30 * 32, col, 0);
