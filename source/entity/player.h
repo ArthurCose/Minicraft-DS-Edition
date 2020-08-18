@@ -2,7 +2,7 @@
 
 #include "../game.h"
 #include "../level/level.h"
-#include "container/inventory.h"
+#include "../item/inventory.h"
 #include "itementity.h"
 #include "mob.h"
 

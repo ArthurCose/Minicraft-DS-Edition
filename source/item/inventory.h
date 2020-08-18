@@ -2,9 +2,9 @@
 
 #include <vector>
 #include <memory>
-#include "../../item/item.h"
-#include "../../item/resource/resource.h"
-#include "../../item/resourceitem.h"
+#include "item.h"
+#include "resource/resource.h"
+#include "resourceitem.h"
 
 class Inventory
 {
