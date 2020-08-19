@@ -39,7 +39,7 @@ private:
   int tickCount = 0;
   int gameTime = 0;
   int playerDeadTime;
-  int pendingLevelChange;
+  int pendingLevelChange = 0;
   int wonTimer = 0;
   bool hasWon = false;
   void init();

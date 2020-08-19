@@ -156,6 +156,7 @@ void Game::resetGame()
 {
   player = NULL;
   playerDeadTime = 0;
+  pendingLevelChange = 0;
   wonTimer = 0;
   gameTime = 0;
   hasWon = false;
