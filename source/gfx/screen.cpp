@@ -180,7 +180,7 @@ void Screen::renderLight(int x, int y, int r)
       {
         int br = 255 - dist * 255 / (r * r);
         if (pixels[xx + yy * w] < br)
-          pixels[xx + yy * w] = palette[br];
+          pixels[xx + yy * w] = br;
       }
     }
   }

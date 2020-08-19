@@ -120,7 +120,7 @@ void Level::render(Screen &screen, Screen &lightScreen, Player &player)
 
   if (depth < 0)
   {
-    lightScreen.clear(0);
+    lightScreen.pixels.assign(lightScreen.pixels.size(), 0);
     renderLight(lightScreen, xScroll, yScroll);
     screen.overlay(lightScreen, xScroll, yScroll);
   }
