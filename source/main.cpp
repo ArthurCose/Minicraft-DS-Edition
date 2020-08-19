@@ -66,15 +66,18 @@ int main()
     glFlush(0);
     auto end = playtime;
 
-    auto totalTime = end - start;
-
-    lostTime += std::max(totalTime - refreshRate, 0);
-
-    // skip up to one frame per render
-    if (lostTime > refreshRate)
+    if (game.frameSkipEnabled)
     {
-      game.tick();
-      lostTime -= refreshRate;
+      auto totalTime = end - start;
+
+      lostTime += std::max(totalTime - refreshRate, 0);
+
+      // skip up to one frame per render
+      if (lostTime > refreshRate)
+      {
+        game.tick();
+        lostTime -= refreshRate;
+      }
     }
   }
 

@@ -18,6 +18,7 @@ public:
   std::unique_ptr<Menu> menu;
   std::vector<Level> levels;
   int currentLevel = 3;
+  bool frameSkipEnabled = true;
 
   Game();
 

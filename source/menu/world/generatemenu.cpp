@@ -13,6 +13,7 @@ void GenerateMenu::tick(Game &game)
   switch (currentStep)
   {
   case 0:
+    game.frameSkipEnabled = false;
     game.levels.clear();
 
     game.levels.emplace(game.levels.begin(), levelSize, levelSize, 1);
@@ -57,6 +58,7 @@ void GenerateMenu::tick(Game &game)
     currentStepName = "Done!";
     break;
   case 7:
+    game.frameSkipEnabled = true;
     close(game);
     break;
   }
