@@ -1,6 +1,5 @@
 #include "underground.h"
 
-#include <cmath>
 #include "../tile/tile.h"
 #include "noise.h"
 
@@ -67,16 +66,16 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
     {
       int i = x + y * w;
 
-      double val = fabs(noise1.values[i] - noise2.values[i]) * 3 - 2;
+      double val = std::abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
 
-      double mval = fabs(mnoise1.values[i] - mnoise2.values[i]);
-      mval = fabs(mval - mnoise3.values[i]) * 3 - 2;
+      double mval = std::abs(mnoise1.values[i] - mnoise2.values[i]);
+      mval = std::abs(mval - mnoise3.values[i]) * 3 - 2;
 
-      double nval = fabs(nnoise1.values[i] - nnoise2.values[i]);
-      nval = fabs(nval - nnoise3.values[i]) * 3 - 2;
+      double nval = std::abs(nnoise1.values[i] - nnoise2.values[i]);
+      nval = std::abs(nval - nnoise3.values[i]) * 3 - 2;
 
-      double wval = fabs(wnoise1.values[i] - wnoise2.values[i]);
-      wval = fabs(nval - wnoise3.values[i]) * 3 - 2;
+      double wval = std::abs(wnoise1.values[i] - wnoise2.values[i]);
+      wval = std::abs(nval - wnoise3.values[i]) * 3 - 2;
 
       double xd = x / (w - 1.0) * 2 - 1;
       double yd = y / (h - 1.0) * 2 - 1;

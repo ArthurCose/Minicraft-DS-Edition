@@ -1,6 +1,5 @@
 #include "overworld.h"
 
-#include <cmath>
 #include "../tile/tile.h"
 #include "noise.h"
 
@@ -61,9 +60,9 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
     {
       int i = x + y * w;
 
-      double val = fabs(noise1.values[i] - noise2.values[i]) * 3 - 2;
-      double mval = fabs(mnoise1.values[i] - mnoise2.values[i]);
-      mval = fabs(mval - mnoise3.values[i]) * 3 - 2;
+      double val = std::abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
+      double mval = std::abs(mnoise1.values[i] - mnoise2.values[i]);
+      mval = std::abs(mval - mnoise3.values[i]) * 3 - 2;
 
       double xd = x / (w - 1.0) * 2 - 1;
       double yd = y / (h - 1.0) * 2 - 1;

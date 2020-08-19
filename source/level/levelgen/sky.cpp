@@ -1,6 +1,5 @@
 #include "sky.h"
 
-#include <cmath>
 #include "../tile/tile.h"
 #include "noise.h"
 
@@ -51,7 +50,7 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
     {
       int i = x + y * w;
 
-      double val = fabs(noise1.values[i] - noise2.values[i]) * 3 - 2;
+      double val = std::abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
 
       double xd = x / (w - 1.0) * 2 - 1;
       double yd = y / (h - 1.0) * 2 - 1;
