@@ -9,6 +9,7 @@
 #include "../shim/random.h"
 
 class Screen;
+class LightMask;
 
 class Level
 {
@@ -21,7 +22,7 @@ private:
   void removeEntity(int x, int y, std::shared_ptr<Entity> e);
   void renderBackground(Screen &screen, int xScroll, int yScroll);
   void renderSprites(Screen &screen, int xScroll, int yScroll);
-  void renderLight(Screen &screen, int xScroll, int yScroll);
+  void renderLight(LightMask &screen, int xScroll, int yScroll);
 
 public:
   int w, h;
@@ -38,7 +39,7 @@ public:
   Level(int w, int h, int level);
   Level(int w, int h, int level, Level &parentLevel);
 
-  void render(Screen &screen, Screen &lightScreen, Player &player);
+  void render(Screen &screen, LightMask &LightMask, Player &player);
   // Tile *getTile(int x, int y);
   inline Tile *getTile(int x, int y)
   {

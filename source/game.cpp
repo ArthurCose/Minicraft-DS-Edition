@@ -8,8 +8,7 @@
 
 const std::string Game::NAME = "Minicraft DS";
 
-Game::Game() : screen(SCREEN_WIDTH, SCREEN_HEIGHT),
-               lightScreen(SCREEN_WIDTH, SCREEN_HEIGHT)
+Game::Game()
 {
   setMenu(std::make_unique<TitleMenu>());
 }
@@ -76,7 +75,7 @@ void Game::render()
   {
     Level &level = levels[currentLevel];
 
-    level.render(screen, lightScreen, *player);
+    level.render(screen, lightMask, *player);
 
     renderHud();
   }

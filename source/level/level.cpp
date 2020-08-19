@@ -9,6 +9,7 @@
 #include "../entity/hostile/airwizard.h"
 #include "../entity/hostile/slime.h"
 #include "../entity/hostile/zombie.h"
+#include "../gfx/lightmask.h"
 
 Level::Level(int w, int h, int depth, Level &parentLevel)
     : Level(w, h, depth)
@@ -91,7 +92,7 @@ Level::Level(int w, int h, int depth)
   }
 }
 
-void Level::render(Screen &screen, Screen &lightScreen, Player &player)
+void Level::render(Screen &screen, LightMask &lightMask, Player &player)
 {
   int xScroll = player.x - screen.w / 2;
   int yScroll = player.y - (screen.h - 8) / 2;
@@ -120,9 +121,9 @@ void Level::render(Screen &screen, Screen &lightScreen, Player &player)
 
   if (depth < 0)
   {
-    lightScreen.pixels.assign(lightScreen.pixels.size(), 0);
-    renderLight(lightScreen, xScroll, yScroll);
-    screen.overlay(lightScreen, xScroll, yScroll);
+    lightMask.reset();
+    renderLight(lightMask, xScroll, yScroll);
+    lightMask.render(screen);
   }
 }
 
@@ -175,15 +176,16 @@ void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
   screen.setOffset(0, 0);
 }
 
-void Level::renderLight(Screen &screen, int xScroll, int yScroll)
+void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
 {
   int xo = xScroll >> 4;
   int yo = yScroll >> 4;
-  int w = (screen.w + 15) >> 4;
-  int h = (screen.h + 15) >> 4;
+  int w = (lightMask.w + 15) >> 4;
+  int h = (lightMask.h + 15) >> 4;
 
-  screen.setOffset(xScroll, yScroll);
+  lightMask.setOffset(xScroll, yScroll);
   int r = 4;
+
   for (int y = yo - r; y <= h + yo + r; y++)
   {
     for (int x = xo - r; x <= w + xo + r; x++)
@@ -193,17 +195,18 @@ void Level::renderLight(Screen &screen, int xScroll, int yScroll)
       std::vector<std::shared_ptr<Entity>> entities = entitiesInTiles[x + y * this->w];
       for (auto &e : entities)
       {
-        e->render(screen);
         int lr = e->getLightRadius();
+
         if (lr > 0)
-          screen.renderLight(e->x - 1, e->y - 4, lr * 8);
+          lightMask.renderLight(e->x - 1, e->y - 4, lr * 8);
       }
+
       int lr = getTile(x, y)->getLightRadius(*this, x, y);
+
       if (lr > 0)
-        screen.renderLight(x * 16 + 8, y * 16 + 8, lr * 8);
+        lightMask.renderLight(x * 16 + 8, y * 16 + 8, lr * 8);
     }
   }
-  screen.setOffset(0, 0);
 }
 
 static bool compareY(std::shared_ptr<Entity> &e0, std::shared_ptr<Entity> &e1)

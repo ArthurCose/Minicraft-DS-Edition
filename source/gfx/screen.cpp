@@ -9,30 +9,8 @@ static const int SHEET_SIDE_LENGTH = 256;
 unsigned short Screen::palette[256];
 std::unique_ptr<SpriteSheet> Screen::spriteSheet = NULL;
 
-static const int dither[16] = {
-    0,
-    8,
-    2,
-    10,
-    12,
-    4,
-    14,
-    6,
-    3,
-    11,
-    1,
-    9,
-    15,
-    7,
-    13,
-    5,
-};
-
-Screen::Screen(int w, int h)
-    : w(w), h(h)
-{
-  pixels.resize(w * h, 0);
-}
+Screen::Screen()
+    : w(SCREEN_WIDTH), h(SCREEN_HEIGHT) {}
 
 void Screen::clear(int color)
 {
@@ -111,57 +89,26 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
   renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
 }
 
-void Screen::renderLight(int x, int y, int r)
+void Screen::renderPixel(int x, int y, int col)
 {
-  // todo: hardware rendering
-
   x -= xOffset;
   y -= yOffset;
-  int x0 = x - r;
-  int x1 = x + r;
-  int y0 = y - r;
-  int y1 = y + r;
 
-  if (x0 < 0)
-    x0 = 0;
-  if (y0 < 0)
-    y0 = 0;
-  if (x1 > w)
-    x1 = w;
-  if (y1 > h)
-    y1 = h;
-
-  for (int yy = y0; yy < y1; yy++)
-  {
-    int yd = yy - y;
-    yd = yd * yd;
-    for (int xx = x0; xx < x1; xx++)
-    {
-      int xd = xx - x;
-      int dist = xd * xd + yd;
-
-      if (dist <= r * r)
-      {
-        int br = 255 - dist * 255 / (r * r);
-
-        if (pixels[xx + yy * w] < br)
-          glPutPixel(xx, yy, palette[br]);
-      }
-    }
-  }
+  glPutPixel(x, y, palette[col]);
 }
 
-void Screen::overlay(Screen &screen2, int xa, int ya)
+void Screen::renderBox(int x, int y, int w, int h, int col)
 {
-  // todo: hardware rendering
-  int i = 0;
-  for (int y = 0; y < h; y++)
-  {
-    for (int x = 0; x < w; x++)
-    {
-      if (screen2.pixels[i] / 10 <= dither[((x + xa) & 3) + ((y + ya) & 3) * 4])
-        pixels[i] = palette[0];
-      i++;
-    }
-  }
+  x -= xOffset;
+  y -= yOffset;
+
+  glBox(x, y, x + w - 1, y + h - 1, palette[col]);
+}
+
+void Screen::renderBoxFilled(int x, int y, int w, int h, int col)
+{
+  x -= xOffset;
+  y -= yOffset;
+
+  glBoxFilled(x, y, x + w - 1, y + h - 1, palette[col]);
 }

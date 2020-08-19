@@ -3,6 +3,7 @@
 #include "menu/menu.h"
 #include "level/level.h"
 #include "entity/player.h"
+#include "gfx/lightmask.h"
 
 #include <memory>
 
@@ -33,6 +34,7 @@ public:
 
 private:
   Screen lightScreen;
+  LightMask lightMask;
   static const int SCALE = 3;
   int tickCount = 0;
   int gameTime = 0;

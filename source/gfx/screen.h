@@ -20,9 +20,8 @@ public:
   int yOffset = 0;
 
   const int w, h;
-  std::vector<unsigned short> pixels;
 
-  Screen(int w, int h);
+  Screen();
 
   void clear(int color);
   void setOffset(int xOffset, int yOffset);
@@ -30,6 +29,7 @@ public:
   void renderText(std::string msg, int x, int y, int col);
   void renderTextCentered(std::string msg, int x, int y, int col);
   void renderFrame(std::string title, int x0, int y0, int x1, int y1);
-  void renderLight(int x, int y, int r);
-  void overlay(Screen &screen2, int xa, int ya);
+  void renderPixel(int x, int y, int col);
+  void renderBox(int x, int y, int w, int h, int col);
+  void renderBoxFilled(int x, int y, int w, int h, int col);
 };
