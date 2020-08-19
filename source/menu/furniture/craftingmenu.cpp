@@ -23,7 +23,7 @@ CraftingMenu::CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player 
 
 void CraftingMenu::tick(Game &game)
 {
-  if (game.justTapped(KEY_B) || game.justTapped(KEY_START))
+  if (game.justTapped(KEY_B) || game.justTapped(KEY_X) || game.justTapped(KEY_START))
     close(game);
 
   int len = recipes.size();
