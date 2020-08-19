@@ -1,6 +1,3 @@
-dynamically choose how many times to call tick
-  cap this value
-
 separate attack and use with items
 
 pause
