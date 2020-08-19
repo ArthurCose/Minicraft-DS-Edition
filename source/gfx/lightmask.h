@@ -29,7 +29,7 @@ public:
   void render(Screen &render);
 
 private:
-  std::vector<int> brightness;
+  std::vector<unsigned char> brightness;
   const int brightnessW, brightnessH;
 
   bool shouldBlock(int scaledX, int scaledY);
