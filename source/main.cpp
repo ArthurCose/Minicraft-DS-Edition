@@ -1,4 +1,5 @@
 #include <nds.h>
+#include <chrono>
 #include <gl2d.h>
 #include "game.h"
 #include "icons.h"
@@ -28,12 +29,20 @@ void initialize_palette()
   Screen::palette[255] = 0;
 }
 
+// in ms
+static int playtime = 0;
+
+void incrementTime()
+{
+  playtime++;
+}
+
 int main()
 {
+  timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
+
   videoSetMode(MODE_5_3D);
-
   glScreen2D();
-
   vramSetBankA(VRAM_A_TEXTURE);
   vramSetBankB(VRAM_B_TEXTURE);
   vramSetBankF(VRAM_F_TEX_PALETTE);
@@ -41,28 +50,32 @@ int main()
   initialize_palette();
   Screen::spriteSheet = std::make_unique<SpriteSheet>(iconsBitmap, 256, 256, 8);
 
-  // videoSetModeSub(3);
-  // consoleDemoInit();
-  // keyboardDemoInit();
-  // keyboardShow();
-
   Game game;
+
+  int refreshRate = 1000 / 59.8261;
+  int lostTime = 0;
 
   while (true)
   {
+    auto start = playtime;
     game.tick();
-    // game.tick();
-    // game.tick();
-    // game.tick();
+
     glBegin2D();
     game.render();
     glEnd2D();
     glFlush(0);
+    auto end = playtime;
 
-    // int key = keyboardUpdate();
+    auto totalTime = end - start;
 
-    // if (key > 0)
-    //   iprintf("%c", key);
+    lostTime += std::max(totalTime - refreshRate, 0);
+
+    // skip up to one frame per render
+    if (lostTime > refreshRate)
+    {
+      game.tick();
+      lostTime -= refreshRate;
+    }
   }
 
   return 0;
