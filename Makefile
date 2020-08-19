@@ -25,18 +25,14 @@ ASSETS    := res
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH := -mthumb -mthumb-interwork
-
-CFLAGS := -Wall -O3
+CFLAGS := -Wall -O3\
     -march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
-    -ffast-math \
-    $(ARCH)
+    -ffast-math
 
 CFLAGS    += $(INCLUDE) -DARM9
 CXXFLAGS  := $(CFLAGS) -fno-exceptions
 
-ASFLAGS := -g $(ARCH)
-LDFLAGS  = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+LDFLAGS  = -specs=ds_arm9.specs -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project (order is important)
