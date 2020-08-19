@@ -149,7 +149,7 @@ bool Mob::findStartPos(Level &level)
   {
     int xd = level.player->x - xx;
     int yd = level.player->y - yy;
-    if (xd * xd + yd * yd < 80 * 80)
+    if (xd * xd + yd * yd < 144 * 144)
       return false;
   }
 
