@@ -72,18 +72,11 @@ void GenerateMenu::render(Screen &screen)
 
   screen.renderTextCentered(currentStepName, screen.w / 2, screen.h / 2 - 16, Color::get(-1, 555, 555, 555));
 
-  const int barColor = 151;
-  const int barColors = Color::get(barColor, barColor, barColor, barColor);
-  const int barBackgroundColor = 555;
-  const int barBackgroundColors = Color::get(barBackgroundColor, barBackgroundColor, barBackgroundColor, barBackgroundColor);
+  const int totalSteps = 7;
 
-  const int totalSteps = 8;
+  int barX = screen.w / 2 - totalSteps * 4;
+  int barY = screen.h / 2 + 16;
 
-  for (int i = 0; i < totalSteps; i++)
-    screen.renderTile(
-        screen.w / 2 - totalSteps * 4 + i * 8,
-        screen.h / 2 + 16,
-        0,
-        i < currentStep ? barColors : barBackgroundColors,
-        0);
+  screen.renderBoxFilled(barX, barY, totalSteps * 8, 8, Color::get(555));
+  screen.renderBoxFilled(barX, barY, currentStep * 8, 8, Color::get(151));
 }
