@@ -21,6 +21,7 @@ public:
   virtual std::shared_ptr<Furniture> clone();
 
 protected:
+  bool shouldTake = false;
   void touchedBy(Level &level, Entity &entity) override;
 
 private:
