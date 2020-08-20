@@ -129,6 +129,15 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
 
 void Level::renderBackground(Screen &screen, int xScroll, int yScroll)
 {
+  if (depth == 1)
+  {
+    int col = Color::get(20, 20, 121, 121);
+
+    for (int y = 0; y < screen.h / 8 + 1; y++)
+      for (int x = 0; x < screen.w / 8 + 1; x++)
+        screen.renderTile(x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
+  }
+
   int xo = xScroll >> 4;
   int yo = yScroll >> 4;
   int w = (screen.w + 15) >> 4;
