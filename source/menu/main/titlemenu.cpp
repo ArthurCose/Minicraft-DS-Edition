@@ -44,8 +44,11 @@ void TitleMenu::tick(Game &game)
   }
 }
 
-void TitleMenu::render(Screen &screen)
+void TitleMenu::render(Screen &screen, Screen &bottomScreen)
 {
+  if (!clearedSubScreen)
+    bottomScreen.clear(0);
+
   screen.clear(0);
 
   int h = 2;

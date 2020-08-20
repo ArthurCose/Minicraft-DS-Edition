@@ -25,7 +25,7 @@ static std::vector<std::string> aboutText = {
     "december 2011.",
 };
 
-void AboutMenu::render(Screen &screen)
+void AboutMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.clear(0);
 

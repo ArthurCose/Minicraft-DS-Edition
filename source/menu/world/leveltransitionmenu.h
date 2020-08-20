@@ -12,5 +12,5 @@ public:
   LevelTransitionMenu(int dir);
 
   void tick(Game &game) override;
-  void render(Screen &screen) override;
+  void render(Screen &screen, Screen &bottomScreen) override;
 };

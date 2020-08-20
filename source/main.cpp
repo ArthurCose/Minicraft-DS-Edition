@@ -1,10 +1,79 @@
 #include <nds.h>
+#include <nds/arm9/background.h>
 #include <chrono>
 #include <gl2d.h>
 #include "game.h"
 #include "icons.h"
 
-void initialize_palette()
+// in ms
+static int playtime = 0;
+void incrementTime();
+void initialize();
+void initializePalette();
+void initializeMainEngine();
+void initializeSubEngine();
+
+int main()
+{
+  initialize();
+
+  Screen::spriteSheet = std::make_unique<SpriteSheet>(iconsBitmap, 256, 256, 8);
+
+  Game game;
+
+  int refreshRate = 1000 / 59.8261;
+  int lostTime = 0;
+
+  while (true)
+  {
+    auto start = playtime;
+    game.tick();
+
+    glBegin2D();
+    game.render();
+    glEnd2D();
+
+    dmaCopy(&game.bottomScreen.pixels[0], BG_GFX_SUB, game.bottomScreen.pixels.size());
+    glFlush(0);
+    auto end = playtime;
+
+    if (game.frameSkipEnabled)
+    {
+      auto totalTime = end - start;
+
+      lostTime += std::max(totalTime - refreshRate, 0);
+
+      // skip up to one frame per render
+      if (lostTime > refreshRate)
+      {
+        game.tick();
+        lostTime -= refreshRate;
+      }
+    }
+  }
+
+  return 0;
+}
+
+void initialize()
+{
+  timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
+
+  vramSetBankA(VRAM_A_TEXTURE);
+  vramSetBankC(VRAM_C_SUB_BG);
+  vramSetBankF(VRAM_F_TEX_PALETTE);
+
+  initializePalette();
+  initializeMainEngine();
+  initializeSubEngine();
+}
+
+void incrementTime()
+{
+  playtime++;
+}
+
+void initializePalette()
 {
   int pp = 0;
   for (int r = 0; r < 6; r++)
@@ -29,57 +98,25 @@ void initialize_palette()
   Screen::palette[255] = 0;
 }
 
-// in ms
-static int playtime = 0;
-
-void incrementTime()
+void initializeMainEngine()
 {
-  playtime++;
-}
-
-int main()
-{
-  timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
-
   videoSetMode(MODE_5_3D);
   glScreen2D();
-  vramSetBankA(VRAM_A_TEXTURE);
-  vramSetBankB(VRAM_B_TEXTURE);
-  vramSetBankF(VRAM_F_TEX_PALETTE);
+}
 
-  initialize_palette();
-  Screen::spriteSheet = std::make_unique<SpriteSheet>(iconsBitmap, 256, 256, 8);
+void initializeSubEngine()
+{
+  videoSetModeSub(MODE_5_2D | DISPLAY_BG3_ACTIVE);
 
-  Game game;
+  REG_BG3CNT_SUB = BG_BMP8_256x256;
 
-  int refreshRate = 1000 / 59.8261;
-  int lostTime = 0;
+  // and 1:1 scaling
+  REG_BG3PA_SUB = 1 << 8;
+  REG_BG3PB_SUB = 0; // BG SCALING X
+  REG_BG3PC_SUB = 0; // BG SCALING Y
+  REG_BG3PD_SUB = 1 << 8;
+  REG_BG3X_SUB = 0;
+  REG_BG3Y_SUB = 0;
 
-  while (true)
-  {
-    auto start = playtime;
-    game.tick();
-
-    glBegin2D();
-    game.render();
-    glEnd2D();
-    glFlush(0);
-    auto end = playtime;
-
-    if (game.frameSkipEnabled)
-    {
-      auto totalTime = end - start;
-
-      lostTime += std::max(totalTime - refreshRate, 0);
-
-      // skip up to one frame per render
-      if (lostTime > refreshRate)
-      {
-        game.tick();
-        lostTime -= refreshRate;
-      }
-    }
-  }
-
-  return 0;
+  dmaCopy(Screen::palette, BG_PALETTE_SUB, 512);
 }

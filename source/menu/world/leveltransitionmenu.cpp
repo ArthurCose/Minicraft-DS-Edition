@@ -14,7 +14,7 @@ void LevelTransitionMenu::tick(Game &game)
     close(game);
 }
 
-void LevelTransitionMenu::render(Screen &screen)
+void LevelTransitionMenu::render(Screen &screen, Screen &bottomScreen)
 {
   for (int x = 0; x < screen.w / 8; x++)
   {

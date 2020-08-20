@@ -38,7 +38,7 @@ void InventoryMenu::tick(Game &game)
   }
 }
 
-void InventoryMenu::render(Screen &screen)
+void InventoryMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.renderFrame("inventory", 1, 1, 12, 11);
   renderItemList(screen, 1, 1, 12, 11, player->inventory.items, selected);

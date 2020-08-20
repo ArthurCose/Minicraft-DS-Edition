@@ -3,6 +3,8 @@
 #include "menu/menu.h"
 #include "level/level.h"
 #include "entity/player.h"
+#include "gfx/glscreen.h"
+#include "gfx/softwarescreen.h"
 #include "gfx/lightmask.h"
 
 #include <memory>
@@ -13,7 +15,8 @@ class Game
 {
 public:
   static const std::string NAME;
-  Screen screen;
+  GLScreen screen;
+  SoftwareScreen bottomScreen;
   std::shared_ptr<Player> player;
   std::unique_ptr<Menu> menu;
   std::vector<Level> levels;
@@ -34,7 +37,6 @@ public:
   void resetGame();
 
 private:
-  Screen lightScreen;
   LightMask lightMask;
   static const int SCALE = 3;
   int tickCount = 0;

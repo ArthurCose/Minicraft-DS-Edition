@@ -7,5 +7,5 @@ class DeadMenu : public ResultsMenu
 public:
   DeadMenu(int time, int score);
 
-  void render(Screen &screen) override;
+  void render(Screen &screen, Screen &bottomScreen) override;
 };

@@ -18,5 +18,5 @@ public:
   StorageMenu(std::string title, std::shared_ptr<Inventory> storageInventory, std::shared_ptr<Player> player);
 
   void tick(Game &game) override;
-  void render(Screen &screen) override;
+  void render(Screen &screen, Screen &bottomScreen) override;
 };

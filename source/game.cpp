@@ -82,7 +82,7 @@ void Game::render()
 
   if (menu != NULL)
   {
-    menu->render(screen);
+    menu->render(screen, bottomScreen);
   }
 }
 

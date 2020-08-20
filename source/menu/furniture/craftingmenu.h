@@ -18,5 +18,5 @@ public:
   CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player &player);
 
   void tick(Game &game) override;
-  void render(Screen &screen) override;
+  void render(Screen &screen, Screen &bottomScreen) override;
 };

@@ -40,7 +40,7 @@ void ResultsMenu::tick(Game &game)
   }
 }
 
-void ResultsMenu::render(Screen &screen)
+void ResultsMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.renderFrame("", 1, 3, 21, 9);
 

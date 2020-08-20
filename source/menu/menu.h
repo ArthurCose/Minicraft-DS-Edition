@@ -15,7 +15,7 @@ class Menu
 public:
   virtual void tick(Game &game){};
 
-  virtual void render(Screen &screen){};
+  virtual void render(Screen &screen, Screen &bottomScreen){};
 
   template <class T,
             class SharedPtr = typename T::value_type,

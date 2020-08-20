@@ -63,7 +63,7 @@ void StorageMenu::tick(Game &game)
   }
 }
 
-void StorageMenu::render(Screen &screen)
+void StorageMenu::render(Screen &screen, Screen &bottomScreen)
 {
   if (window == 1)
     screen.setOffset(6 * 8, 0);

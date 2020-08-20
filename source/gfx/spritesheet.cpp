@@ -2,10 +2,11 @@
 
 #include <gl2d.h>
 #include <_ansi.h>
-#include "screen.h"
+#include "glscreen.h"
+#include "softwarescreen.h"
 
 SpriteSheet::SpriteSheet(const unsigned char *bitmap, int width, int height, int tileW)
-    : w(width), h(height), tileW(tileW)
+    : bitmap(bitmap), w(width), h(height), tileW(tileW)
 {
   sassert(width == 256 && height == 256, "Only support TEXTURE_SIZE_256 for now");
 
@@ -42,7 +43,7 @@ SpriteSheet::SpriteSheet(const unsigned char *bitmap, int width, int height, int
 static const int BIT_MIRROR_X = 0x01;
 static const int BIT_MIRROR_Y = 0x02;
 
-void SpriteSheet::renderTile(Screen &screen, int xp, int yp, int tile, int compressedColors, int bits)
+void SpriteSheet::renderTile(GLScreen &screen, int xp, int yp, int tile, int compressedColors, int bits)
 {
   xp -= screen.xOffset;
   yp -= screen.yOffset;
@@ -71,4 +72,51 @@ void SpriteSheet::renderTile(Screen &screen, int xp, int yp, int tile, int compr
   int flipMode = ((bits & BIT_MIRROR_X) << 2) | (bits & BIT_MIRROR_Y);
 
   glSprite(xp, yp, flipMode, &tiles[tile]);
+}
+
+void SpriteSheet::renderTile(SoftwareScreen &screen, int xp, int yp, int tile, int compressedColors, int bits)
+{
+  xp -= screen.xOffset;
+  yp -= screen.yOffset;
+
+  bool mirrorX = (bits & BIT_MIRROR_X) > 0;
+  bool mirrorY = (bits & BIT_MIRROR_Y) > 0;
+
+  int tileX = tile % 32;
+  int tileY = tile / 32;
+  int tileOffset = tileX * 8 + tileY * 8 * w;
+
+  int colors[5] = {
+      255,
+      (compressedColors >> (0 * 8)) & 255,
+      (compressedColors >> (1 * 8)) & 255,
+      (compressedColors >> (2 * 8)) & 255,
+      (compressedColors >> (3 * 8)) & 255};
+
+  for (int y = 0; y < 8; y++)
+  {
+    int ys = y;
+    if (mirrorY)
+      ys = 7 - y;
+    if (y + yp < 0 || y + yp >= h)
+      continue;
+    for (int x = 0; x < 8; x++)
+    {
+      if (x + xp < 0 || x + xp >= w)
+        continue;
+
+      int xs = x;
+      if (mirrorX)
+        xs = 7 - x;
+
+      int bitmapIndex = ys * w + xs + tileOffset;
+
+      int colorIndex = bitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
+
+      int col = colors[colorIndex];
+
+      if (col < 255)
+        screen.pixels[(x + xp) + (y + yp) * w] = col;
+    }
+  }
 }

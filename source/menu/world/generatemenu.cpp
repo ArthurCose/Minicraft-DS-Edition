@@ -66,7 +66,7 @@ void GenerateMenu::tick(Game &game)
   currentStep++;
 }
 
-void GenerateMenu::render(Screen &screen)
+void GenerateMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.clear(0);
 

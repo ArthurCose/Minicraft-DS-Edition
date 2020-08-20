@@ -30,7 +30,7 @@ static std::vector<std::string> winInstructions = {
     "to win the game!",
 };
 
-void InstructionsMenu::render(Screen &screen)
+void InstructionsMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.clear(0);
 

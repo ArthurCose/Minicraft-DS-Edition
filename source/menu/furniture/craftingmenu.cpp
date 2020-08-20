@@ -92,7 +92,7 @@ void CraftingMenu::updateAmounts(Player &player)
   }
 }
 
-void CraftingMenu::render(Screen &screen)
+void CraftingMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.renderFrame("Have", 12, 1, 19, 3);
   screen.renderFrame("Cost", 12, 4, 19, 11);
