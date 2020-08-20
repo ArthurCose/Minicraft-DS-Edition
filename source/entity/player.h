@@ -30,9 +30,9 @@ public:
   int getLightRadius() override;
 
 private:
-  int attackTime, attackDir;
-  int onStairDelay;
-  bool swimming;
+  int attackTime = 0, attackDir = 0;
+  int onStairDelay = 0;
+  bool swimming = false;
 
   void attack(Level &level);
   bool use(Game &game, Level &level);
