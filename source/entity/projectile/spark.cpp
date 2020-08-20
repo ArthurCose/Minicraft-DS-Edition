@@ -45,6 +45,9 @@ void Spark::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
 
   for (auto e : toHit)
   {
+    if (e.get() == owner.get())
+      continue;
+
     if (auto mob = std::dynamic_pointer_cast<Mob>(e))
     {
       e->hurt(level, *owner, 1, mob->dir ^ 1);
