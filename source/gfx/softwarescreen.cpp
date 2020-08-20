@@ -87,7 +87,7 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
 
   normalizeBox(x, y, w, h);
 
-  int right = x + 8;
+  int right = x + w;
   int bottom = y + h;
 
   for (int i = y; i < bottom; i++)
