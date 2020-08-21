@@ -50,15 +50,18 @@ void InGameMenu::renderHud(Screen &screen)
 
   if (player->itemSelected)
   {
-    auto &activeItem = *player->getActiveItem();
-    auto name = activeItem.getName();
+    auto activeItem = player->getActiveItem();
+    auto name = activeItem->getName();
 
     int iconOffset = -12;
     int itemNameLeft = (screen.w - name.size() * 8) / 2 - iconOffset / 2;
     int itemNameTop = screen.h - 16;
 
-    screen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem.getSprite(), activeItem.getColor(), 0);
+    screen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
     screen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
+
+    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem))
+      screen.renderTextCentered(std::to_string(resourceItem->count), screen.w / 2, itemNameTop + 12, Color::get(-1, 222, 222, 222));
   }
 }
 
