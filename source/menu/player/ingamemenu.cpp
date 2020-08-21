@@ -71,7 +71,7 @@ void InGameMenu::renderInventory(Screen &bottomScreen)
 
   int inventoryY = 8;
   bottomScreen.renderText("L", 8, inventoryY, Color::get(-1, 555, 555, 555));
-  bottomScreen.renderText("R", bottomScreen.w - 16 - 8, inventoryY, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("R", bottomScreen.w - 16, inventoryY, Color::get(-1, 555, 555, 555));
 
   int itemCount = items.size();
   int itemRenderCount = (bottomScreen.w - 48) / 16;
