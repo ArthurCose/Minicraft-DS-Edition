@@ -18,6 +18,7 @@ void StorageMenu::tick(Game &game)
     int tmp = selected;
     selected = oSelected;
     oSelected = tmp;
+    moving = false;
   }
   if (game.justTapped(KEY_RIGHT) || game.justTapped(KEY_R))
   {
@@ -25,6 +26,7 @@ void StorageMenu::tick(Game &game)
     int tmp = selected;
     selected = oSelected;
     oSelected = tmp;
+    moving = false;
   }
 
   Inventory &i = window == 1 ? player->inventory : *storageInventory;
@@ -36,6 +38,8 @@ void StorageMenu::tick(Game &game)
     selected = 0;
   if (selected >= len)
     selected = len - 1;
+
+  int lastPosition = selected;
 
   if (game.justTapped(KEY_UP))
     selected--;
@@ -49,7 +53,25 @@ void StorageMenu::tick(Game &game)
   if (selected >= len)
     selected = 0;
 
-  if (game.justTapped(KEY_A) && len > 0)
+  if (moving && lastPosition != selected)
+  {
+    auto start = i.items.begin();
+    std::iter_swap(start + lastPosition, start + selected);
+  }
+
+  if (game.justTapped(KEY_SELECT))
+  {
+    moving = !moving;
+
+    if (moving)
+      blinkTimer = 15;
+  }
+
+  if (moving && (game.justTapped(KEY_A) || game.justTapped(KEY_B)))
+  {
+    moving = false;
+  }
+  else if (game.justTapped(KEY_A) && len > 0)
   {
     auto item = i.items[selected];
 
@@ -61,6 +83,11 @@ void StorageMenu::tick(Game &game)
     if (selected >= len)
       selected = len - 1;
   }
+
+  if (moving)
+    blinkTimer = (blinkTimer + 1) % 30;
+  else
+    blinkTimer = 0;
 }
 
 void StorageMenu::render(Screen &screen, Screen &bottomScreen)
@@ -68,10 +95,19 @@ void StorageMenu::render(Screen &screen, Screen &bottomScreen)
   if (window == 1)
     screen.setOffset(6 * 8, 0);
 
-  screen.renderFrame(title, 1, 1, 12, 11);
-  renderItemList(screen, 1, 1, 12, 11, storageInventory->items, window == 0 ? selected : oSelected);
+  renderInventory(screen, 1, 1, title, storageInventory->items, window == 0);
+  renderInventory(screen, 13, 1, "inventory", player->inventory.items, window == 1);
 
-  screen.renderFrame("inventory", 13, 1, 13 + 11, 11);
-  renderItemList(screen, 13, 1, 13 + 11, 11, player->inventory.items, window == 1 ? selected : oSelected);
   screen.setOffset(0, 0);
+}
+
+void StorageMenu::renderInventory(Screen &screen, int x, int y, std::string name, std::vector<std::shared_ptr<Item>> &items, bool active)
+{
+  int currentSelection = active ? selected : oSelected;
+
+  if (active && blinkTimer >= 15)
+    currentSelection = -1;
+
+  screen.renderFrame(name, x, y, x + 11, y + 11);
+  renderItemList(screen, x, y, x + 11, y + 11, items, currentSelection);
 }

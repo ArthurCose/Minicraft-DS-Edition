@@ -15,7 +15,7 @@ void InstructionsMenu::tick(Game &game)
 }
 
 static std::vector<std::string> controlInstructions = {
-    "Controls:",
+    "Basic Controls:",
     " move with the D-Pad",
     " A to use items",
     " B to attack",

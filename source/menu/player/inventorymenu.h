@@ -8,6 +8,8 @@ class InventoryMenu : public Menu
 private:
   const std::shared_ptr<Player> player;
   int selected = 0;
+  int blinkTimer = 0;
+  int moving = false;
 
 public:
   InventoryMenu(std::shared_ptr<Player> player);

@@ -30,7 +30,7 @@ public:
       int selected)
   {
     const int itemCount = listItems.size();
-    const bool renderCursor = itemCount > 0;
+    const bool renderCursor = selected > -1 && itemCount > 0;
 
     const int w = x1 - xo;
     const int h = y1 - yo - 1;
