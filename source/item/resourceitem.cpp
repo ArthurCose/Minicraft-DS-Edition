@@ -1,38 +1,42 @@
 #include "resourceitem.h"
 
-ResourceItem::ResourceItem(const Resource *resource)
-    : resource(resource)
+ResourceItem::ResourceItem(Resource::ID resourceId)
+    : resourceId(resourceId)
 {
 }
 
-std::string ResourceItem::getName() const
-{
-  return resource->name;
-}
-
-ResourceItem::ResourceItem(const Resource *resource, int count)
-    : resource(resource)
+ResourceItem::ResourceItem(Resource::ID resourceId, int count)
+    : resourceId(resourceId)
 {
   this->count = count;
 }
 
+std::string ResourceItem::getName() const
+{
+  return Resource::resources[resourceId]->name;
+}
+
 int ResourceItem::getColor() const
 {
-  return resource->color;
+  return Resource::resources[resourceId]->color;
 }
 
 int ResourceItem::getSprite() const
 {
-  return resource->sprite;
+  return Resource::resources[resourceId]->sprite;
 }
 
 void ResourceItem::renderIcon(Screen &screen, int x, int y)
 {
+  auto resource = Resource::resources[resourceId];
+
   screen.renderTile(x, y, resource->sprite, resource->color, 0);
 }
 
 void ResourceItem::renderInventory(Screen &screen, int x, int y)
 {
+  auto resource = Resource::resources[resourceId];
+
   screen.renderTile(x, y, resource->sprite, resource->color, 0);
   screen.renderText(resource->name, x + 32, y, Color::get(-1, 555, 555, 555));
 
@@ -45,6 +49,8 @@ void ResourceItem::renderInventory(Screen &screen, int x, int y)
 
 bool ResourceItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir)
 {
+  auto resource = Resource::resources[resourceId];
+
   if (resource->interactOn(tile, level, xt, yt, player, attackDir))
   {
     count--;
@@ -57,5 +63,5 @@ bool ResourceItem::isDepleted() { return count <= 0; }
 
 std::shared_ptr<Item> ResourceItem::clone()
 {
-  return std::make_shared<ResourceItem>(resource);
+  return std::make_shared<ResourceItem>(resourceId);
 }

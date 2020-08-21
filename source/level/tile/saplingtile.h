@@ -9,7 +9,7 @@ private:
   unsigned char growsTo;
 
 public:
-  SaplingTile(int id, Tile onType, Tile growsTo);
+  SaplingTile(int id, Tile *onType, Tile *growsTo);
 
   int getMapColor(Level &level, int x, int y) override;
   void tick(Level &level, int x, int y) override;

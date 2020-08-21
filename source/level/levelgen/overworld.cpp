@@ -27,15 +27,15 @@ static bool validateLevel(GeneratedLevel &result)
     count[result.map[i] & 0xff]++;
   }
 
-  if (count[Tile::rock->id & 0xff] < 100)
+  if (count[Tile::rock & 0xff] < 100)
     return false;
-  if (count[Tile::sand->id & 0xff] < 100)
+  if (count[Tile::sand & 0xff] < 100)
     return false;
-  if (count[Tile::grass->id & 0xff] < 100)
+  if (count[Tile::grass & 0xff] < 100)
     return false;
-  if (count[Tile::tree->id & 0xff] < 100)
+  if (count[Tile::tree & 0xff] < 100)
     return false;
-  if (count[Tile::stairsDown->id & 0xff] < 2)
+  if (count[Tile::stairsDown & 0xff] < 2)
     return false;
 
   return true;
@@ -77,15 +77,15 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
 
       if (val < -0.5)
       {
-        result.map[i] = Tile::water->id;
+        result.map[i] = Tile::water;
       }
       else if (val > 0.5 && mval < -1.5)
       {
-        result.map[i] = Tile::rock->id;
+        result.map[i] = Tile::rock;
       }
       else
       {
-        result.map[i] = Tile::grass->id;
+        result.map[i] = Tile::grass;
       }
     }
   }
@@ -106,9 +106,9 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
           for (int xx = xo - 1; xx <= xo + 1; xx++)
             if (xx >= 0 && yy >= 0 && xx < w && yy < h)
             {
-              if (result.map[xx + yy * w] == Tile::grass->id)
+              if (result.map[xx + yy * w] == Tile::grass)
               {
-                result.map[xx + yy * w] = Tile::sand->id;
+                result.map[xx + yy * w] = Tile::sand;
               }
             }
       }
@@ -116,7 +116,7 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
   }
 
   /*
-  * for (int i = 0; i < w * h / 2800; i++) { int xs = random.nextInt(w); int ys = random.nextInt(h); for (int k = 0; k < 10; k++) { int x = xs + random.nextInt(21) - 10; int y = ys + random.nextInt(21) - 10; for (int j = 0; j < 100; j++) { int xo = x + random.nextInt(5) - random.nextInt(5); int yo = y + random.nextInt(5) - random.nextInt(5); for (int yy = yo - 1; yy <= yo + 1; yy++) for (int xx = xo - 1; xx <= xo + 1; xx++) if (xx >= 0 && yy >= 0 && xx < w && yy < h) { if (map[xx + yy * w] == Tile.grass->id) { map[xx + yy * w] = Tile.dirt->id; } } } } }
+  * for (int i = 0; i < w * h / 2800; i++) { int xs = random.nextInt(w); int ys = random.nextInt(h); for (int k = 0; k < 10; k++) { int x = xs + random.nextInt(21) - 10; int y = ys + random.nextInt(21) - 10; for (int j = 0; j < 100; j++) { int xo = x + random.nextInt(5) - random.nextInt(5); int yo = y + random.nextInt(5) - random.nextInt(5); for (int yy = yo - 1; yy <= yo + 1; yy++) for (int xx = xo - 1; xx <= xo + 1; xx++) if (xx >= 0 && yy >= 0 && xx < w && yy < h) { if (map[xx + yy * w] == Tile.grass) { map[xx + yy * w] = Tile.dirt; } } } } }
   */
 
   for (int i = 0; i < w * h / 400; i++)
@@ -129,9 +129,9 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
       int yy = y + random.nextInt(15) - random.nextInt(15);
       if (xx >= 0 && yy >= 0 && xx < w && yy < h)
       {
-        if (result.map[xx + yy * w] == Tile::grass->id)
+        if (result.map[xx + yy * w] == Tile::grass)
         {
-          result.map[xx + yy * w] = Tile::tree->id;
+          result.map[xx + yy * w] = Tile::tree;
         }
       }
     }
@@ -148,9 +148,9 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
       int yy = y + random.nextInt(5) - random.nextInt(5);
       if (xx >= 0 && yy >= 0 && xx < w && yy < h)
       {
-        if (result.map[xx + yy * w] == Tile::grass->id)
+        if (result.map[xx + yy * w] == Tile::grass)
         {
-          result.map[xx + yy * w] = Tile::flower->id;
+          result.map[xx + yy * w] = Tile::flower;
           result.data[xx + yy * w] = (char)(col + random.nextInt(4) * 16);
         }
       }
@@ -163,9 +163,9 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
     int yy = random.nextInt(h);
     if (xx >= 0 && yy >= 0 && xx < w && yy < h)
     {
-      if (result.map[xx + yy * w] == Tile::sand->id)
+      if (result.map[xx + yy * w] == Tile::sand)
       {
-        result.map[xx + yy * w] = Tile::cactus->id;
+        result.map[xx + yy * w] = Tile::cactus;
       }
     }
   }
@@ -183,7 +183,7 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
     {
       for (int xx = x - 1; xx <= x + 1; xx++)
       {
-        if (result.map[xx + yy * w] != Tile::rock->id)
+        if (result.map[xx + yy * w] != Tile::rock)
         {
           continueStairsLoop = true;
           break;
@@ -199,7 +199,7 @@ static GeneratedLevel createOverworldLevel(Random &random, int w, int h)
       continue;
     }
 
-    result.map[x + y * w] = Tile::stairsDown->id;
+    result.map[x + y * w] = Tile::stairsDown;
     count++;
     if (count == 4)
       break;

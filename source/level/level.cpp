@@ -19,29 +19,29 @@ Level::Level(int w, int h, int depth, Level &parentLevel)
     {
       if (parentLevel.getTile(x, y) == Tile::stairsDown)
       {
-        setTile(x, y, Tile::stairsUp->id, 0);
+        setTile(x, y, Tile::stairsUp, 0);
 
         if (depth == 0)
         {
-          setTile(x - 1, y, Tile::hardRock->id, 0);
-          setTile(x + 1, y, Tile::hardRock->id, 0);
-          setTile(x, y - 1, Tile::hardRock->id, 0);
-          setTile(x, y + 1, Tile::hardRock->id, 0);
-          setTile(x - 1, y - 1, Tile::hardRock->id, 0);
-          setTile(x - 1, y + 1, Tile::hardRock->id, 0);
-          setTile(x + 1, y - 1, Tile::hardRock->id, 0);
-          setTile(x + 1, y + 1, Tile::hardRock->id, 0);
+          setTile(x - 1, y, Tile::hardRock, 0);
+          setTile(x + 1, y, Tile::hardRock, 0);
+          setTile(x, y - 1, Tile::hardRock, 0);
+          setTile(x, y + 1, Tile::hardRock, 0);
+          setTile(x - 1, y - 1, Tile::hardRock, 0);
+          setTile(x - 1, y + 1, Tile::hardRock, 0);
+          setTile(x + 1, y - 1, Tile::hardRock, 0);
+          setTile(x + 1, y + 1, Tile::hardRock, 0);
         }
         else
         {
-          setTile(x - 1, y, Tile::dirt->id, 0);
-          setTile(x + 1, y, Tile::dirt->id, 0);
-          setTile(x, y - 1, Tile::dirt->id, 0);
-          setTile(x, y + 1, Tile::dirt->id, 0);
-          setTile(x - 1, y - 1, Tile::dirt->id, 0);
-          setTile(x - 1, y + 1, Tile::dirt->id, 0);
-          setTile(x + 1, y - 1, Tile::dirt->id, 0);
-          setTile(x + 1, y + 1, Tile::dirt->id, 0);
+          setTile(x - 1, y, Tile::dirt, 0);
+          setTile(x + 1, y, Tile::dirt, 0);
+          setTile(x, y - 1, Tile::dirt, 0);
+          setTile(x, y + 1, Tile::dirt, 0);
+          setTile(x - 1, y - 1, Tile::dirt, 0);
+          setTile(x - 1, y + 1, Tile::dirt, 0);
+          setTile(x + 1, y - 1, Tile::dirt, 0);
+          setTile(x + 1, y + 1, Tile::dirt, 0);
         }
       }
     }
@@ -150,7 +150,7 @@ void Level::renderBackground(Screen &screen, int xScroll, int yScroll)
   {
     for (int x = xo; x <= w + xo; x++)
     {
-      getTile(x, y)->render(screen, *this, x, y);
+      Tile::tiles[getTile(x, y)]->render(screen, *this, x, y);
     }
   }
   screen.setOffset(0, 0);
@@ -213,7 +213,7 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
           lightMask.renderLight(e->x - 1, e->y - 4, lr * 8);
       }
 
-      int lr = getTile(x, y)->getLightRadius(*this, x, y);
+      int lr = Tile::tiles[getTile(x, y)]->getLightRadius(*this, x, y);
 
       if (lr > 0)
         lightMask.renderLight(x * 16 + 8, y * 16 + 8, lr * 8);
@@ -355,7 +355,7 @@ void Level::tick(Game &game)
   {
     int xt = random.nextInt(w);
     int yt = random.nextInt(h);
-    getTile(xt, yt)->tick(*this, xt, yt);
+    Tile::tiles[getTile(xt, yt)]->tick(*this, xt, yt);
   }
 
   for (size_t i = 0; i < entities.size(); i++)
@@ -419,7 +419,7 @@ void Level::updateMap(int mapX, int mapY, int viewDistance)
 
   for (int y = top; y < bottom; y++)
     for (int x = left; x < right; x++)
-      m[y * w + x] = getTile(x, y)->getMapColor(*this, x, y);
+      m[y * w + x] = Tile::tiles[getTile(x, y)]->getMapColor(*this, x, y);
 }
 
 std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, int y1)

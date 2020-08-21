@@ -45,7 +45,7 @@ bool FlowerTile::interact(Level &level, int x, int y, Player &player, Item &item
       {
         level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::flower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
         level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::flower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
-        level.setTile(x, y, Tile::grass->id, 0);
+        level.setTile(x, y, Tile::grass, 0);
         return true;
       }
     }
@@ -60,5 +60,5 @@ void FlowerTile::hurt(Level &level, int x, int y, Mob &source, int dmg, int atta
   {
     level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::flower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
   }
-  level.setTile(x, y, Tile::grass->id, 0);
+  level.setTile(x, y, Tile::grass, 0);
 }

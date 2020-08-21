@@ -6,7 +6,7 @@
 class OreTile : public Tile
 {
 public:
-  OreTile(int id, const Resource *toDrop);
+  OreTile(int id, Resource::ID toDrop);
 
   int getMapColor(Level &level, int x, int y) override;
   void render(Screen &screen, Level &level, int x, int y) override;
@@ -16,7 +16,6 @@ public:
   void hurt(Level &level, int x, int y, Mob &source, int dmg, int attackDir) override;
 
 private:
-  const Resource *toDrop;
-  int color;
+  const Resource::ID toDrop;
   void hurt(Level &level, int x, int y, int dmg);
 };

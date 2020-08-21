@@ -23,15 +23,15 @@ void HoleTile::render(Screen &screen, Level &level, int x, int y)
   int transitionColor1 = Color::get(3, 111, level.dirtColor - 111, level.dirtColor);
   int transitionColor2 = Color::get(3, 111, level.sandColor - 110, level.sandColor);
 
-  bool u = !level.getTile(x, y - 1)->connectsToLiquid();
-  bool d = !level.getTile(x, y + 1)->connectsToLiquid();
-  bool l = !level.getTile(x - 1, y)->connectsToLiquid();
-  bool r = !level.getTile(x + 1, y)->connectsToLiquid();
+  bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToLiquid();
+  bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToLiquid();
+  bool l = !Tile::tiles[level.getTile(x - 1, y)]->connectsToLiquid();
+  bool r = !Tile::tiles[level.getTile(x + 1, y)]->connectsToLiquid();
 
-  bool su = u && level.getTile(x, y - 1)->connectsToSand;
-  bool sd = d && level.getTile(x, y + 1)->connectsToSand;
-  bool sl = l && level.getTile(x - 1, y)->connectsToSand;
-  bool sr = r && level.getTile(x + 1, y)->connectsToSand;
+  bool su = u && Tile::tiles[level.getTile(x, y - 1)]->connectsToSand;
+  bool sd = d && Tile::tiles[level.getTile(x, y + 1)]->connectsToSand;
+  bool sl = l && Tile::tiles[level.getTile(x - 1, y)]->connectsToSand;
+  bool sr = r && Tile::tiles[level.getTile(x + 1, y)]->connectsToSand;
 
   if (!u && !l)
   {

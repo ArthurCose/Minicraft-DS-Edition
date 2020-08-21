@@ -64,7 +64,7 @@ void CloudCactusTile::hurt(Level &level, int x, int y, int dmg)
   {
     if (damage >= 10)
     {
-      level.setTile(x, y, Tile::cloud->id, 0);
+      level.setTile(x, y, Tile::cloud, 0);
     }
     else
     {

@@ -4,15 +4,15 @@
 #include "../../entity/entity.h"
 #include "../../gfx/screen.h"
 
-SaplingTile::SaplingTile(int id, Tile onType, Tile growsTo)
+SaplingTile::SaplingTile(int id, Tile *onType, Tile *growsTo)
     : Tile(id)
 {
-  this->onType = onType.id;
-  this->growsTo = growsTo.id;
-  connectsToSand = onType.connectsToSand;
-  connectsToGrass = onType.connectsToGrass;
-  connectsToWater = onType.connectsToWater;
-  connectsToLava = onType.connectsToLava;
+  this->onType = onType->id;
+  this->growsTo = growsTo->id;
+  connectsToSand = onType->connectsToSand;
+  connectsToGrass = onType->connectsToGrass;
+  connectsToWater = onType->connectsToWater;
+  connectsToLava = onType->connectsToLava;
 }
 
 int SaplingTile::getMapColor(Level &level, int x, int y)

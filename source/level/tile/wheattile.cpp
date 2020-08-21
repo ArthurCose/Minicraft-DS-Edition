@@ -51,7 +51,7 @@ bool WheatTile::interact(Level &level, int xt, int yt, Player &player, Item &ite
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::dirt->id, 0);
+        level.setTile(xt, yt, Tile::dirt, 0);
         return true;
       }
     }
@@ -98,5 +98,5 @@ void WheatTile::harvest(Level &level, int x, int y)
     level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::wheat), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
   }
 
-  level.setTile(x, y, Tile::dirt->id, 0);
+  level.setTile(x, y, Tile::dirt, 0);
 }

@@ -9,29 +9,32 @@ class Player;
 class Resource
 {
 public:
-  static const Resource *wood;
-  static const Resource *stone;
-  static const Resource *flower;
-  static const Resource *acorn;
-  static const Resource *dirt;
-  static const Resource *sand;
-  static const Resource *cactusFlower;
-  static const Resource *seeds;
-  static const Resource *wheat;
-  static const Resource *bread;
-  static const Resource *apple;
+  enum ID
+  {
+    wood,
+    stone,
+    flower,
+    acorn,
+    dirt,
+    sand,
+    cactusFlower,
+    seeds,
+    wheat,
+    bread,
+    apple,
+    coal,
+    ironOre,
+    goldOre,
+    ironIngot,
+    goldIngot,
+    slime,
+    glass,
+    cloth,
+    cloud,
+    gem,
+  };
 
-  static const Resource *coal;
-  static const Resource *ironOre;
-  static const Resource *goldOre;
-  static const Resource *ironIngot;
-  static const Resource *goldIngot;
-
-  static const Resource *slime;
-  static const Resource *glass;
-  static const Resource *cloth;
-  static const Resource *cloud;
-  static const Resource *gem;
+  static Resource *resources[256];
 
   const std::string name;
   const int sprite;

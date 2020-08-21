@@ -23,14 +23,14 @@ void TreeTile::render(Screen &screen, Level &level, int x, int y)
   int barkCol1 = Color::get(10, 30, 430, level.grassColor);
   int barkCol2 = Color::get(10, 30, 320, level.grassColor);
 
-  bool u = level.getTile(x, y - 1) == this;
-  bool l = level.getTile(x - 1, y) == this;
-  bool r = level.getTile(x + 1, y) == this;
-  bool d = level.getTile(x, y + 1) == this;
-  bool ul = level.getTile(x - 1, y - 1) == this;
-  bool ur = level.getTile(x + 1, y - 1) == this;
-  bool dl = level.getTile(x - 1, y + 1) == this;
-  bool dr = level.getTile(x + 1, y + 1) == this;
+  bool u = level.getTile(x, y - 1) == this->id;
+  bool l = level.getTile(x - 1, y) == this->id;
+  bool r = level.getTile(x + 1, y) == this->id;
+  bool d = level.getTile(x, y + 1) == this->id;
+  bool ul = level.getTile(x - 1, y - 1) == this->id;
+  bool ur = level.getTile(x + 1, y - 1) == this->id;
+  bool dl = level.getTile(x - 1, y + 1) == this->id;
+  bool dr = level.getTile(x + 1, y + 1) == this->id;
 
   if (u && ul && l)
   {
@@ -123,7 +123,7 @@ void TreeTile::hurt(Level &level, int x, int y, int dmg)
     {
       level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::acorn), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
     }
-    level.setTile(x, y, Tile::grass->id, 0);
+    level.setTile(x, y, Tile::grass, 0);
   }
   else
   {

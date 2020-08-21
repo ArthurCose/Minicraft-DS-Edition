@@ -81,7 +81,7 @@ bool CloudTile::interact(Level &level, int xt, int yt, Player &player, Item &ite
     {
       if (player.payStamina(5))
       {
-        level.setTile(xt, yt, Tile::infiniteFall->id, 0);
+        level.setTile(xt, yt, Tile::infiniteFall, 0);
         int count = random.nextInt(2) + 1;
         for (int i = 0; i < count; i++)
         {

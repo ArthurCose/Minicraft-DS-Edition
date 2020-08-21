@@ -12,7 +12,7 @@ void Recipe::checkCanCraft(Player &player)
   {
     if (auto resourceItem = dynamic_cast<const ResourceItem *>(&item))
     {
-      if (!player.inventory.hasResources(resourceItem->resource, resourceItem->count))
+      if (!player.inventory.hasResources(resourceItem->resourceId, resourceItem->count))
       {
         canCraft = false;
         return;
@@ -30,7 +30,7 @@ void Recipe::craft(Player &player)
   {
     if (auto resourceItem = dynamic_cast<const ResourceItem *>(&item))
     {
-      player.inventory.removeResource(resourceItem->resource, resourceItem->count);
+      player.inventory.removeResource(resourceItem->resourceId, resourceItem->count);
     }
   }
 }

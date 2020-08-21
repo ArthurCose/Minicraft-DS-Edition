@@ -22,10 +22,10 @@ void LavaTile::render(Screen &screen, Level &level, int x, int y)
   int transitionColor1 = Color::get(3, 500, level.dirtColor - 111, level.dirtColor);
   int transitionColor2 = Color::get(3, 500, level.sandColor - 110, level.sandColor);
 
-  auto u = level.getTile(x, y - 1);
-  auto d = level.getTile(x, y + 1);
-  auto l = level.getTile(x - 1, y);
-  auto r = level.getTile(x + 1, y);
+  auto u = Tile::tiles[level.getTile(x, y - 1)];
+  auto d = Tile::tiles[level.getTile(x, y + 1)];
+  auto l = Tile::tiles[level.getTile(x - 1, y)];
+  auto r = Tile::tiles[level.getTile(x + 1, y)];
 
   bool lu = !u->connectsToLava;
   bool ld = !d->connectsToLava;

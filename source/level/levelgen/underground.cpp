@@ -27,13 +27,13 @@ static bool validateLevel(GeneratedLevel &result, int depth)
     count[result.map[i] & 0xff]++;
   }
 
-  if (count[Tile::rock->id & 0xff] < 100)
+  if (count[Tile::rock & 0xff] < 100)
     return false;
-  if (count[Tile::dirt->id & 0xff] < 100)
+  if (count[Tile::dirt & 0xff] < 100)
     return false;
-  if (count[(Tile::ironOre->id & 0xff) + depth - 1] < 20)
+  if (count[(Tile::ironOre & 0xff) + depth - 1] < 20)
     return false;
-  if (depth < 3 && count[Tile::stairsDown->id & 0xff] < 2)
+  if (depth < 3 && count[Tile::stairsDown & 0xff] < 2)
     return false;
 
   return true;
@@ -93,17 +93,17 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
       if (val > -2 && wval < -2.0 + (depth) / 2 * 3)
       {
         if (depth > 2)
-          result.map[i] = Tile::lava->id;
+          result.map[i] = Tile::lava;
         else
-          result.map[i] = Tile::water->id;
+          result.map[i] = Tile::water;
       }
       else if (val > -2 && (mval < -1.7 || nval < -1.4))
       {
-        result.map[i] = Tile::dirt->id;
+        result.map[i] = Tile::dirt;
       }
       else
       {
-        result.map[i] = Tile::rock->id;
+        result.map[i] = Tile::rock;
       }
     }
   }
@@ -120,9 +120,9 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
         int yy = y + random.nextInt(5) - random.nextInt(5);
         if (xx >= r && yy >= r && xx < w - r && yy < h - r)
         {
-          if (result.map[xx + yy * w] == Tile::rock->id)
+          if (result.map[xx + yy * w] == Tile::rock)
           {
-            result.map[xx + yy * w] = (char)((Tile::ironOre->id & 0xff) + depth - 1);
+            result.map[xx + yy * w] = (char)((Tile::ironOre & 0xff) + depth - 1);
           }
         }
       }
@@ -144,7 +144,7 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
       {
         for (int xx = x - 1; xx <= x + 1; xx++)
         {
-          if (result.map[xx + yy * w] != Tile::rock->id)
+          if (result.map[xx + yy * w] != Tile::rock)
           {
             continueStairsLoop = true;
             break;
@@ -157,7 +157,7 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
       if (continueStairsLoop)
         continue;
 
-      result.map[x + y * w] = Tile::stairsDown->id;
+      result.map[x + y * w] = Tile::stairsDown;
       count++;
       if (count == 4)
         break;

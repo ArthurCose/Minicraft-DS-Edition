@@ -37,7 +37,7 @@ bool FarmTile::interact(Level &level, int xt, int yt, Player &player, Item &item
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::dirt->id, 0);
+        level.setTile(xt, yt, Tile::dirt, 0);
         return true;
       }
     }
@@ -51,5 +51,5 @@ void FarmTile::steppedOn(Level &level, int xt, int yt, Entity &entity)
     return;
   if (level.getData(xt, yt) < 5)
     return;
-  level.setTile(xt, yt, Tile::dirt->id, 0);
+  level.setTile(xt, yt, Tile::dirt, 0);
 }

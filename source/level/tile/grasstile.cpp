@@ -22,10 +22,10 @@ void GrassTile::render(Screen &screen, Level &level, int x, int y)
   int col = Color::get(level.grassColor, level.grassColor, level.grassColor + 111, level.grassColor + 111);
   int transitionColor = Color::get(level.grassColor - 111, level.grassColor, level.grassColor + 111, level.dirtColor);
 
-  bool u = !level.getTile(x, y - 1)->connectsToGrass;
-  bool d = !level.getTile(x, y + 1)->connectsToGrass;
-  bool l = !level.getTile(x - 1, y)->connectsToGrass;
-  bool r = !level.getTile(x + 1, y)->connectsToGrass;
+  bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToGrass;
+  bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToGrass;
+  bool l = !Tile::tiles[level.getTile(x - 1, y)]->connectsToGrass;
+  bool r = !Tile::tiles[level.getTile(x + 1, y)]->connectsToGrass;
 
   if (!u && !l)
   {
@@ -83,7 +83,7 @@ bool GrassTile::interact(Level &level, int xt, int yt, Player &player, Item &ite
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::dirt->id, 0);
+        level.setTile(xt, yt, Tile::dirt, 0);
         Sound::monsterHurt.play();
         if (random.nextInt(5) == 0)
         {
@@ -103,7 +103,7 @@ bool GrassTile::interact(Level &level, int xt, int yt, Player &player, Item &ite
           level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
           return true;
         }
-        level.setTile(xt, yt, Tile::farmland->id, 0);
+        level.setTile(xt, yt, Tile::farmland, 0);
         return true;
       }
     }

@@ -43,7 +43,7 @@ void CactusTile::hurt(Level &level, int x, int y, Mob &source, int dmg, int atta
     {
       level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::cactusFlower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
     }
-    level.setTile(x, y, Tile::sand->id, 0);
+    level.setTile(x, y, Tile::sand, 0);
   }
   else
   {

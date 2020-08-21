@@ -27,9 +27,9 @@ static bool validateLevel(GeneratedLevel &result)
     count[result.map[i] & 0xff]++;
   }
 
-  if (count[Tile::cloud->id & 0xff] < 2000)
+  if (count[Tile::cloud & 0xff] < 2000)
     return false;
-  if (count[Tile::stairsDown->id & 0xff] < 2)
+  if (count[Tile::stairsDown & 0xff] < 2)
     return false;
 
   return true;
@@ -66,11 +66,11 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
 
       if (val < -0.25)
       {
-        result.map[i] = Tile::infiniteFall->id;
+        result.map[i] = Tile::infiniteFall;
       }
       else
       {
-        result.map[i] = Tile::cloud->id;
+        result.map[i] = Tile::cloud;
       }
     }
   }
@@ -86,7 +86,7 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
     for (int yy = y - 1; yy <= y + 1; yy++)
       for (int xx = x - 1; xx <= x + 1; xx++)
       {
-        if (result.map[xx + yy * w] != Tile::cloud->id)
+        if (result.map[xx + yy * w] != Tile::cloud)
         {
           continueStairsLoop = true;
           break;
@@ -99,7 +99,7 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
     if (continueStairsLoop)
       continue;
 
-    result.map[x + y * w] = Tile::cloudCactus->id;
+    result.map[x + y * w] = Tile::cloudCactus;
   }
 
   int count = 0;
@@ -116,7 +116,7 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
     {
       for (int xx = x - 1; xx <= x + 1; xx++)
       {
-        if (result.map[xx + yy * w] != Tile::cloud->id)
+        if (result.map[xx + yy * w] != Tile::cloud)
         {
           continueStairsLoop = true;
           break;
@@ -130,7 +130,7 @@ static GeneratedLevel createSkyLevel(Random &random, int w, int h)
     if (continueStairsLoop)
       continue;
 
-    result.map[x + y * w] = Tile::stairsDown->id;
+    result.map[x + y * w] = Tile::stairsDown;
 
     count++;
 

@@ -13,11 +13,11 @@ public:
 
   void add(std::shared_ptr<Item> item);
   void add(int slot, std::shared_ptr<Item> item);
-  bool hasResources(const Resource *r, int count);
-  bool removeResource(const Resource *r, int count);
+  bool hasResources(Resource::ID resourceId, int count);
+  bool removeResource(Resource::ID resourceId, int count);
   bool removeItem(Item &item);
   int count(const Item &item);
 
 private:
-  std::shared_ptr<ResourceItem> findResource(const Resource *resource);
+  std::shared_ptr<ResourceItem> findResource(Resource::ID resourceId);
 };

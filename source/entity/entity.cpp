@@ -31,7 +31,7 @@ bool Entity::move(Level &level, int xa, int ya)
     {
       int xt = x >> 4;
       int yt = y >> 4;
-      level.getTile(xt, yt)->steppedOn(level, xt, yt, *this);
+      Tile::tiles[level.getTile(xt, yt)]->steppedOn(level, xt, yt, *this);
     }
     return !stopped;
   }
@@ -60,7 +60,7 @@ bool Entity::move2(Level &level, int xa, int ya)
       if (xt >= xto0 && xt <= xto1 && yt >= yto0 && yt <= yto1)
         continue;
 
-      Tile *tile = level.getTile(xt, yt);
+      Tile *tile = Tile::tiles[level.getTile(xt, yt)];
 
       tile->bumpedInto(level, xt, yt, *this);
 

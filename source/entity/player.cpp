@@ -30,7 +30,7 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   if (invulnerableTime > 0)
     invulnerableTime--;
 
-  Tile *onTile = level.getTile(x >> 4, y >> 4);
+  auto onTile = level.getTile(x >> 4, y >> 4);
 
   if (onTile == Tile::stairsDown || onTile == Tile::stairsUp)
   {
@@ -158,13 +158,13 @@ void Player::attack(Level &level)
 
     if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
     {
-      if (activeItem->interactOn(*level.getTile(xt, yt), level, xt, yt, *this, attackDir))
+      if (activeItem->interactOn(*Tile::tiles[level.getTile(xt, yt)], level, xt, yt, *this, attackDir))
       {
         done = true;
       }
       else
       {
-        if (level.getTile(xt, yt)->interact(level, xt, yt, *this, *activeItem, attackDir))
+        if (Tile::tiles[level.getTile(xt, yt)]->interact(level, xt, yt, *this, *activeItem, attackDir))
         {
           done = true;
         }
@@ -207,7 +207,7 @@ void Player::attack(Level &level)
 
     if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
     {
-      level.getTile(xt, yt)->hurt(level, xt, yt, *this, random.nextInt(3) + 1, attackDir);
+      Tile::tiles[level.getTile(xt, yt)]->hurt(level, xt, yt, *this, random.nextInt(3) + 1, attackDir);
     }
   }
 }
@@ -238,7 +238,7 @@ bool Player::use(Game &game, Level &level)
 
   if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
   {
-    if (level.getTile(xt, yt)->use(level, xt, yt, *this, attackDir))
+    if (Tile::tiles[level.getTile(xt, yt)]->use(level, xt, yt, *this, attackDir))
       return true;
   }
 
@@ -419,7 +419,7 @@ bool Player::findStartPos(Level &level)
 
   Position spawn;
 
-  auto findAcceptablePos = [&](std::function<bool(Tile *)> acceptableStart) {
+  auto findAcceptablePos = [&](std::function<bool(Tile::ID)> acceptableStart) {
     std::vector<Position> spawnablePositions;
     spawnablePositions.reserve(100);
 
@@ -427,7 +427,7 @@ bool Player::findStartPos(Level &level)
     {
       for (int x = 0; x < level.w; x++)
       {
-        if (acceptableStart(level.getTile(x, y)))
+        if (acceptableStart((Tile::ID)level.getTile(x, y)))
         {
           spawnablePositions.push_back({x, y});
         }
@@ -445,15 +445,15 @@ bool Player::findStartPos(Level &level)
   };
 
   // attempt to start on a grass tile
-  bool foundAcceptableStart = findAcceptablePos([](Tile *tile) { return tile == Tile::grass; });
+  bool foundAcceptableStart = findAcceptablePos([](Tile::ID tile) { return tile == Tile::grass; });
 
   if (!foundAcceptableStart)
   {
     // accept any walkable space
-    foundAcceptableStart = findAcceptablePos([&](Tile *tile) {
+    foundAcceptableStart = findAcceptablePos([&](Tile::ID tile) {
       return tile != Tile::water &&
              tile != Tile::lava &&
-             tile->mayPass(level, x, y, *this);
+             Tile::tiles[tile]->mayPass(level, x, y, *this);
     });
   }
 

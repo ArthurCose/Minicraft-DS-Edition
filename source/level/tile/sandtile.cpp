@@ -20,10 +20,10 @@ void SandTile::render(Screen &screen, Level &level, int x, int y)
   int col = Color::get(level.sandColor + 2, level.sandColor, level.sandColor - 110, level.sandColor - 110);
   int transitionColor = Color::get(level.sandColor - 110, level.sandColor, level.sandColor - 110, level.dirtColor);
 
-  bool u = !level.getTile(x, y - 1)->connectsToSand;
-  bool d = !level.getTile(x, y + 1)->connectsToSand;
-  bool l = !level.getTile(x - 1, y)->connectsToSand;
-  bool r = !level.getTile(x + 1, y)->connectsToSand;
+  bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToSand;
+  bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToSand;
+  bool l = !Tile::tiles[level.getTile(x - 1, y)]->connectsToSand;
+  bool r = !Tile::tiles[level.getTile(x + 1, y)]->connectsToSand;
 
   bool steppedOn = level.getData(x, y) > 0;
 
@@ -84,7 +84,7 @@ bool SandTile::interact(Level &level, int xt, int yt, Player &player, Item &item
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::dirt->id, 0);
+        level.setTile(xt, yt, Tile::dirt, 0);
         level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::sand), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
         return true;
       }

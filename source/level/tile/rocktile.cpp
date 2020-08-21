@@ -23,15 +23,15 @@ void RockTile::render(Screen &screen, Level &level, int x, int y)
   int col = Color::get(444, 444, 333, 333);
   int transitionColor = Color::get(111, 444, 555, level.dirtColor);
 
-  bool u = level.getTile(x, y - 1) != this;
-  bool d = level.getTile(x, y + 1) != this;
-  bool l = level.getTile(x - 1, y) != this;
-  bool r = level.getTile(x + 1, y) != this;
+  bool u = level.getTile(x, y - 1) != this->id;
+  bool d = level.getTile(x, y + 1) != this->id;
+  bool l = level.getTile(x - 1, y) != this->id;
+  bool r = level.getTile(x + 1, y) != this->id;
 
-  bool ul = level.getTile(x - 1, y - 1) != this;
-  bool dl = level.getTile(x - 1, y + 1) != this;
-  bool ur = level.getTile(x + 1, y - 1) != this;
-  bool dr = level.getTile(x + 1, y + 1) != this;
+  bool ul = level.getTile(x - 1, y - 1) != this->id;
+  bool dl = level.getTile(x - 1, y + 1) != this->id;
+  bool ur = level.getTile(x + 1, y - 1) != this->id;
+  bool dr = level.getTile(x + 1, y + 1) != this->id;
 
   if (!u && !l)
   {
@@ -118,7 +118,7 @@ void RockTile::hurt(Level &level, int x, int y, int dmg)
     {
       level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::coal), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
     }
-    level.setTile(x, y, Tile::dirt->id, 0);
+    level.setTile(x, y, Tile::dirt, 0);
   }
   else
   {

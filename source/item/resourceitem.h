@@ -8,11 +8,11 @@
 class ResourceItem : public Item
 {
 public:
-  const Resource *resource;
+  const Resource::ID resourceId;
   int count = 1;
 
-  ResourceItem(const Resource *resource);
-  ResourceItem(const Resource *resource, int count);
+  ResourceItem(Resource::ID resourceId);
+  ResourceItem(Resource::ID resourceId, int count);
 
   std::string getName() const override;
   int getColor() const override;

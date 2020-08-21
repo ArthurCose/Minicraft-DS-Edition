@@ -29,7 +29,7 @@ bool DirtTile::interact(Level &level, int xt, int yt, Player &player, Item &item
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::hole->id, 0);
+        level.setTile(xt, yt, Tile::hole, 0);
         level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::dirt), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
         Sound::monsterHurt.play();
         return true;
@@ -39,7 +39,7 @@ bool DirtTile::interact(Level &level, int xt, int yt, Player &player, Item &item
     {
       if (player.payStamina(4 - tool->level))
       {
-        level.setTile(xt, yt, Tile::farmland->id, 0);
+        level.setTile(xt, yt, Tile::farmland, 0);
         Sound::monsterHurt.play();
         return true;
       }

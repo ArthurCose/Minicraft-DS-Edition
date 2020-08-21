@@ -7,20 +7,19 @@
 #include "../../entity/particle/textparticle.h"
 #include "../../gfx/screen.h"
 
-OreTile::OreTile(int id, const Resource *toDrop)
+OreTile::OreTile(int id, Resource::ID toDrop)
     : Tile(id), toDrop(toDrop)
 {
-  this->color = toDrop->color & 0xffff00;
 }
 
 int OreTile::getMapColor(Level &level, int x, int y)
 {
-  return toDrop->color >> 16 & 255;
+  return Resource::resources[toDrop]->color >> 16 & 255;
 }
 
 void OreTile::render(Screen &screen, Level &level, int x, int y)
 {
-  color = (toDrop->color & 0xffffff00) + Color::get(level.dirtColor);
+  int color = (Resource::resources[toDrop]->color & 0xffffff00) + Color::get(level.dirtColor);
   screen.renderTile(x * 16 + 0, y * 16 + 0, 17 + 1 * 32, color, 0);
   screen.renderTile(x * 16 + 8, y * 16 + 0, 18 + 1 * 32, color, 0);
   screen.renderTile(x * 16 + 0, y * 16 + 8, 17 + 2 * 32, color, 0);
@@ -68,7 +67,7 @@ void OreTile::hurt(Level &level, int x, int y, int dmg)
     int count = random.nextInt(2);
     if (damage >= random.nextInt(10) + 3)
     {
-      level.setTile(x, y, Tile::dirt->id, 0);
+      level.setTile(x, y, Tile::dirt, 0);
       count += 2;
     }
     else

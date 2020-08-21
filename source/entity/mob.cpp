@@ -157,7 +157,7 @@ bool Mob::findStartPos(Level &level)
   if (level.getEntities(xx - r, yy - r, xx + r, yy + r).size() > 0)
     return false;
 
-  if (level.getTile(x, y)->mayPass(level, x, y, *this))
+  if (Tile::tiles[level.getTile(x, y)]->mayPass(level, x, y, *this))
   {
     this->x = xx;
     this->y = yy;
