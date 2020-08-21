@@ -1,8 +1,6 @@
 fix lantern sometimes disappearing when a new lantern is taken out
 fix too many gl calls from lighting blocking sprites from rendering
 
-separate attack and use with items
-
 drop button (add to instructions as well)
 
 

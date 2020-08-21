@@ -16,14 +16,15 @@ void InstructionsMenu::tick(Game &game)
 
 static std::vector<std::string> controlInstructions = {
     "Basic Controls:",
+    "",
     " move with the D-Pad",
-    " A to use items",
-    " B to attack",
+    " A to interact",
+    " B to attack/use items",
     " X to open the inventory",
     " START to pause the game",
     "",
-    "Select an item in the inventory to",
-    "equip it.",
+    "Select an item in the inventory",
+    "to equip it.",
 };
 
 static std::vector<std::string> winInstructions = {
