@@ -17,16 +17,14 @@ static std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=
 
 void Screen::renderText(std::string msg, int x, int y, int col)
 {
-  bool renderBackground = (col & 255) != 255;
-  int backgroundColor = ((col & 255) << 16) | ((col & 255) << 8);
+  int backgroundColor = col & 255;
+  bool renderBackground = backgroundColor != 255;
+
+  if (renderBackground)
+    renderBoxFilled(x, y, msg.size() * 8, 8, backgroundColor);
 
   for (size_t i = 0; i < msg.length(); i++)
   {
-    if (renderBackground)
-    {
-      renderTile(x + i * 8, y, 0, backgroundColor, 0);
-    }
-
     int ix = chars.find(std::toupper(msg[i]));
 
     if (ix >= 0)
@@ -44,32 +42,29 @@ void Screen::renderTextCentered(std::string msg, int x, int y, int col)
 void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
 {
   int borderColor = Color::get(-1, 1, 5, 445);
-  int backgroundColor = Color::get(5, 5, 5, 5);
 
-  for (int y = y0; y <= y1; y++)
+  // corners
+  renderTile(x0 * 8, y0 * 8, 0 + 13 * 32, borderColor, 0);
+  renderTile(x1 * 8, y0 * 8, 0 + 13 * 32, borderColor, 1);
+  renderTile(x0 * 8, y1 * 8, 0 + 13 * 32, borderColor, 2);
+  renderTile(x1 * 8, y1 * 8, 0 + 13 * 32, borderColor, 3);
+
+  // top + bottom side
+  for (int y = y0 + 1; y < y1; y++)
   {
-    for (int x = x0; x <= x1; x++)
-    {
-      if (x == x0 && y == y0)
-        renderTile(x * 8, y * 8, 0 + 13 * 32, borderColor, 0);
-      else if (x == x1 && y == y0)
-        renderTile(x * 8, y * 8, 0 + 13 * 32, borderColor, 1);
-      else if (x == x0 && y == y1)
-        renderTile(x * 8, y * 8, 0 + 13 * 32, borderColor, 2);
-      else if (x == x1 && y == y1)
-        renderTile(x * 8, y * 8, 0 + 13 * 32, borderColor, 3);
-      else if (y == y0)
-        renderTile(x * 8, y * 8, 1 + 13 * 32, borderColor, 0);
-      else if (y == y1)
-        renderTile(x * 8, y * 8, 1 + 13 * 32, borderColor, 2);
-      else if (x == x0)
-        renderTile(x * 8, y * 8, 2 + 13 * 32, borderColor, 0);
-      else if (x == x1)
-        renderTile(x * 8, y * 8, 2 + 13 * 32, borderColor, 1);
-      else
-        renderTile(x * 8, y * 8, 0, backgroundColor, 1);
-    }
+    renderTile(x0 * 8, y * 8, 2 + 13 * 32, borderColor, 0);
+    renderTile(x1 * 8, y * 8, 2 + 13 * 32, borderColor, 1);
   }
+
+  // left and right side
+  for (int x = x0 + 1; x < x1; x++)
+  {
+    renderTile(x * 8, y0 * 8, 1 + 13 * 32, borderColor, 0);
+    renderTile(x * 8, y1 * 8, 1 + 13 * 32, borderColor, 2);
+  }
+
+  // background
+  renderBoxFilled((x0 + 1) * 8, (y0 + 1) * 8, (x1 - x0 - 1) * 8, (y1 - y0 - 1) * 8, Color::get(5));
 
   renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
 }
