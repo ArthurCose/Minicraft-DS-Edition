@@ -4,7 +4,6 @@ fix too many gl calls from lighting blocking sprites from rendering
 separate attack and use with items
 
 drop button (add to instructions as well)
-cycle items with L/R
 
 
 multiplayer!

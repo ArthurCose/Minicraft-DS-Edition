@@ -11,7 +11,8 @@ class Player : public Mob
 public:
   Inventory inventory;
   std::shared_ptr<Item> attackItem;
-  std::shared_ptr<Item> activeItem;
+  int activeItemIndex = 0;
+  bool itemSelected = false;
   int stamina = 0;
   int staminaRecharge = 0;
   int staminaRechargeDelay = 0;
@@ -28,12 +29,14 @@ public:
   bool payStamina(int cost);
   bool canSwim() override;
   int getLightRadius() override;
+  std::shared_ptr<Item> getActiveItem();
 
 private:
   int attackTime = 0, attackDir = 0;
   int onStairDelay = 0;
   bool swimming = false;
 
+  void updateInventory(Game &game);
   void attack(Level &level);
   bool use(Game &game, Level &level);
   bool use(Game &game, Level &level, int x0, int y0, int x1, int y1);

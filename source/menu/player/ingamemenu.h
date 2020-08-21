@@ -16,5 +16,6 @@ private:
   std::shared_ptr<std::vector<unsigned char>> map;
 
   void renderHud(Screen &screen);
+  void renderInventory(Screen &bottomScreen);
   void renderMap(Screen &bottomScreen);
 };

@@ -20,6 +20,8 @@ CraftingMenu::CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player 
   std::sort(this->recipes.begin(), this->recipes.end(), compareCraftability);
 
   updateAmounts(player);
+
+  player.itemSelected = false;
 }
 
 void CraftingMenu::tick(Game &game)

@@ -108,27 +108,46 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
     attack(level);
   }
 
-  if (game.justTapped(KEY_X))
-    game.setMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
-
   if (game.justTapped(KEY_A))
     use(game, level);
+
+  if (game.justTapped(KEY_X))
+    game.setMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
 
   if (game.justTapped(KEY_START))
     game.enterMenu(std::make_unique<PauseMenu>());
 
+  updateInventory(game);
+
   if (attackTime > 0)
     attackTime--;
+}
+
+void Player::updateInventory(Game &game)
+{
+  if (itemSelected && game.justTapped(KEY_L))
+    activeItemIndex--;
+  if (itemSelected && game.justTapped(KEY_R))
+    activeItemIndex++;
+  if (!itemSelected && (game.justTapped(KEY_L) || game.justTapped(KEY_R)))
+    itemSelected = true;
+
+  int itemCount = inventory.items.size();
+
+  if (activeItemIndex < 0)
+    activeItemIndex = 0;
+  if (activeItemIndex > itemCount - 1)
+    activeItemIndex = itemCount - 1;
 }
 
 void Player::attack(Level &level)
 {
   walkDist += 8;
   attackDir = dir;
-  attackItem = activeItem;
+  attackItem = getActiveItem();
   bool done = false;
 
-  if (activeItem != NULL)
+  if (attackItem != NULL)
   {
     attackTime = 10;
     int yo = -2;
@@ -158,20 +177,22 @@ void Player::attack(Level &level)
 
     if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h)
     {
-      if (activeItem->interactOn(*Tile::tiles[level.getTile(xt, yt)], level, xt, yt, *this, attackDir))
+      if (attackItem->interactOn(*Tile::tiles[level.getTile(xt, yt)], level, xt, yt, *this, attackDir))
       {
         done = true;
       }
       else
       {
-        if (Tile::tiles[level.getTile(xt, yt)]->interact(level, xt, yt, *this, *activeItem, attackDir))
+        if (Tile::tiles[level.getTile(xt, yt)]->interact(level, xt, yt, *this, *attackItem, attackDir))
         {
           done = true;
         }
       }
-      if (activeItem->isDepleted())
+      if (attackItem->isDepleted())
       {
-        activeItem = NULL;
+        inventory.removeItem(*attackItem);
+        itemSelected = false;
+        attackItem = NULL;
       }
     }
   }
@@ -179,7 +200,7 @@ void Player::attack(Level &level)
   if (done)
     return;
 
-  if (activeItem == NULL || activeItem->canAttack())
+  if (attackItem == NULL || attackItem->canAttack())
   {
     attackTime = 5;
     int yo = -2;
@@ -266,7 +287,7 @@ bool Player::interact(Level &level, int x0, int y0, int x1, int y1)
   for (auto e : entities)
   {
     if (e.get() != this)
-      if (e->interact(*this, *activeItem, attackDir))
+      if (e->interact(*this, *getActiveItem(), attackDir))
         return true;
   }
 
@@ -347,7 +368,7 @@ void Player::render(Screen &screen)
     col = Color::get(-1, 555, 555, 555);
   }
 
-  auto furnitureItem = std::dynamic_pointer_cast<FurnitureItem>(activeItem);
+  auto furnitureItem = std::dynamic_pointer_cast<FurnitureItem>(getActiveItem());
 
   if (furnitureItem)
   {
@@ -480,7 +501,9 @@ bool Player::payStamina(int cost)
 
 int Player::getLightRadius()
 {
+  auto activeItem = getActiveItem();
   int r = 2;
+
   if (activeItem != NULL)
   {
     if (auto furnitureItem = std::dynamic_pointer_cast<FurnitureItem>(activeItem))
@@ -491,6 +514,13 @@ int Player::getLightRadius()
     }
   }
   return r;
+}
+
+std::shared_ptr<Item> Player::getActiveItem()
+{
+  if (!itemSelected || activeItemIndex >= (int)inventory.items.size())
+    return NULL;
+  return inventory.items[activeItemIndex];
 }
 
 void Player::touchedBy(Level &level, Entity &entity)

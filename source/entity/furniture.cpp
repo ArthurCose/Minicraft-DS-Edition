@@ -29,8 +29,11 @@ void Furniture::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   if (shouldTake)
   {
     remove();
-    game.player->inventory.add(0, game.player->activeItem);
-    game.player->activeItem = std::make_shared<FurnitureItem>(std::static_pointer_cast<Furniture>(self));
+
+    game.player->inventory.add(
+        game.player->activeItemIndex,
+        std::make_shared<FurnitureItem>(std::static_pointer_cast<Furniture>(self)));
+
     shouldTake = false;
   }
 }
@@ -50,7 +53,7 @@ bool Furniture::blocks(Entity &e)
 
 void Furniture::take(Player &player)
 {
-  if (std::dynamic_pointer_cast<PowerGloveItem>(player.activeItem))
+  if (std::dynamic_pointer_cast<PowerGloveItem>(player.getActiveItem()))
   {
     shouldTake = true;
   }
