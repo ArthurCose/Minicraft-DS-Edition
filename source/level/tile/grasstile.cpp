@@ -12,6 +12,11 @@ GrassTile::GrassTile(int id)
   connectsToGrass = true;
 }
 
+int GrassTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(level.grassColor);
+}
+
 void GrassTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(level.grassColor, level.grassColor, level.grassColor + 111, level.grassColor + 111);

@@ -7,6 +7,11 @@
 
 DirtTile::DirtTile(int id) : Tile(id) {}
 
+int DirtTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(level.dirtColor);
+}
+
 void DirtTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(level.dirtColor, level.dirtColor, level.dirtColor - 111, level.dirtColor - 111);

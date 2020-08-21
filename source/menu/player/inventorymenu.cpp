@@ -1,5 +1,7 @@
 #include "inventorymenu.h"
 
+#include "ingamemenu.h"
+
 InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 {
   // put held item back in inventory
@@ -13,7 +15,7 @@ InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 void InventoryMenu::tick(Game &game)
 {
   if (game.justTapped(KEY_X) || game.justTapped(KEY_B) || game.justTapped(KEY_START))
-    close(game);
+    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
 
   if (game.justTapped(KEY_UP))
     selected--;
@@ -34,7 +36,7 @@ void InventoryMenu::tick(Game &game)
     auto item = player->inventory.items[selected];
     player->inventory.removeItem(*item);
     player->activeItem = item;
-    close(game);
+    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
   }
 }
 

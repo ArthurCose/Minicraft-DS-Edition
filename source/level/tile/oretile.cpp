@@ -13,6 +13,11 @@ OreTile::OreTile(int id, const Resource *toDrop)
   this->color = toDrop->color & 0xffff00;
 }
 
+int OreTile::getMapColor(Level &level, int x, int y)
+{
+  return toDrop->color >> 16 & 255;
+}
+
 void OreTile::render(Screen &screen, Level &level, int x, int y)
 {
   color = (toDrop->color & 0xffffff00) + Color::get(level.dirtColor);

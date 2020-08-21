@@ -10,6 +10,11 @@
 HardRockTile::HardRockTile(int id)
     : Tile(id) {}
 
+int HardRockTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(334);
+}
+
 void HardRockTile::tick(Level &level, int xt, int yt)
 {
   int damage = level.getData(xt, yt);

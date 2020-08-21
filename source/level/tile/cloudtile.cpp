@@ -8,10 +8,15 @@
 CloudTile::CloudTile(int id)
     : Tile(id) {}
 
+int CloudTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(444);
+}
+
 void CloudTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(444, 444, 555, 555);
-  int transitionColor = Color::get(333, 444, 555, -1);
+  int transitionColor = Color::get(333, 444, 555, 20);
 
   bool u = level.getTile(x, y - 1) == Tile::infiniteFall;
   bool d = level.getTile(x, y + 1) == Tile::infiniteFall;

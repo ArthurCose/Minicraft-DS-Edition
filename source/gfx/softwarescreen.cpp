@@ -12,7 +12,22 @@ SoftwareScreen::SoftwareScreen()
 
 void SoftwareScreen::clear(int color)
 {
-  pixels.assign(w * h, color);
+  size_t size = w * h;
+  size_t leftoverBytes = size % 4;
+
+  // unsigned int unsignedCol = color;
+  unsigned int word = color |
+                      (color << 8) |
+                      (color << 16) |
+                      (color << 24);
+
+  for (size_t i = size - leftoverBytes; i < size; i++)
+    pixels[i] = color;
+
+  while (dmaBusy(3))
+    ;
+
+  dmaFillWords(word, &pixels[0], w * h);
 }
 
 void SoftwareScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)
@@ -90,7 +105,29 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
   int right = x + w;
   int bottom = y + h;
 
-  for (int i = y; i < bottom; i++)
-    for (int j = x; j < right; j++)
-      pixels[i * this->w + j] = col;
+  if (w * h < 256)
+  {
+    for (int i = y; i < bottom; i++)
+      for (int j = x; j < right; j++)
+        pixels[i * this->w + j] = col;
+  }
+  else
+  {
+    int leftoverBytes = w % 4;
+    unsigned int word = col |
+                        (col << 8) |
+                        (col << 16) |
+                        (col << 24);
+
+    while (dmaBusy(3))
+      ;
+
+    for (int i = y; i < h; i++)
+    {
+      for (int j = x + w - leftoverBytes; j < right; j++)
+        pixels[i * this->w + j] = col;
+
+      dmaFillWords(word, &pixels[i * this->w + x], w);
+    }
+  }
 }

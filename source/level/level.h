@@ -17,6 +17,7 @@ private:
   Random random;
   int depth;
 
+  void updateMap(int x, int y, int viewDistance);
   void sortAndRender(Screen &screen, std::vector<std::shared_ptr<Entity>> list);
   void insertEntity(int x, int y, std::shared_ptr<Entity> e);
   void removeEntity(int x, int y, std::shared_ptr<Entity> e);
@@ -30,6 +31,7 @@ public:
   int dirtColor = 322;
   int sandColor = 550;
   int monsterDensity = 8;
+  std::shared_ptr<std::vector<unsigned char>> map;
   std::vector<unsigned char> tiles;
   std::vector<unsigned char> data;
   std::vector<std::shared_ptr<Entity>> entities;

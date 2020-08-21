@@ -19,44 +19,48 @@ void Game::tick()
 
   scanKeys();
 
+  bool blockTick = false;
+
   if (menu != NULL)
   {
+    blockTick = menu->blocksGameTick;
     menu->tick(*this);
+  }
+
+  if (blockTick)
+    return;
+
+  if (player->removed)
+  {
+    playerDeadTime++;
+
+    if (playerDeadTime > 60)
+    {
+      setMenu(std::make_unique<DeadMenu>(gameTime, player->score));
+    }
   }
   else
   {
-    if (player->removed)
+    if (!hasWon)
+      gameTime++;
+
+    if (pendingLevelChange != 0)
     {
-      playerDeadTime++;
-
-      if (playerDeadTime > 60)
-      {
-        setMenu(std::make_unique<DeadMenu>(gameTime, player->score));
-      }
+      setMenu(std::make_unique<LevelTransitionMenu>(pendingLevelChange));
+      pendingLevelChange = 0;
     }
-    else
-    {
-      if (!hasWon)
-        gameTime++;
-
-      if (pendingLevelChange != 0)
-      {
-        setMenu(std::make_unique<LevelTransitionMenu>(pendingLevelChange));
-        pendingLevelChange = 0;
-      }
-    }
-
-    if (wonTimer > 0)
-    {
-      if (--wonTimer == 0)
-      {
-        setMenu(std::make_unique<WonMenu>(gameTime, player->score));
-      }
-    }
-
-    levels[currentLevel].tick(*this);
-    Tile::tickCount++;
   }
+
+  if (wonTimer > 0)
+  {
+    if (--wonTimer == 0)
+    {
+      setMenu(std::make_unique<WonMenu>(gameTime, player->score));
+    }
+  }
+
+  levels[currentLevel].tick(*this);
+  Tile::tickCount++;
 }
 
 bool Game::isHeld(int key)
@@ -76,47 +80,11 @@ void Game::render()
     Level &level = levels[currentLevel];
 
     level.render(screen, lightMask, *player);
-
-    renderHud();
   }
 
   if (menu != NULL)
   {
     menu->render(screen, bottomScreen);
-  }
-}
-
-void Game::renderHud()
-{
-  const int hudTop = screen.h - 8;
-  const int staminaBarLeft = screen.w - 10 * 8;
-
-  for (int i = 0; i < 10; i++)
-  {
-    if (i < player->health)
-      screen.renderTile(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 200, 500, 533), 0);
-    else
-      screen.renderTile(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 100, 000, 000), 0);
-
-    if (player->staminaRechargeDelay > 0)
-    {
-      if (player->staminaRechargeDelay / 4 % 2 == 0)
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 555, 000, 000), 0);
-      else
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
-    }
-    else
-    {
-      if (i < player->stamina)
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 220, 550, 553), 0);
-      else
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
-    }
-  }
-
-  if (player->activeItem != NULL)
-  {
-    player->activeItem->renderInventory(screen, 10 * 8, screen.h - 16);
   }
 }
 

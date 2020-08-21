@@ -15,6 +15,11 @@ SaplingTile::SaplingTile(int id, Tile onType, Tile growsTo)
   connectsToLava = onType.connectsToLava;
 }
 
+int SaplingTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(40);
+}
+
 void SaplingTile::tick(Level &level, int x, int y)
 {
   int age = level.getData(x, y) + 1;

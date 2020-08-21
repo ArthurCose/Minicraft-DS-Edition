@@ -1,5 +1,7 @@
 #include "generatemenu.h"
 
+#include "../player/ingamemenu.h"
+
 GenerateMenu::GenerateMenu()
 {
   currentStep = 0;
@@ -59,7 +61,7 @@ void GenerateMenu::tick(Game &game)
     break;
   case 7:
     game.frameSkipEnabled = true;
-    close(game);
+    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
     break;
   }
 

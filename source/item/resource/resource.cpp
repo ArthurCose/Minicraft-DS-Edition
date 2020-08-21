@@ -3,6 +3,7 @@
 #include "plantableresource.h"
 #include "foodresource.h"
 #include "../../gfx/color.h"
+#include "../../level/tile/tile.h"
 
 const Resource *Resource::wood = new Resource("Wood", 1 + 4 * 32, Color::get(-1, 200, 531, 430));
 const Resource *Resource::stone = new Resource("Stone", 2 + 4 * 32, Color::get(-1, 111, 333, 555));

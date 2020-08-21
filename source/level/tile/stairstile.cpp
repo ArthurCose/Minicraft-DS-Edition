@@ -10,6 +10,11 @@ StairsTile::StairsTile(int id, bool leadsUp)
   this->leadsUp = leadsUp;
 }
 
+int StairsTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(333);
+}
+
 void StairsTile::render(Screen &screen, Level &level, int x, int y)
 {
   int color = Color::get(level.dirtColor, 000, 333, 444);

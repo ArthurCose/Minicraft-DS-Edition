@@ -12,6 +12,11 @@ HoleTile::HoleTile(int id)
   connectsToLava = true;
 }
 
+int HoleTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(111);
+}
+
 void HoleTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(111, 111, 110, 110);

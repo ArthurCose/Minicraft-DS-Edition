@@ -13,6 +13,11 @@ void RockTile::tick(Level &level, int xt, int yt)
     level.setData(xt, yt, damage - 1);
 }
 
+int RockTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(444);
+}
+
 void RockTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(444, 444, 333, 333);
@@ -57,6 +62,7 @@ void RockTile::render(Screen &screen, Level &level, int x, int y)
   }
   else
     screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 6 : 5) + (d ? 0 : 1) * 32, transitionColor, 3);
+
   if (!d && !r)
   {
     if (!dr)

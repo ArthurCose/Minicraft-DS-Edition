@@ -13,6 +13,8 @@ class Game;
 class Menu
 {
 public:
+  bool blocksGameTick = true;
+
   virtual void tick(Game &game){};
 
   virtual void render(Screen &screen, Screen &bottomScreen){};

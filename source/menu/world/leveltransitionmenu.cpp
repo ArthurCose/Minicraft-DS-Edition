@@ -1,5 +1,7 @@
 #include "leveltransitionmenu.h"
 
+#include "../player/ingamemenu.h"
+
 LevelTransitionMenu::LevelTransitionMenu(int dir)
 {
   this->dir = dir;
@@ -11,7 +13,7 @@ void LevelTransitionMenu::tick(Game &game)
   if (time == 30)
     game.changeLevel(dir);
   if (time == 60)
-    close(game);
+    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
 }
 
 void LevelTransitionMenu::render(Screen &screen, Screen &bottomScreen)

@@ -53,7 +53,8 @@ Tile *Tile::goldOre = new OreTile(20, Resource::goldOre);
 Tile *Tile::gemOre = new OreTile(21, Resource::gem);
 Tile *Tile::cloudCactus = new CloudCactusTile(22);
 
-Tile::Tile(unsigned char id) : id(id)
+Tile::Tile(unsigned char id)
+    : id(id)
 {
   sassert(tiles[id] == NULL, "No duplicate tile ids");
   tiles[id] = this;

@@ -46,5 +46,4 @@ private:
   int wonTimer = 0;
   bool hasWon = false;
   void init();
-  void renderHud();
 };

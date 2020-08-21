@@ -7,6 +7,11 @@
 
 WheatTile::WheatTile(int id) : Tile(id) {}
 
+int WheatTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(450);
+}
+
 void WheatTile::tick(Level &level, int xt, int yt)
 {
   if (random.nextInt(2) == 0)

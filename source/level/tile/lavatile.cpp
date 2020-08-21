@@ -10,6 +10,11 @@ LavaTile::LavaTile(int id)
   connectsToLava = true;
 }
 
+int LavaTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(500);
+}
+
 void LavaTile::render(Screen &screen, Level &level, int x, int y)
 {
   wRandom.setSeed((tickCount + (x / 2 - y) * 4311) / 10 * 54687121l + x * 3271612l + y * 3412987161l);

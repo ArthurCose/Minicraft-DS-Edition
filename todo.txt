@@ -1,3 +1,6 @@
+fix plantable resource, static initialization order issue?
+fix too many gl calls from lighting blocking sprites from rendering
+
 separate attack and use with items
 
 pause
@@ -9,5 +12,4 @@ cycle items with L/R
 multiplayer!
 respawning/beds
 
-figure out what should go on the bottom screen
 adjust menu layout + sizes

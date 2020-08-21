@@ -12,6 +12,11 @@ TreeTile::TreeTile(int id) : Tile(id)
   connectsToGrass = true;
 }
 
+int TreeTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(30);
+}
+
 void TreeTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(10, 30, 151, level.grassColor);

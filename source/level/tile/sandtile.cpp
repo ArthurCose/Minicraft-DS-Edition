@@ -10,6 +10,11 @@ SandTile::SandTile(int id) : Tile(id)
   connectsToSand = true;
 }
 
+int SandTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(level.sandColor);
+}
+
 void SandTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(level.sandColor + 2, level.sandColor, level.sandColor - 110, level.sandColor - 110);

@@ -8,6 +8,11 @@
 FarmTile::FarmTile(int id)
     : Tile(id) {}
 
+int FarmTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(level.dirtColor - 11);
+}
+
 void FarmTile::tick(Level &level, int xt, int yt)
 {
   int age = level.getData(xt, yt);

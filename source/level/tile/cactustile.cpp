@@ -12,6 +12,11 @@ CactusTile::CactusTile(int id)
   connectsToSand = true;
 }
 
+int CactusTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(40);
+}
+
 void CactusTile::render(Screen &screen, Level &level, int x, int y)
 {
   int col = Color::get(20, 40, 50, level.sandColor);

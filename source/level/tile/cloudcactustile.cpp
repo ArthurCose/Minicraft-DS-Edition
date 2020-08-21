@@ -13,6 +13,11 @@ CloudCactusTile::CloudCactusTile(int id)
 {
 }
 
+int CloudCactusTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(333);
+}
+
 void CloudCactusTile::render(Screen &screen, Level &level, int x, int y)
 {
   int color = Color::get(444, 111, 333, 555);

@@ -12,6 +12,11 @@ FlowerTile::FlowerTile(int id)
   connectsToGrass = true;
 }
 
+int FlowerTile::getMapColor(Level &level, int x, int y)
+{
+  return Color::get(555);
+}
+
 void FlowerTile::render(Screen &screen, Level &level, int x, int y)
 {
   GrassTile::render(screen, level, x, y);

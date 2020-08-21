@@ -55,6 +55,8 @@ public:
 
   virtual bool mayPass(Level &level, int x, int y, Entity &e) { return true; };
 
+  virtual int getMapColor(Level &level, int x, int y) { return 404; };
+
   virtual int getLightRadius(Level &level, int x, int y) { return 0; };
 
   virtual void hurt(Level &level, int x, int y, Mob &source, int dmg, int attackDir){};
