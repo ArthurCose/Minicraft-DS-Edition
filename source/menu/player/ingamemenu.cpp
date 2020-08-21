@@ -47,22 +47,6 @@ void InGameMenu::renderHud(Screen &screen)
         screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
     }
   }
-
-  if (player->itemSelected)
-  {
-    auto activeItem = player->getActiveItem();
-    auto name = activeItem->getName();
-
-    int iconOffset = -12;
-    int itemNameLeft = (screen.w - name.size() * 8) / 2 - iconOffset / 2;
-    int itemNameTop = screen.h - 16;
-
-    screen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
-    screen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
-
-    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem))
-      screen.renderTextCentered(std::to_string(resourceItem->count), screen.w / 2, itemNameTop + 12, Color::get(-1, 222, 222, 222));
-  }
 }
 
 void InGameMenu::renderInventory(Screen &bottomScreen)
@@ -98,6 +82,22 @@ void InGameMenu::renderInventory(Screen &bottomScreen)
     auto &item = *items[index];
 
     bottomScreen.renderTile(x, inventoryY, item.getSprite(), item.getColor(), 0);
+  }
+
+  if (player->itemSelected)
+  {
+    auto activeItem = player->getActiveItem();
+    auto name = activeItem->getName();
+
+    int iconOffset = -12;
+    int itemNameLeft = (bottomScreen.w - name.size() * 8) / 2 - iconOffset / 2;
+    int itemNameTop = bottomScreen.h - 24;
+
+    bottomScreen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
+    bottomScreen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
+
+    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem))
+      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, itemNameTop + 12, Color::get(-1, 222, 222, 222));
   }
 }
 
