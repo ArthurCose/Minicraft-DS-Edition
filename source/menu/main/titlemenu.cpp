@@ -67,6 +67,9 @@ void TitleMenu::render(Screen &screen, Screen &bottomScreen)
     }
   }
 
+  int subtitleColor = Color::get(0, 551, 551, 551);
+  screen.renderTextCentered("DS Edition!", screen.w / 2, 6 * 8, subtitleColor);
+
   int optionColor = Color::get(0, 222, 222, 222);
   int highlightColor = Color::get(0, 555, 555, 555);
 
@@ -80,8 +83,6 @@ void TitleMenu::render(Screen &screen, Screen &bottomScreen)
       msg = "> " + msg + " <";
       col = highlightColor;
     }
-    screen.renderText(msg, (screen.w - msg.length() * 8) / 2, (8 + i) * 8, col);
+    screen.renderTextCentered(msg, screen.w / 2, (10 + i) * 8 + 4, col);
   }
-
-  // screen.renderText("(D-PAD,A and B)", 0, screen.h - 8, Color::get(0, 111, 111, 111));
 }

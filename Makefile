@@ -8,6 +8,11 @@ endif
 
 include $(DEVKITARM)/ds_rules
 
+GAME_TITLE := Minicraft DS Edition
+GAME_SUBTITLE1 := built with devkitARM
+GAME_SUBTITLE2 := http://devkitpro.org
+GAME_ICON := ../icon.bmp
+
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed

@@ -14,22 +14,24 @@ void AboutMenu::tick(Game &game)
 }
 
 static std::vector<std::string> aboutText = {
-    "  MinicraftDS is a",
-    "port of Minicraft",
-    "by Arthur Cosentino",
+    "  Minicraft was made by",
+    "Markus Persson for the",
+    "22'nd ludum dare",
+    "competition in december",
+    "2011. It is dedicated",
+    "to my father. <3",
+    "       - Markus Persson",
     "",
-    "  Minicraft was made",
-    "by Markus Persson",
-    "For the 22'nd ludum",
-    "dare competition in",
-    "december 2011.",
+    "  Minicraft DS Edition",
+    "is a port of Minicraft",
+    "by Arthur Cosentino",
 };
 
 void AboutMenu::render(Screen &screen, Screen &bottomScreen)
 {
   screen.clear(0);
 
-  screen.renderTextCentered("About MinicraftDS", screen.w / 2, 28, Color::get(0, 555, 555, 555));
+  screen.renderTextCentered("About Minicraft", screen.w / 2, 28, Color::get(0, 555, 555, 555));
 
   size_t widestLength = 0;
 
