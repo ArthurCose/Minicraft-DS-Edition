@@ -80,5 +80,7 @@ void GenerateMenu::render(Screen &screen, Screen &bottomScreen)
   int barY = screen.h / 2 + 16;
 
   screen.renderBoxFilled(barX, barY, totalSteps * 8, 8, Color::get(555));
-  screen.renderBoxFilled(barX, barY, currentStep * 8, 8, Color::get(151));
+
+  if (currentStep > 0)
+    screen.renderBoxFilled(barX, barY, currentStep * 8, 8, Color::get(151));
 }
