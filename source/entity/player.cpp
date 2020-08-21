@@ -9,6 +9,7 @@
 #include "workbenches/workbench.h"
 #include "particle/textparticle.h"
 #include "../menu/player/inventorymenu.h"
+#include "../menu/player/pausemenu.h"
 
 Player::Player()
 {
@@ -108,16 +109,13 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   }
 
   if (game.justTapped(KEY_X))
-  {
     game.setMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
-  }
 
   if (game.justTapped(KEY_A))
-  {
     use(game, level);
-  }
 
-  // todo: pause, fix instructionsmenu
+  if (game.justTapped(KEY_START))
+    game.enterMenu(std::make_unique<PauseMenu>());
 
   if (attackTime > 0)
     attackTime--;
