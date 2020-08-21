@@ -9,7 +9,7 @@ StorageMenu::StorageMenu(std::string title, std::shared_ptr<Inventory> storageIn
 
 void StorageMenu::tick(Game &game)
 {
-  if (game.justTapped(KEY_B) || game.justTapped(KEY_B) || game.justTapped(KEY_START))
+  if (game.justTapped(KEY_B) || game.justTapped(KEY_X) || game.justTapped(KEY_START))
     close(game);
 
   if (game.justTapped(KEY_LEFT) || game.justTapped(KEY_L))
