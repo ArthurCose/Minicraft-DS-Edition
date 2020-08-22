@@ -54,16 +54,19 @@ void SpriteSheet::renderTile(GLScreen &screen, int xp, int yp, int tile, int com
 
     auto palettesIt = palettes.find(compressedColors);
 
+    std::shared_ptr<TilePalette> palette;
+
     if (palettesIt == palettes.end())
     {
-      TilePalette &palette = *palettes.emplace(compressedColors, std::make_unique<TilePalette>(compressedColors)).first->second;
-      palette.assignToActiveTexture();
+      palette = std::make_shared<TilePalette>(compressedColors);
+      palettes.emplace(compressedColors, palette);
     }
     else
     {
-      TilePalette &palette = *palettesIt->second;
-      palette.assignToActiveTexture();
+      palette = palettesIt->second;
     }
+
+    palette->assignToActiveTexture();
 
     lastBoundPalette = compressedColors;
   }

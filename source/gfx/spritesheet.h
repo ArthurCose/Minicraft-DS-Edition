@@ -13,7 +13,7 @@ class SpriteSheet
 {
 private:
   std::vector<glImage> tiles;
-  std::unordered_map<int, std::unique_ptr<TilePalette>> palettes;
+  std::unordered_map<int, std::shared_ptr<TilePalette>> palettes;
   int lastBoundPalette = -1;
   int textureId;
   const unsigned char *bitmap;
