@@ -27,10 +27,11 @@ public:
       Screen &screen,
       int xo, int yo, int x1, int y1,
       const T &listItems,
-      int selected)
+      int selected,
+      bool renderCursor)
   {
     const int itemCount = listItems.size();
-    const bool renderCursor = selected > -1 && itemCount > 0;
+    renderCursor = renderCursor && itemCount > 0;
 
     const int w = x1 - xo;
     const int h = y1 - yo - 1;

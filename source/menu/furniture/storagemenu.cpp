@@ -105,9 +105,6 @@ void StorageMenu::renderInventory(Screen &screen, int x, int y, std::string name
 {
   int currentSelection = active ? selected : oSelected;
 
-  if (active && blinkTimer >= 15)
-    currentSelection = -1;
-
   screen.renderFrame(name, x, y, x + 11, y + 11);
-  renderItemList(screen, x, y, x + 11, y + 11, items, currentSelection);
+  renderItemList(screen, x, y, x + 11, y + 11, items, currentSelection, blinkTimer < 15);
 }

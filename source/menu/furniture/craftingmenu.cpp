@@ -100,7 +100,7 @@ void CraftingMenu::render(Screen &screen, Screen &bottomScreen)
   screen.renderFrame("Have", 12, 1, 19, 3);
   screen.renderFrame("Cost", 12, 4, 19, 11);
   screen.renderFrame("Crafting", 0, 1, 11, 11);
-  renderItemList(screen, 0, 1, 11, 11, recipes, selected);
+  renderItemList(screen, 0, 1, 11, 11, recipes, selected, true);
 
   if (recipes.size() > 0)
   {
@@ -137,5 +137,4 @@ void CraftingMenu::render(Screen &screen, Screen &bottomScreen)
       screen.renderText(std::to_string(requiredAmount) + "/" + std::to_string(has), xo + 8, yo, color);
     }
   }
-  // renderItemList(screen, 12, 4, 19, 11, recipes.get(selected).costs, -1);
 }
