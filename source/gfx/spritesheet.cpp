@@ -50,8 +50,6 @@ void SpriteSheet::renderTile(GLScreen &screen, int xp, int yp, int tile, int com
 
   if (lastBoundPalette != compressedColors)
   {
-    glSetActiveTexture(textureId);
-
     auto palettesIt = palettes.find(compressedColors);
 
     std::shared_ptr<TilePalette> palette;
@@ -66,6 +64,7 @@ void SpriteSheet::renderTile(GLScreen &screen, int xp, int yp, int tile, int com
       palette = palettesIt->second;
     }
 
+    glSetActiveTexture(textureId);
     palette->assignToActiveTexture();
 
     lastBoundPalette = compressedColors;
