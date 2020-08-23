@@ -95,6 +95,81 @@ Level::Level(int w, int h, int depth)
   }
 }
 
+void Level::tick(Game &game)
+{
+  trySpawn(1);
+
+  for (int i = 0; i < w * h / 50; i++)
+  {
+    int xt = random.nextInt(w);
+    int yt = random.nextInt(h);
+    Tile::tiles[getTile(xt, yt)]->tick(*this, xt, yt);
+  }
+
+  for (size_t i = 0; i < entities.size(); i++)
+  {
+    auto e = entities[i];
+
+    int xto = e->x >> 4;
+    int yto = e->y >> 4;
+
+    e->tick(game, *this, e);
+
+    if (e->removed)
+    {
+      entities.erase(entities.begin() + i);
+      removeEntity(xto, yto, e);
+    }
+    else
+    {
+      int xt = e->x >> 4;
+      int yt = e->y >> 4;
+
+      if (xto != xt || yto != yt)
+      {
+        removeEntity(xto, yto, e);
+        insertEntity(xt, yt, e);
+      }
+    }
+  }
+
+  updateMap(
+      game.player->x >> 4,
+      game.player->y >> 4,
+      depth < 0 ? game.player->getLightRadius() : 8);
+}
+
+void Level::updateMap(int mapX, int mapY, int viewDistance)
+{
+  int left = mapX - viewDistance;
+  int right = mapX + viewDistance + 1;
+  int top = mapY - viewDistance;
+  int bottom = mapY + viewDistance + 1;
+
+  if (left < 0)
+    left = 0;
+  if (left > w)
+    left = w;
+  if (right < 0)
+    right = 0;
+  if (right > w)
+    right = w;
+  if (top < 0)
+    top = 0;
+  if (top > h)
+    top = h;
+  if (bottom < 0)
+    bottom = 0;
+  if (bottom > h)
+    bottom = h;
+
+  auto &m = *map;
+
+  for (int y = top; y < bottom; y++)
+    for (int x = left; x < right; x++)
+      m[y * w + x] = Tile::tiles[getTile(x, y)]->getMapColor(*this, x, y);
+}
+
 void Level::render(Screen &screen, LightMask &lightMask, Player &player)
 {
   int xScroll = player.x - screen.w / 2;
@@ -124,8 +199,6 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
 
   if (depth < 0)
   {
-    lightMask.reset();
-    renderLight(lightMask, xScroll, yScroll);
     lightMask.render(screen);
   }
 }
@@ -345,81 +418,6 @@ void Level::trySpawn(int count)
       this->add(mob);
     }
   }
-}
-
-void Level::tick(Game &game)
-{
-  trySpawn(1);
-
-  for (int i = 0; i < w * h / 50; i++)
-  {
-    int xt = random.nextInt(w);
-    int yt = random.nextInt(h);
-    Tile::tiles[getTile(xt, yt)]->tick(*this, xt, yt);
-  }
-
-  for (size_t i = 0; i < entities.size(); i++)
-  {
-    auto e = entities[i];
-
-    int xto = e->x >> 4;
-    int yto = e->y >> 4;
-
-    e->tick(game, *this, e);
-
-    if (e->removed)
-    {
-      entities.erase(entities.begin() + i);
-      removeEntity(xto, yto, e);
-    }
-    else
-    {
-      int xt = e->x >> 4;
-      int yt = e->y >> 4;
-
-      if (xto != xt || yto != yt)
-      {
-        removeEntity(xto, yto, e);
-        insertEntity(xt, yt, e);
-      }
-    }
-  }
-
-  updateMap(
-      game.player->x >> 4,
-      game.player->y >> 4,
-      depth < 0 ? game.player->getLightRadius() : 8);
-}
-
-void Level::updateMap(int mapX, int mapY, int viewDistance)
-{
-  int left = mapX - viewDistance;
-  int right = mapX + viewDistance + 1;
-  int top = mapY - viewDistance;
-  int bottom = mapY + viewDistance + 1;
-
-  if (left < 0)
-    left = 0;
-  if (left > w)
-    left = w;
-  if (right < 0)
-    right = 0;
-  if (right > w)
-    right = w;
-  if (top < 0)
-    top = 0;
-  if (top > h)
-    top = h;
-  if (bottom < 0)
-    bottom = 0;
-  if (bottom > h)
-    bottom = h;
-
-  auto &m = *map;
-
-  for (int y = top; y < bottom; y++)
-    for (int x = left; x < right; x++)
-      m[y * w + x] = Tile::tiles[getTile(x, y)]->getMapColor(*this, x, y);
 }
 
 std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, int y1)

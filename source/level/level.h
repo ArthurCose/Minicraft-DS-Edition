@@ -41,6 +41,7 @@ public:
   Level(int w, int h, int level);
   Level(int w, int h, int level, Level &parentLevel);
 
+  void tick(Game &game);
   void render(Screen &screen, LightMask &LightMask, Player &player);
   // Tile *getTile(int x, int y);
   inline unsigned char getTile(int x, int y)
@@ -55,7 +56,6 @@ public:
   void add(std::shared_ptr<Entity> entity);
   void remove(std::shared_ptr<Entity> e);
   void trySpawn(int count);
-  void tick(Game &game);
 
   std::vector<std::shared_ptr<Entity>> getEntities(int x0, int y0, int x1, int y1);
 };
