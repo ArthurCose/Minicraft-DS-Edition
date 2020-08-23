@@ -5,12 +5,12 @@
 class Color
 {
 public:
-  inline static int get(int a, int b, int c, int d)
+  static inline constexpr int get(int a, int b, int c, int d)
   {
     return (get(d) << 24) + (get(c) << 16) + (get(b) << 8) + (get(a));
   }
 
-  inline static int get(int d)
+  static inline constexpr int get(int d)
   {
     if (d < 0)
       return 255;
