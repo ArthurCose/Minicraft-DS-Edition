@@ -32,10 +32,26 @@ static inline int nearestPow2(int n)
 
 LightMask::LightMask(Screen &screen)
     : w(screen.w), h(screen.h), scale(2),
-      brightnessW(w / scale + w % scale), brightnessH(h / scale + h % scale),
-      texture(screen.genTexture(NULL, nearestPow2(brightnessW), nearestPow2(brightnessH)))
+      brightnessW(w / scale + w % scale), brightnessH(h / scale + h % scale)
 {
   brightness.resize(brightnessW * brightnessH, 0);
+
+  int textureW = nearestPow2(brightnessW);
+  int textureH = nearestPow2(brightnessH);
+
+  // force textureB into bank B
+  glLockVRAMBank(VRAM_A);
+  textureB = screen.genTexture(NULL, textureW, textureH);
+
+  // force textureD into bank D
+  glLockVRAMBank(VRAM_B);
+  glLockVRAMBank(VRAM_C);
+  textureD = screen.genTexture(NULL, textureW, textureH);
+  glLockVRAMBank(VRAM_D);
+
+  // keep bank B and D locked, but unlock the rest
+  glUnlockVRAMBank(VRAM_A);
+  glUnlockVRAMBank(VRAM_C);
 }
 
 void LightMask::reset()
@@ -95,29 +111,27 @@ void LightMask::renderLight(int x, int y, int r)
 
 void LightMask::render(Screen &screen)
 {
-  // bank swapping based on vramGetBank and glTexImage2D
-  // https://github.com/devkitPro/libnds/blob/master/source/arm9/videoGL.c
-  auto previousBankModes = VRAM_CR;
+  std::shared_ptr<Texture> texture = usingTextureB ? textureB : textureD;
 
   unsigned short *textureData = (unsigned short *)texture->data;
-  unsigned short *dataEnd = textureData + texture->width * texture->height;
 
-  if (dataEnd >= VRAM_A && textureData < VRAM_B)
-    vramSetBankA(VRAM_A_LCD);
-  if (dataEnd >= VRAM_B && textureData < VRAM_C)
+  auto previousBankModes = VRAM_CR;
+
+  if (usingTextureB)
     vramSetBankB(VRAM_B_LCD);
-  if (dataEnd >= VRAM_C && textureData < VRAM_D)
-    vramSetBankC(VRAM_C_LCD);
-  if (dataEnd >= VRAM_D && textureData < VRAM_E)
+  else
     vramSetBankD(VRAM_D_LCD);
 
   for (int y = 0; y < brightnessH - 1; y++)
     for (int x = 0; x < brightnessW - 1; x++)
       textureData[y * texture->width + x] = shouldBlock(x, y) ? ARGB16(1, 0, 0, 0) : 0;
 
+  DC_FlushRange(texture->data, texture->width * texture->height);
   vramRestorePrimaryBanks(previousBankModes);
 
   screen.renderTexture(*texture, 0, 0, scale, scale);
+
+  usingTextureB = !usingTextureB;
 }
 
 bool LightMask::shouldBlock(int scaledX, int scaledY)

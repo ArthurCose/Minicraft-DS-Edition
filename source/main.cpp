@@ -83,7 +83,9 @@ void initialize()
   timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
 
   vramSetBankA(VRAM_A_TEXTURE);
+  vramSetBankB(VRAM_B_TEXTURE); // dedicated to lighting,
   vramSetBankC(VRAM_C_SUB_BG);
+  vramSetBankD(VRAM_D_TEXTURE); // dedicated to lighting
   vramSetBankF(VRAM_F_TEX_PALETTE);
 
   initializePalette();

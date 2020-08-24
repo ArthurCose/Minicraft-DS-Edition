@@ -33,7 +33,9 @@ public:
 private:
   std::vector<unsigned char> brightness;
   const int brightnessW, brightnessH;
-  std::shared_ptr<Texture> texture;
+  std::shared_ptr<Texture> textureB;
+  std::shared_ptr<Texture> textureD;
+  bool usingTextureB = true;
 
   bool shouldBlock(int scaledX, int scaledY);
 };
