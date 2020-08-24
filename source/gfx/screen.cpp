@@ -68,3 +68,14 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
 
   renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
 }
+
+std::shared_ptr<Texture> Screen::genTexture(void *loadData, int w, int h)
+{
+  sassert(false, "Not Implemented");
+  return NULL;
+}
+
+void Screen::renderTexture(Texture &texture, int x, int y, int scaleX, int scaleY)
+{
+  sassert(false, "Not Implemented");
+}

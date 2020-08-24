@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "spritesheet.h"
+#include "texture.h"
 
 class Screen
 {
@@ -28,4 +29,6 @@ public:
   virtual void renderPixel(int x, int y, int col){};
   virtual void renderBox(int x, int y, int w, int h, int col){};
   virtual void renderBoxFilled(int x, int y, int w, int h, int col){};
+  virtual std::shared_ptr<Texture> genTexture(void *loadData, int w, int h);
+  virtual void renderTexture(Texture &texture, int x, int y, int scaleX, int scaleY);
 };

@@ -1,7 +1,7 @@
 #include "lightmask.h"
 
+#include <cmath>
 #include <nds.h>
-
 #include "screen.h"
 
 static const int dither[16] = {
@@ -23,8 +23,17 @@ static const int dither[16] = {
     5,
 };
 
-LightMask::LightMask()
-    : w(SCREEN_WIDTH), h(SCREEN_HEIGHT), scale(3), brightnessW(w / scale + w % scale), brightnessH(h / scale + h % scale)
+static inline int nearestPow2(int n)
+{
+  // not sure why the + 1 is needed
+  // in tests on desktop it works without, and would be off with it
+  return std::pow(2, std::ceil(std::log2(n))) + 1;
+}
+
+LightMask::LightMask(Screen &screen)
+    : w(screen.w), h(screen.h), scale(2),
+      brightnessW(w / scale + w % scale), brightnessH(h / scale + h % scale),
+      texture(screen.genTexture(NULL, nearestPow2(brightnessW), nearestPow2(brightnessH)))
 {
   brightness.resize(brightnessW * brightnessH, 0);
 }
@@ -86,14 +95,29 @@ void LightMask::renderLight(int x, int y, int r)
 
 void LightMask::render(Screen &screen)
 {
-  std::vector<DarknessBox> boxes;
+  // bank swapping based on vramGetBank and glTexImage2D
+  // https://github.com/devkitPro/libnds/blob/master/source/arm9/videoGL.c
+  auto previousBankModes = VRAM_CR;
 
-  compressDarkness(boxes, 0, 0, brightnessW, brightnessH);
+  unsigned short *textureData = (unsigned short *)texture->data;
+  unsigned short *dataEnd = textureData + texture->width * texture->height;
 
-  for (auto &box : boxes)
-  {
-    screen.renderBoxFilled(box.x * scale, box.y * scale, box.w * scale, box.h * scale, 0);
-  }
+  if (dataEnd >= VRAM_A && textureData < VRAM_B)
+    vramSetBankA(VRAM_A_LCD);
+  if (dataEnd >= VRAM_B && textureData < VRAM_C)
+    vramSetBankB(VRAM_B_LCD);
+  if (dataEnd >= VRAM_C && textureData < VRAM_D)
+    vramSetBankC(VRAM_C_LCD);
+  if (dataEnd >= VRAM_D && textureData < VRAM_E)
+    vramSetBankD(VRAM_D_LCD);
+
+  for (int y = 0; y < brightnessH - 1; y++)
+    for (int x = 0; x < brightnessW - 1; x++)
+      textureData[y * texture->width + x] = shouldBlock(x, y) ? ARGB16(1, 0, 0, 0) : 0;
+
+  vramRestorePrimaryBanks(previousBankModes);
+
+  screen.renderTexture(*texture, 0, 0, scale, scale);
 }
 
 bool LightMask::shouldBlock(int scaledX, int scaledY)
@@ -102,86 +126,4 @@ bool LightMask::shouldBlock(int scaledX, int scaledY)
   int ditherIndex = ((scaledX + xOffset) & 3) + ((scaledY + yOffset) & 3) * 4;
 
   return brightness[brightnessIndex] / 10 <= dither[ditherIndex];
-}
-
-// dinky compression algorithm
-// creates columns of darkness whenever a darkness pixel touches a bright pixel on the x axis
-// seems to work well enough to ignore making improvements on, renderLight is the bottleneck
-void LightMask::compressDarkness(
-    std::vector<DarknessBox> &boxes,
-    int searchX, int searchY,
-    int searchW, int searchH)
-{
-  if (searchH == 0)
-    return;
-
-  int lastBoxR = searchX;
-
-  int darkStartX = searchX;
-  bool wasDark = false;
-
-  for (int x = searchX; x < searchX + searchW; x++)
-  {
-    bool isDark = shouldBlock(x, searchY);
-
-    if (isDark && !wasDark)
-    {
-      // search for boxes missed to the left
-      if (x != searchX)
-      {
-        compressDarkness(boxes, lastBoxR, searchY + 1, x - lastBoxR, searchH - 1);
-      }
-
-      darkStartX = x;
-    }
-
-    if (!isDark && wasDark)
-    {
-      DarknessBox box = expandDarknessBox(darkStartX, searchY, x - darkStartX, searchH);
-
-      boxes.push_back(box);
-
-      lastBoxR = x;
-
-      // search for missing boxes below this box
-      compressDarkness(boxes, box.x, searchY + box.h, box.w, searchH - box.h);
-    }
-
-    wasDark = isDark;
-  }
-
-  if (wasDark)
-  {
-    DarknessBox box = expandDarknessBox(darkStartX, searchY, searchW - (darkStartX - searchX), searchH);
-
-    boxes.push_back(box);
-
-    // search for missing boxes below this box
-    compressDarkness(boxes, box.x, searchY + box.h, box.w, searchH - box.h);
-  }
-  else
-  {
-    // search for boxes below
-    compressDarkness(boxes, lastBoxR, searchY + 1, searchW - (lastBoxR - searchX), searchH - 1);
-  }
-}
-
-DarknessBox LightMask::expandDarknessBox(
-    int startX, int startY,
-    int searchW, int searchH)
-{
-  for (int y = startY + 1; y < startY + searchH; y++)
-  {
-    for (int x = startX; x < startX + searchW; x++)
-    {
-      bool isDark = shouldBlock(x, y);
-
-      if (!isDark)
-      {
-        return DarknessBox{x : startX, y : startY, w : searchW, h : y - startY};
-      }
-    }
-  }
-
-  return DarknessBox{x : startX, y : startY, w : searchW, h : searchH};
 }

@@ -9,6 +9,7 @@
 const std::string Game::NAME = "Minicraft DS";
 
 Game::Game()
+    : lightMask(screen)
 {
   setMenu(std::make_unique<TitleMenu>());
 }

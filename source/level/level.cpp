@@ -199,6 +199,8 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
 
   if (depth < 0)
   {
+    lightMask.reset();
+    renderLight(lightMask, xScroll, yScroll);
     lightMask.render(screen);
   }
 }
