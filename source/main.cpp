@@ -66,11 +66,13 @@ int main()
 
       lostTime += std::max(totalTime - refreshRate, 0);
 
-      // skip up to one frame per render
-      if (lostTime > refreshRate)
+      int skips = 0;
+
+      while (skips < 2 && lostTime > refreshRate)
       {
         game.tick();
         lostTime -= refreshRate;
+        skips++;
       }
     }
   }
