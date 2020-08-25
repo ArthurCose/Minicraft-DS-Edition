@@ -1,6 +1,5 @@
 #include <nds.h>
 #include <nds/arm9/background.h>
-#include <chrono>
 #include <gl2d.h>
 #include "game.h"
 #include "icons.h"
