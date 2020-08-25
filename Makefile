@@ -9,8 +9,8 @@ endif
 include $(DEVKITARM)/ds_rules
 
 GAME_TITLE := Minicraft DS Edition
-GAME_SUBTITLE1 := built with devkitARM
-GAME_SUBTITLE2 := http://devkitpro.org
+GAME_SUBTITLE1 := 
+GAME_SUBTITLE2 := 
 GAME_ICON := ../icon.bmp
 
 #---------------------------------------------------------------------------------
