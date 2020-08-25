@@ -14,6 +14,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
     - Cursor is placed on the active item instead
   - Item wheel and cycle with L/R
 - Active item name moved to the bottom screen
+- Lighting is lower resolution (1/3)
 
 ## Internal Differences
 
@@ -33,6 +34,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 - Level generation split into three files based on generator
   - No longer using static class methods
   - New Noise class
+- Menus and entities are organized into folders
 
 ## Screenshots
 
@@ -44,5 +46,5 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 
 ## TODO
 
-- drop button
-- instructions in menus
+- Drop button
+- Instructions in menus
