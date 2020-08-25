@@ -1,7 +1,6 @@
 #include "craftingmenu.h"
 
 #include <algorithm>
-#include "../player/ingamemenu.h"
 
 bool compareCraftability(std::shared_ptr<Recipe> &a, std::shared_ptr<Recipe> &b)
 {
@@ -27,7 +26,7 @@ CraftingMenu::CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player 
 void CraftingMenu::tick(Game &game)
 {
   if (game.justTapped(KEY_B) || game.justTapped(KEY_X) || game.justTapped(KEY_START))
-    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
+    close(game);
 
   int len = recipes.size();
 

@@ -112,7 +112,7 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
     use(game, level);
 
   if (game.justTapped(KEY_X))
-    game.setMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
+    game.enterMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
 
   if (game.justTapped(KEY_Y))
     setItemHeld(false);

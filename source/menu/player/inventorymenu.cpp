@@ -1,7 +1,6 @@
 #include "inventorymenu.h"
 
 #include <algorithm>
-#include "ingamemenu.h"
 
 InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 {
@@ -12,7 +11,7 @@ InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 void InventoryMenu::tick(Game &game)
 {
   if (game.justTapped(KEY_X) || game.justTapped(KEY_B) || game.justTapped(KEY_START))
-    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
+    close(game);
 
   int lastPosition = selected;
 
@@ -52,7 +51,7 @@ void InventoryMenu::tick(Game &game)
   {
     player->setItemHeld(true);
     player->setSelectedItemIndex(selected);
-    game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
+    close(game);
   }
 
   if (moving)

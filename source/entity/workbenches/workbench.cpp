@@ -40,7 +40,7 @@ Workbench::Workbench() : Furniture("Workbench")
 
 bool Workbench::use(Game &game, Level &level, Player &player, int attackDir)
 {
-  game.setMenu(std::make_unique<CraftingMenu>(workbenchRecipes, player));
+  game.enterMenu(std::make_unique<CraftingMenu>(workbenchRecipes, player));
   return true;
 }
 

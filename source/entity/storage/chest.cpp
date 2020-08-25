@@ -12,7 +12,7 @@ Chest::Chest()
 
 bool Chest::use(Game &game, Level &level, Player &player, int attackDir)
 {
-  game.setMenu(std::make_unique<StorageMenu>(std::string("Chest"), inventory, game.player));
+  game.enterMenu(std::make_unique<StorageMenu>(std::string("Chest"), inventory, game.player));
   return true;
 }
 

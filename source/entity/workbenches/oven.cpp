@@ -19,7 +19,7 @@ Oven::Oven()
 
 bool Oven::use(Game &game, Level &level, Player &player, int attackDir)
 {
-  game.setMenu(std::make_unique<CraftingMenu>(ovenRecipes, player));
+  game.enterMenu(std::make_unique<CraftingMenu>(ovenRecipes, player));
   return true;
 }
 
