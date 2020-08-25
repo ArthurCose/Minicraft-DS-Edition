@@ -48,3 +48,9 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 
 - Drop button
 - Instructions in menus
+- Utilize touchscreen
+  - Selecting items?
+  - Moving items?
+  - Marking locations?
+- Display something on the bottom screen in the title menus
+- Optimize LightMask
