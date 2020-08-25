@@ -114,6 +114,9 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   if (game.justTapped(KEY_X))
     game.setMenu(std::make_unique<InventoryMenu>(std::static_pointer_cast<Player>(self)));
 
+  if (game.justTapped(KEY_Y))
+    setItemHeld(false);
+
   if (game.justTapped(KEY_START))
     game.enterMenu(std::make_unique<PauseMenu>());
 
