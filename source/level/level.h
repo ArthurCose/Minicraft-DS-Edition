@@ -43,13 +43,7 @@ public:
 
   void tick(Game &game);
   void render(Screen &screen, LightMask &LightMask, Player &player);
-  // Tile *getTile(int x, int y);
-  inline unsigned char getTile(int x, int y)
-  {
-    if (x < 0 || y < 0 || x >= w || y >= h)
-      return Tile::rock;
-    return tiles[x + y * w];
-  };
+  unsigned char getTile(int x, int y);
   void setTile(int x, int y, unsigned char tile, int dataVal);
   int getData(int x, int y);
   void setData(int x, int y, int val);

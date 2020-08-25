@@ -311,12 +311,12 @@ void Level::sortAndRender(Screen &screen, std::vector<std::shared_ptr<Entity>> l
   }
 }
 
-// Tile *Level::getTile(int x, int y)
-// {
-//   if (x < 0 || y < 0 || x >= w || y >= h)
-//     return Tile::rock;
-//   return Tile::tiles[tiles[x + y * w]];
-// }
+unsigned char Level::getTile(int x, int y)
+{
+  if (x < 0 || y < 0 || x >= w || y >= h)
+    return Tile::rock;
+  return tiles[x + y * w];
+}
 
 void Level::setTile(int x, int y, unsigned char tile, int dataVal)
 {
