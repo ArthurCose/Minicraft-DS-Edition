@@ -4,6 +4,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 
 ## Notable Version Differences
 
+- Loading screen
 - Separate button used for interacting with furniture
 - New level map on the bottom screen
 - Inventory changes:
@@ -32,3 +33,9 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 - Level generation split into three files based on generator
   - No longer using static class methods
   - New Noise class
+
+![Title Screen](screenshots/title-screen.png)
+![Loading Screen](screenshots/loading-screen.png)
+![Overworld](screenshots/overworld.png)
+![Crafting](screenshots/crafting.png)
+![Underground 3](screenshots/underground-3.png)
