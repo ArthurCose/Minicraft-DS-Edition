@@ -68,7 +68,7 @@ int main()
 
       int skips = 0;
 
-      while (skips < 2 && lostTime > refreshRate)
+      while (skips < 3 && lostTime > refreshRate)
       {
         game.tick();
         lostTime -= refreshRate;
