@@ -31,8 +31,8 @@ static inline int nearestPow2(int n)
 }
 
 LightMask::LightMask(Screen &screen)
-    : w(screen.w), h(screen.h), scale(2),
-      brightnessW(w / scale + w % scale), brightnessH(h / scale + h % scale)
+    : w(screen.w), h(screen.h), scale(3),
+      brightnessW(std::ceil(w / scale)), brightnessH(std::ceil(h / scale))
 {
   brightness.resize(brightnessW * brightnessH, 0);
 

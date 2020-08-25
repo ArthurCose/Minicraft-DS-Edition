@@ -17,7 +17,7 @@ class LightMask
 {
 public:
   const int w, h;
-  const int scale;
+  const float scale;
 
   int xOffset = 0;
   int yOffset = 0;
