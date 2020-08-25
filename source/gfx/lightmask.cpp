@@ -109,6 +109,27 @@ void LightMask::renderLight(int x, int y, int r)
   }
 }
 
+void LightMask::fillTile(int x, int y)
+{
+  int x0 = (x * 16 - xOffset) / scale;
+  int y0 = (y * 16 - yOffset) / scale;
+  int x1 = x0 + std::ceil(16 / scale);
+  int y1 = y0 + std::ceil(16 / scale);
+
+  if (x0 < 0)
+    x0 = 0;
+  if (y0 < 0)
+    y0 = 0;
+  if (x1 > brightnessW)
+    x1 = brightnessW;
+  if (y1 > brightnessH)
+    y1 = brightnessH;
+
+  for (int yy = y0; yy < y1; yy++)
+    for (int xx = x0; xx < x1; xx++)
+      brightness[xx + yy * brightnessW] = 255;
+}
+
 void LightMask::render(Screen &screen)
 {
   std::shared_ptr<Texture> texture = usingTextureB ? textureB : textureD;
