@@ -1,10 +1,9 @@
 #include "game.h"
-#include "gfx/color.h"
+
 #include "menu/main/titlemenu.h"
 #include "menu/world/leveltransitionmenu.h"
 #include "menu/player/deadmenu.h"
 #include "menu/player/wonmenu.h"
-#include "icons.h"
 
 const std::string Game::NAME = "Minicraft DS";
 
