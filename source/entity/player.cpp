@@ -125,19 +125,15 @@ void Player::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
 
 void Player::updateInventory(Game &game)
 {
-  if (itemSelected && game.justTapped(KEY_L))
-    activeItemIndex--;
-  if (itemSelected && game.justTapped(KEY_R))
-    activeItemIndex++;
-  if (!itemSelected && (game.justTapped(KEY_L) || game.justTapped(KEY_R)))
-    itemSelected = true;
+  if (itemHeld && game.justTapped(KEY_L))
+    selectedItemIndex--;
+  if (itemHeld && game.justTapped(KEY_R))
+    selectedItemIndex++;
+  if (!itemHeld && (game.justTapped(KEY_L) || game.justTapped(KEY_R)))
+    itemHeld = true;
 
-  int itemCount = inventory.items.size();
-
-  if (activeItemIndex < 0)
-    activeItemIndex = 0;
-  if (activeItemIndex > itemCount - 1)
-    activeItemIndex = itemCount - 1;
+  // make sure selectedItemIndex is within bounds
+  setSelectedItemIndex(selectedItemIndex);
 }
 
 void Player::attack(Level &level)
@@ -191,7 +187,7 @@ void Player::attack(Level &level)
       if (attackItem->isDepleted())
       {
         inventory.removeItem(*attackItem);
-        itemSelected = false;
+        itemHeld = false;
         attackItem = NULL;
       }
     }
@@ -516,11 +512,33 @@ int Player::getLightRadius()
   return r;
 }
 
+void Player::setSelectedItemIndex(int index)
+{
+  int itemCount = inventory.items.size();
+
+  if (index > itemCount - 1)
+    index = itemCount - 1;
+  if (index < 0)
+    index = 0;
+
+  selectedItemIndex = index;
+}
+
+int Player::getSelectedItemIndex()
+{
+  return selectedItemIndex;
+}
+
+void Player::setItemHeld(bool status)
+{
+  itemHeld = status;
+}
+
 std::shared_ptr<Item> Player::getActiveItem()
 {
-  if (!itemSelected || activeItemIndex >= (int)inventory.items.size())
+  if (!itemHeld || selectedItemIndex >= (int)inventory.items.size())
     return NULL;
-  return inventory.items[activeItemIndex];
+  return inventory.items[selectedItemIndex];
 }
 
 void Player::touchedBy(Level &level, Entity &entity)

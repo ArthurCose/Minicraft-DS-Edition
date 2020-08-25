@@ -21,7 +21,7 @@ CraftingMenu::CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player 
 
   updateAmounts(player);
 
-  player.itemSelected = false;
+  player.setItemHeld(false);
 }
 
 void CraftingMenu::tick(Game &game)

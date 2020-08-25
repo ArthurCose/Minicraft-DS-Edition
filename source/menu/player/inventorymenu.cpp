@@ -5,8 +5,8 @@
 
 InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
 {
-  selected = player->activeItemIndex;
-  player->itemSelected = false;
+  selected = player->getSelectedItemIndex();
+  player->setItemHeld(false);
 }
 
 void InventoryMenu::tick(Game &game)
@@ -50,8 +50,8 @@ void InventoryMenu::tick(Game &game)
   }
   else if (game.justTapped(KEY_A) && len > 0)
   {
-    player->itemSelected = true;
-    player->activeItemIndex = selected;
+    player->setItemHeld(true);
+    player->setSelectedItemIndex(selected);
     game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
   }
 

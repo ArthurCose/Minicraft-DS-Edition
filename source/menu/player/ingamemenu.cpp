@@ -52,6 +52,7 @@ void InGameMenu::renderHud(Screen &screen)
 void InGameMenu::renderInventory(Screen &bottomScreen)
 {
   auto &items = player->inventory.items;
+  auto activeItem = player->getActiveItem();
 
   int inventoryY = 8;
   bottomScreen.renderText("L", 8, inventoryY, Color::get(-1, 555, 555, 555));
@@ -59,7 +60,7 @@ void InGameMenu::renderInventory(Screen &bottomScreen)
 
   int itemCount = items.size();
   int itemRenderCount = (bottomScreen.w - 48) / 16;
-  int itemStart = player->activeItemIndex - itemRenderCount / 2;
+  int itemStart = player->getSelectedItemIndex() - itemRenderCount / 2;
 
   if (itemStart + itemRenderCount >= itemCount)
     itemStart = itemCount - itemRenderCount;
@@ -76,7 +77,7 @@ void InGameMenu::renderInventory(Screen &bottomScreen)
     // 16 for L padding, 8 for L, 4 to center
     int x = i * 16 + 16 + 8 + 4;
 
-    if (player->itemSelected && player->activeItemIndex == index)
+    if (activeItem != NULL && player->getSelectedItemIndex() == index)
       bottomScreen.renderBox(x, inventoryY, 8, 8, Color::get(444));
 
     auto &item = *items[index];
@@ -84,9 +85,8 @@ void InGameMenu::renderInventory(Screen &bottomScreen)
     bottomScreen.renderTile(x, inventoryY, item.getSprite(), item.getColor(), 0);
   }
 
-  if (player->itemSelected)
+  if (activeItem != NULL)
   {
-    auto activeItem = player->getActiveItem();
     auto name = activeItem->getName();
 
     int iconOffset = -12;

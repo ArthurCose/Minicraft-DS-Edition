@@ -31,7 +31,7 @@ void Furniture::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
     remove();
 
     game.player->inventory.add(
-        game.player->activeItemIndex,
+        game.player->getSelectedItemIndex(),
         std::make_shared<FurnitureItem>(std::static_pointer_cast<Furniture>(self)));
 
     shouldTake = false;
