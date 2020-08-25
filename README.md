@@ -34,8 +34,15 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
   - No longer using static class methods
   - New Noise class
 
+## Screenshots
+
 ![Title Screen](screenshots/title-screen.png)
 ![Loading Screen](screenshots/loading-screen.png)
 ![Overworld](screenshots/overworld.png)
 ![Crafting](screenshots/crafting.png)
 ![Underground 3](screenshots/underground-3.png)
+
+## TODO
+
+- drop button
+- instructions in menus
