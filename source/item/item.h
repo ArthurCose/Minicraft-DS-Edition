@@ -19,8 +19,6 @@ public:
 
   virtual int getSprite() const { return 0; }
 
-  virtual void onTake(ItemEntity &itemEntity) {}
-
   virtual bool interact(Player &player, Entity &entity, int attackDir) { return false; }
 
   virtual void renderIcon(Screen &screen, int x, int y) {}

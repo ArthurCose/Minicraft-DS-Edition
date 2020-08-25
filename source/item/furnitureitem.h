@@ -16,7 +16,6 @@ public:
   int getSprite() const override;
   void renderIcon(Screen &screen, int x, int y) override;
   void renderInventory(Screen &screen, int x, int y) override;
-  void onTake(ItemEntity &itemEntity) override;
   bool canAttack() override;
   bool interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) override;
   bool isDepleted() override;

@@ -29,10 +29,6 @@ void FurnitureItem::renderInventory(Screen &screen, int x, int y)
   screen.renderText(furniture->name, x + 8, y, Color::get(-1, 555, 555, 555));
 }
 
-void FurnitureItem::onTake(ItemEntity &itemEntity)
-{
-}
-
 bool FurnitureItem::canAttack()
 {
   return false;

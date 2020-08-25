@@ -71,7 +71,6 @@ void ItemEntity::take(Player &player)
 {
   Sound::pickup.play();
   player.score++;
-  item->onTake(*this);
   remove();
 }
 
