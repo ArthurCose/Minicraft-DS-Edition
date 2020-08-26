@@ -9,8 +9,6 @@ endif
 include $(DEVKITARM)/ds_rules
 
 GAME_TITLE := Minicraft DS Edition
-GAME_SUBTITLE1 := 
-GAME_SUBTITLE2 := 
 GAME_ICON := ../icon.bmp
 
 #---------------------------------------------------------------------------------
@@ -115,6 +113,8 @@ else
 #---------------------------------------------------------------------------------
 
 $(OUTPUT).nds : $(OUTPUT).elf
+	ndstool -c $@ -9 $< -b $(GAME_ICON) "$(GAME_TITLE)"
+
 $(OUTPUT).elf : $(OFILES)
 
 #---------------------------------------------------------------------------------
