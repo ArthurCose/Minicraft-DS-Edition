@@ -143,9 +143,11 @@ void LightMask::render(Screen &screen)
   else
     vramSetBankD(VRAM_D_LCD);
 
+  unsigned short shadowColor = Screen::palette[0] | 1 << 15;
+
   for (int y = 0; y < brightnessH - 1; y++)
     for (int x = 0; x < brightnessW - 1; x++)
-      textureData[y * texture->width + x] = shouldBlock(x, y) ? ARGB16(1, 0, 0, 0) : 0;
+      textureData[y * texture->width + x] = shouldBlock(x, y) ? shadowColor : 0;
 
   DC_FlushRange(texture->data, texture->width * texture->height);
   vramRestorePrimaryBanks(previousBankModes);
