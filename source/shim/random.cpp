@@ -2,7 +2,9 @@
 
 #include <time.h>
 
-std::uniform_real_distribution<> dis(1.0, 2.0);
+static std::uniform_real_distribution<> dis(1.0, 2.0);
+
+Random Random::globalRandom = Random();
 
 Random::Random()
     : gaussian_distribution(-1, 1)

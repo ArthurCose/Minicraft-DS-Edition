@@ -63,18 +63,17 @@ Level::Level(int w, int h, int depth)
   }
 
   GeneratedLevel generatedData;
-  Random random = Random();
 
   if (depth == 0)
-    generatedData = generateOverworld(random, w, h);
+    generatedData = generateOverworld(Random::globalRandom, w, h);
   else if (depth < 0)
   {
-    generatedData = generateUnderground(random, w, h, -depth);
+    generatedData = generateUnderground(Random::globalRandom, w, h, -depth);
     monsterDensity = 4;
   }
   else
   {
-    generatedData = generateSky(random, w, h); // Sky level
+    generatedData = generateSky(Random::globalRandom, w, h); // Sky level
     monsterDensity = 4;
   }
 

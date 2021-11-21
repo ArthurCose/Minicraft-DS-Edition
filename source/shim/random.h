@@ -5,6 +5,8 @@
 class Random
 {
 public:
+  static Random globalRandom;
+
   Random();
   Random(long long int seed);
   void setSeed(long long int seed);

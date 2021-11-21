@@ -140,8 +140,8 @@ void Mob::doHurt(Level &level, int damage, int attackDir)
 
 bool Mob::findStartPos(Level &level)
 {
-  int x = random.nextInt(level.w);
-  int y = random.nextInt(level.h);
+  int x = Random::globalRandom.nextInt(level.w);
+  int y = Random::globalRandom.nextInt(level.h);
   int xx = x * 16 + 8;
   int yy = y * 16 + 8;
 

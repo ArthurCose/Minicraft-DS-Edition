@@ -456,7 +456,7 @@ bool Player::findStartPos(Level &level)
 
     if (spawnablePositions.size() > 0)
     {
-      int index = random.nextInt(spawnablePositions.size());
+      int index = Random::globalRandom.nextInt(spawnablePositions.size());
       spawn = spawnablePositions[index];
       return true;
     }
@@ -480,8 +480,8 @@ bool Player::findStartPos(Level &level)
   if (!foundAcceptableStart)
   {
     // accept anything
-    spawn.x = random.nextInt(level.w);
-    spawn.y = random.nextInt(level.h);
+    spawn.x = Random::globalRandom.nextInt(level.w);
+    spawn.y = Random::globalRandom.nextInt(level.h);
   }
 
   this->x = spawn.x * 16 + 8;
