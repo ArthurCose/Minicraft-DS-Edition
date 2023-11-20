@@ -264,7 +264,7 @@ void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
       if (x < 0 || y < 0 || x >= this->w || y >= this->h)
         continue;
 
-      auto entitiesInTile = entitiesInTiles[x + y * this->w];
+      auto& entitiesInTile = entitiesInTiles[x + y * this->w];
 
       rowSprites.insert(rowSprites.end(), entitiesInTile.begin(), entitiesInTile.end());
     }
@@ -294,7 +294,9 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
     {
       if (x < 0 || y < 0 || x >= this->w || y >= this->h)
         continue;
-      std::vector<std::shared_ptr<Entity>> entities = entitiesInTiles[x + y * this->w];
+
+      auto& entities = entitiesInTiles[x + y * this->w];
+
       for (auto &e : entities)
       {
         int lr = e->getLightRadius();
@@ -453,7 +455,7 @@ std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, 
       if (x < 0 || y < 0 || x >= w || y >= h)
         continue;
 
-      std::vector<std::shared_ptr<Entity>> entities = entitiesInTiles[x + y * this->w];
+      auto& entities = entitiesInTiles[x + y * this->w];
 
       for (auto &e : entities)
       {
