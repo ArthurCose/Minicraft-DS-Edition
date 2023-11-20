@@ -1,4 +1,5 @@
 #---------------------------------------------------------------------------------
+.SECONDEXPANSION:
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ export DEPSDIR := $(CURDIR)/$(BUILD)
 
 export CFILES        := $(shell find $(SOURCE) -name *.c)
 export CPPFILES      := $(shell find $(SOURCE) -name *.cpp)
+export HFILES        := $(shell find $(SOURCE) -name *.h)
 export SFILES        := $(shell find $(SOURCE) -name *.s)
 export BINFILES      := soundbank.bin
 export SPRITE_FILES  := $(shell find $(ASSETS) -name *.png)
@@ -118,13 +120,13 @@ $(OUTPUT).nds : $(OUTPUT).elf
 $(OUTPUT).elf : $(OFILES)
 
 #---------------------------------------------------------------------------------
-$(CPPFILES:.cpp=.o) : $(foreach file,$(CPPFILES),../$(file))
+$(CPPFILES:.cpp=.o) : $$(patsubst %.o,../%.cpp,$$@) $(foreach file,$(HFILES),../$(file))
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c ../$(basename $@).cpp -o $@
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
-$(SPRITE_FILES:.png=.o) : $(foreach file,$(SPRITE_FILES),../$(file))
+$(SPRITE_FILES:.png=.o) : $$(patsubst %.o,../%.png,$$@)
 	@mkdir -p $(dir $@)
 	grit ../$(basename $@).png -ff../$(basename $@).grit -o$(basename $@)
 	$(CXX) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
