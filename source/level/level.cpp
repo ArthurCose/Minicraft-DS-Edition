@@ -380,14 +380,10 @@ void Level::add(std::shared_ptr<Entity> entity)
 
 void Level::remove(std::shared_ptr<Entity> e)
 {
-  for (size_t i = 0; i < entities.size(); i++)
-  {
-    if (entities[i].get() == e.get())
-    {
-      entities.erase(entities.begin() + i);
-      break;
-    }
-  }
+  auto iter = std::find(entities.begin(), entities.end(), e);
+
+  if (iter != entities.end())
+    entities.erase(iter);
 
   int xto = e->x >> 4;
   int yto = e->y >> 4;
@@ -406,16 +402,11 @@ void Level::removeEntity(int x, int y, std::shared_ptr<Entity> e)
   if (x < 0 || y < 0 || x >= w || y >= h)
     return;
 
-  auto &entitiesInTile = entitiesInTiles[x + y * w];
+  auto& entitiesInTile = entitiesInTiles[x + y * w];
+  auto iter = std::find(entitiesInTile.begin(), entitiesInTile.end(), e);
 
-  for (size_t i = 0; i < entitiesInTile.size(); i++)
-  {
-    if (entitiesInTile[i].get() == e.get())
-    {
-      entitiesInTile.erase(entitiesInTile.begin() + i);
-      break;
-    }
-  }
+  if (iter != entitiesInTile.end())
+    entitiesInTile.erase(iter);
 }
 
 void Level::trySpawn(int count)
