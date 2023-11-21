@@ -283,16 +283,23 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
 
       if (lr > 0)
       {
-        bool neighborsLit =
-            Tile::tiles[getTile(x, y - 1)]->getLightRadius(*this, x, y - 1) > 1 &&
-            Tile::tiles[getTile(x, y + 1)]->getLightRadius(*this, x, y + 1) > 1 &&
-            Tile::tiles[getTile(x - 1, y)]->getLightRadius(*this, x - 1, y) > 1 &&
-            Tile::tiles[getTile(x + 1, y)]->getLightRadius(*this, x + 1, y) > 1;
+        bool aboveLit = Tile::tiles[getTile(x, y - 1)]->getLightRadius(*this, x, y - 1) > 1;
+        bool belowLit = Tile::tiles[getTile(x, y + 1)]->getLightRadius(*this, x, y + 1) > 1;
+        bool leftLit = Tile::tiles[getTile(x - 1, y)]->getLightRadius(*this, x - 1, y) > 1;
+        bool rightLit = Tile::tiles[getTile(x + 1, y)]->getLightRadius(*this, x + 1, y) > 1;
 
-        if (neighborsLit)
+        bool verticalNeighborsLit = aboveLit && belowLit;
+        bool horizontalNeighborsLit = leftLit && rightLit;
+        bool neighborsLit = verticalNeighborsLit && horizontalNeighborsLit;
+
+        if (neighborsLit) {
           lightMask.fillTile(x, y);
-        else
+        } else if ((horizontalNeighborsLit && x % 2) || (verticalNeighborsLit && y % 2)) {
+          // edge tile, but our neighbors also provide light
+          // skip every other
+        } else {
           lightMask.renderLight(x * 16 + 8, y * 16 + 8, lr * 8);
+        }
       }
     }
   }
