@@ -4,6 +4,8 @@
 #include "../../entity/entity.h"
 #include "../../gfx/screen.h"
 
+static Random wRandom;
+
 WaterTile::WaterTile(int id) : Tile(id)
 {
   connectsToSand = true;
@@ -37,30 +39,41 @@ void WaterTile::render(Screen &screen, Level &level, int x, int y)
   bool sl = wl && l->connectsToSand;
   bool sr = wr && r->connectsToSand;
 
+  int randomInt = wRandom.nextInt();
+
+  auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
+    int tile = randomInt & 0b11;
+    randomInt >>= 2;
+    int bits = randomInt & 0b11;
+    randomInt >>= 2;
+
+    screen.renderTile(x, y, tile, col, bits);
+  };
+
   if (!wu && !wl)
   {
-    screen.renderTile(x * 16 + 0, y * 16 + 0, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 0, y * 16 + 0);
   }
   else
     screen.renderTile(x * 16 + 0, y * 16 + 0, (wl ? 14 : 15) + (wu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
 
   if (!wu && !wr)
   {
-    screen.renderTile(x * 16 + 8, y * 16 + 0, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 8, y * 16 + 0);
   }
   else
     screen.renderTile(x * 16 + 8, y * 16 + 0, (wr ? 16 : 15) + (wu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
 
   if (!wd && !wl)
   {
-    screen.renderTile(x * 16 + 0, y * 16 + 8, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 0, y * 16 + 8);
   }
   else
     screen.renderTile(x * 16 + 0, y * 16 + 8, (wl ? 14 : 15) + (wd ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
 
   if (!wd && !wr)
   {
-    screen.renderTile(x * 16 + 8, y * 16 + 8, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 8, y * 16 + 8);
   }
   else
     screen.renderTile(x * 16 + 8, y * 16 + 8, (wr ? 16 : 15) + (wd ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);

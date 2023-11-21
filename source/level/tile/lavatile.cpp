@@ -3,6 +3,8 @@
 #include "../level.h"
 #include "../../gfx/screen.h"
 
+static Random wRandom;
+
 LavaTile::LavaTile(int id)
     : Tile(id)
 {
@@ -37,29 +39,40 @@ void LavaTile::render(Screen &screen, Level &level, int x, int y)
   bool sl = ll && l->connectsToSand;
   bool sr = lr && r->connectsToSand;
 
+  int randomInt = wRandom.nextInt();
+
+  auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
+    int tile = randomInt & 0b11;
+    randomInt >>= 2;
+    int bits = randomInt & 0b11;
+    randomInt >>= 2;
+
+    screen.renderTile(x, y, tile, col, bits);
+  };
+
   if (!lu && !ll)
   {
-    screen.renderTile(x * 16 + 0, y * 16 + 0, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 0, y * 16 + 0);
   }
   else
     screen.renderTile(x * 16 + 0, y * 16 + 0, (ll ? 14 : 15) + (lu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
 
   if (!lu && !lr)
   {
-    screen.renderTile(x * 16 + 8, y * 16 + 0, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 8, y * 16 + 0);
   }
   else
     screen.renderTile(x * 16 + 8, y * 16 + 0, (lr ? 16 : 15) + (lu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
 
   if (!ld && !ll)
   {
-    screen.renderTile(x * 16 + 0, y * 16 + 8, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 0, y * 16 + 8);
   }
   else
     screen.renderTile(x * 16 + 0, y * 16 + 8, (ll ? 14 : 15) + (ld ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
   if (!ld && !lr)
   {
-    screen.renderTile(x * 16 + 8, y * 16 + 8, wRandom.nextInt(4), col, wRandom.nextInt(4));
+    renderLiquid(x * 16 + 8, y * 16 + 8);
   }
   else
     screen.renderTile(x * 16 + 8, y * 16 + 8, (lr ? 16 : 15) + (ld ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);

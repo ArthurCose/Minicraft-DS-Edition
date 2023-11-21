@@ -4,9 +4,6 @@
 
 class LavaTile : public Tile
 {
-private:
-  Random wRandom;
-
 public:
   LavaTile(int id);
 

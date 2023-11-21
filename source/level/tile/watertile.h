@@ -4,9 +4,6 @@
 
 class WaterTile : public Tile
 {
-private:
-  Random wRandom;
-
 public:
   WaterTile(int id);
 
