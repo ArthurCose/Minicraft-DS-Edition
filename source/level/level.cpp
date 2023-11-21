@@ -145,22 +145,10 @@ void Level::updateMap(int mapX, int mapY, int viewDistance)
   int top = mapY - viewDistance;
   int bottom = mapY + viewDistance + 1;
 
-  if (left < 0)
-    left = 0;
-  if (left > w)
-    left = w;
-  if (right < 0)
-    right = 0;
-  if (right > w)
-    right = w;
-  if (top < 0)
-    top = 0;
-  if (top > h)
-    top = h;
-  if (bottom < 0)
-    bottom = 0;
-  if (bottom > h)
-    bottom = h;
+  left = std::clamp(left, 0, w);
+  right = std::clamp(right, 0, w);
+  top = std::clamp(top, 0, h);
+  bottom = std::clamp(bottom, 0, h);
 
   auto &m = *map;
 
@@ -174,14 +162,8 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
   int xScroll = player.x - screen.w / 2;
   int yScroll = player.y - (screen.h - 8) / 2;
 
-  if (xScroll < 16)
-    xScroll = 16;
-  if (yScroll < 16)
-    yScroll = 16;
-  if (xScroll > w * 16 - screen.w - 16)
-    xScroll = w * 16 - screen.w - 16;
-  if (yScroll > h * 16 - screen.h - 16)
-    yScroll = h * 16 - screen.h - 16;
+  xScroll = std::clamp(xScroll, 16, w * 16 - screen.w - 16);
+  yScroll = std::clamp(yScroll, 16, h * 16 - screen.h - 16);
 
   renderBackground(screen, xScroll, yScroll);
   renderSprites(screen, xScroll, yScroll);
@@ -278,13 +260,15 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
   lightMask.setOffset(xScroll, yScroll);
   int r = 4;
 
-  for (int y = yo - r; y <= h + yo + r; y++)
-  {
-    for (int x = xo - r; x <= w + xo + r; x++)
-    {
-      if (x < 0 || y < 0 || x >= this->w || y >= this->h)
-        continue;
+  int x0 = std::max(xo - r, 0);
+  int y0 = std::max(yo - r, 0);
+  int x1 = std::min(w + xo + r, this->w);
+  int y1 = std::min(h + yo + r, this->h);
 
+  for (int y = y0; y <= y1; y++)
+  {
+    for (int x = x0; x <= x1; x++)
+    {
       auto& entities = entitiesInTiles[x + y * this->w];
 
       for (auto &e : entities)
