@@ -183,16 +183,6 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
   if (yScroll > h * 16 - screen.h - 16)
     yScroll = h * 16 - screen.h - 16;
 
-  if (depth < 0)
-  {
-    int col = Color::get(20, 20, 121, 121);
-    for (int y = 0; y < 14; y++)
-      for (int x = 0; x < 24; x++)
-      {
-        screen.renderTile(x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
-      }
-  }
-
   renderBackground(screen, xScroll, yScroll);
   renderSprites(screen, xScroll, yScroll);
 
