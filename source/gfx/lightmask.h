@@ -5,22 +5,10 @@
 
 class Screen;
 
-struct DarknessBox
-{
-  int x;
-  int y;
-  int w;
-  int h;
-};
-
 class LightMask
 {
 public:
   const int w, h;
-  const float scale;
-
-  int xOffset = 0;
-  int yOffset = 0;
 
   LightMask(Screen &screen);
 
@@ -32,8 +20,11 @@ public:
   void render(Screen &render);
 
 private:
-  std::vector<unsigned char> brightness;
+  std::vector<char> brightness;
+  std::vector<std::vector<char>> precalculatedLights;
   const int brightnessW, brightnessH;
+  int xOffset = 0;
+  int yOffset = 0;
   std::shared_ptr<Texture> textureB;
   std::shared_ptr<Texture> textureD;
   bool usingTextureB = true;

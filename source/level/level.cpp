@@ -309,13 +309,13 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
 
       if (lr > 0)
       {
-        bool neighorsLit =
+        bool neighborsLit =
             Tile::tiles[getTile(x, y - 1)]->getLightRadius(*this, x, y - 1) > 1 &&
             Tile::tiles[getTile(x, y + 1)]->getLightRadius(*this, x, y + 1) > 1 &&
             Tile::tiles[getTile(x - 1, y)]->getLightRadius(*this, x - 1, y) > 1 &&
             Tile::tiles[getTile(x + 1, y)]->getLightRadius(*this, x + 1, y) > 1;
 
-        if (neighorsLit)
+        if (neighborsLit)
           lightMask.fillTile(x, y);
         else
           lightMask.renderLight(x * 16 + 8, y * 16 + 8, lr * 8);
