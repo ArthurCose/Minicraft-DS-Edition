@@ -4,4 +4,4 @@
 
 class Random;
 
-GeneratedLevel generateSky(Random &random, int w, int h);
+GeneratedLevel generateSky(Random& random, int w, int h);

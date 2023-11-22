@@ -8,7 +8,7 @@
 const std::string Game::NAME = "Minicraft DS";
 
 Game::Game()
-    : lightMask(screen)
+  : lightMask(screen)
 {
   setMenu(std::make_unique<TitleMenu>());
 }
@@ -21,8 +21,7 @@ void Game::tick()
 
   bool blockTick = false;
 
-  if (menu != NULL)
-  {
+  if (menu != NULL) {
     blockTick = menu->blocksGameTick;
     menu->tick(*this);
   }
@@ -30,31 +29,24 @@ void Game::tick()
   if (blockTick)
     return;
 
-  if (player->removed)
-  {
+  if (player->removed) {
     playerDeadTime++;
 
-    if (playerDeadTime > 60)
-    {
+    if (playerDeadTime > 60) {
       setMenu(std::make_unique<DeadMenu>(gameTime, player->score));
     }
-  }
-  else
-  {
+  } else {
     if (!hasWon)
       gameTime++;
 
-    if (pendingLevelChange != 0)
-    {
+    if (pendingLevelChange != 0) {
       setMenu(std::make_unique<LevelTransitionMenu>(pendingLevelChange));
       pendingLevelChange = 0;
     }
   }
 
-  if (wonTimer > 0)
-  {
-    if (--wonTimer == 0)
-    {
+  if (wonTimer > 0) {
+    if (--wonTimer == 0) {
       setMenu(std::make_unique<WonMenu>(gameTime, player->score));
     }
   }
@@ -75,15 +67,13 @@ bool Game::justTapped(int key)
 
 void Game::render()
 {
-  if (player != NULL)
-  {
-    Level &level = levels[currentLevel];
+  if (player != NULL) {
+    Level& level = levels[currentLevel];
 
     level.render(screen, lightMask, *player);
   }
 
-  if (menu != NULL)
-  {
+  if (menu != NULL) {
     menu->render(screen, bottomScreen);
   }
 }

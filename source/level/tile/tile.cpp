@@ -28,7 +28,7 @@ Random Tile::random(time(NULL));
 
 int Tile::tickCount = 0;
 
-Tile *Tile::tiles[256];
+Tile* Tile::tiles[256];
 
 Tile::Tile(unsigned char id) : id(id)
 {

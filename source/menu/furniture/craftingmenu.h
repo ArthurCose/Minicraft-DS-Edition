@@ -12,11 +12,11 @@ private:
   std::vector<int> storedRequiredAmounts;
   std::vector<std::shared_ptr<Recipe>> recipes;
 
-  void updateAmounts(Player &player);
+  void updateAmounts(Player& player);
 
 public:
-  CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player &player);
+  CraftingMenu(std::vector<std::shared_ptr<Recipe>> recipes, Player& player);
 
-  void tick(Game &game) override;
-  void render(Screen &screen, Screen &bottomScreen) override;
+  void tick(Game& game) override;
+  void render(Screen& screen, Screen& bottomScreen) override;
 };

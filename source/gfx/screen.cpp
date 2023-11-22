@@ -23,12 +23,10 @@ void Screen::renderText(std::string msg, int x, int y, int col)
   if (renderBackground)
     renderBoxFilled(x, y, msg.size() * 8, 8, backgroundColor);
 
-  for (size_t i = 0; i < msg.length(); i++)
-  {
+  for (size_t i = 0; i < msg.length(); i++) {
     int ix = chars.find(std::toupper(msg[i]));
 
-    if (ix >= 0)
-    {
+    if (ix >= 0) {
       renderTile(x + i * 8, y, ix + 30 * 32, col, 0);
     }
   }
@@ -50,15 +48,13 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
   renderTile(x1 * 8, y1 * 8, 0 + 13 * 32, borderColor, 3);
 
   // top + bottom side
-  for (int y = y0 + 1; y < y1; y++)
-  {
+  for (int y = y0 + 1; y < y1; y++) {
     renderTile(x0 * 8, y * 8, 2 + 13 * 32, borderColor, 0);
     renderTile(x1 * 8, y * 8, 2 + 13 * 32, borderColor, 1);
   }
 
   // left and right side
-  for (int x = x0 + 1; x < x1; x++)
-  {
+  for (int x = x0 + 1; x < x1; x++) {
     renderTile(x * 8, y0 * 8, 1 + 13 * 32, borderColor, 0);
     renderTile(x * 8, y1 * 8, 1 + 13 * 32, borderColor, 2);
   }
@@ -69,13 +65,13 @@ void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
   renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
 }
 
-std::shared_ptr<Texture> Screen::genTexture(void *loadData, int w, int h)
+std::shared_ptr<Texture> Screen::genTexture(void* loadData, int w, int h)
 {
   sassert(false, "Not Implemented");
   return NULL;
 }
 
-void Screen::renderTexture(Texture &texture, int x, int y, int scaleX, int scaleY)
+void Screen::renderTexture(Texture& texture, int x, int y, int scaleX, int scaleY)
 {
   sassert(false, "Not Implemented");
 }

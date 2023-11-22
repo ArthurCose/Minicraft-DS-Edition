@@ -1,14 +1,12 @@
 #include "noise.h"
 
-Noise::Noise(Random &random, int w, int h, int featureSize)
-    : w(w), h(h)
+Noise::Noise(Random& random, int w, int h, int featureSize)
+  : w(w), h(h)
 {
   values.resize(w * h);
 
-  for (int y = 0; y < w; y += featureSize)
-  {
-    for (int x = 0; x < w; x += featureSize)
-    {
+  for (int y = 0; y < w; y += featureSize) {
+    for (int x = 0; x < w; x += featureSize) {
       setSample(x, y, random.nextFloat() * 2 - 1);
     }
   }
@@ -16,13 +14,10 @@ Noise::Noise(Random &random, int w, int h, int featureSize)
   int stepSize = featureSize;
   double scale = 1.0 / w;
   double scaleMod = 1;
-  do
-  {
+  do {
     int halfStep = stepSize / 2;
-    for (int y = 0; y < w; y += stepSize)
-    {
-      for (int x = 0; x < w; x += stepSize)
-      {
+    for (int y = 0; y < w; y += stepSize) {
+      for (int x = 0; x < w; x += stepSize) {
         double a = sample(x, y);
         double b = sample(x + stepSize, y);
         double c = sample(x, y + stepSize);
@@ -32,10 +27,8 @@ Noise::Noise(Random &random, int w, int h, int featureSize)
         setSample(x + halfStep, y + halfStep, e);
       }
     }
-    for (int y = 0; y < w; y += stepSize)
-    {
-      for (int x = 0; x < w; x += stepSize)
-      {
+    for (int y = 0; y < w; y += stepSize) {
+      for (int x = 0; x < w; x += stepSize) {
         double a = sample(x, y);
         double b = sample(x + stepSize, y);
         double c = sample(x, y + stepSize);

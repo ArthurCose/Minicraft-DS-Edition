@@ -7,7 +7,7 @@
 class SoftwareScreen : public Screen
 {
 private:
-  void normalizeBox(int &x, int &y, int &w, int &h);
+  void normalizeBox(int& x, int& y, int& w, int& h);
 
 public:
   std::vector<unsigned char> pixels;

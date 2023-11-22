@@ -11,11 +11,11 @@ private:
   std::string scoreString;
 
 protected:
-  void renderResults(Screen &screen);
+  void renderResults(Screen& screen);
 
 public:
   ResultsMenu(int time, int score);
 
-  void tick(Game &game) override;
-  void render(Screen &screen, Screen &bottomScreen) override;
+  void tick(Game& game) override;
+  void render(Screen& screen, Screen& bottomScreen) override;
 };

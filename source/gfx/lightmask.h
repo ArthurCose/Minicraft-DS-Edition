@@ -10,14 +10,14 @@ class LightMask
 public:
   const int w, h;
 
-  LightMask(Screen &screen);
+  LightMask(Screen& screen);
 
   void reset();
   void setOffset(int xOffset, int yOffset);
   void renderLight(int x, int y, int r);
   void fillTile(int x, int y);
   void updateTexture();
-  void render(Screen &render);
+  void render(Screen& render);
 
 private:
   std::vector<char> brightness;

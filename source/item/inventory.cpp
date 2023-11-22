@@ -9,31 +9,23 @@ void Inventory::add(int slot, std::shared_ptr<Item> item)
 {
   auto itemsBegin = items.begin();
 
-  if (auto toTake = std::dynamic_pointer_cast<ResourceItem>(item))
-  {
+  if (auto toTake = std::dynamic_pointer_cast<ResourceItem>(item)) {
     auto has = findResource(toTake->resourceId);
 
-    if (has == NULL)
-    {
+    if (has == NULL) {
       items.insert(itemsBegin + slot, toTake);
-    }
-    else
-    {
+    } else {
       has->count += toTake->count;
     }
-  }
-  else
-  {
+  } else {
     items.insert(itemsBegin + slot, item);
   }
 }
 
 std::shared_ptr<ResourceItem> Inventory::findResource(Resource::ID resource)
 {
-  for (auto item : items)
-  {
-    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(item))
-    {
+  for (auto item : items) {
+    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(item)) {
       if (resourceItem->resourceId == resource)
         return resourceItem;
     }
@@ -67,12 +59,10 @@ bool Inventory::removeResource(Resource::ID resourceId, int count)
   return true;
 }
 
-bool Inventory::removeItem(Item &item)
+bool Inventory::removeItem(Item& item)
 {
-  for (auto it = items.begin(); it < items.end(); it++)
-  {
-    if ((*it)->matches(item))
-    {
+  for (auto it = items.begin(); it < items.end(); it++) {
+    if ((*it)->matches(item)) {
       items.erase(it);
       return true;
     }
@@ -81,23 +71,19 @@ bool Inventory::removeItem(Item &item)
   return false;
 }
 
-int Inventory::count(const Item &item)
+int Inventory::count(const Item& item)
 {
   // unsafe hack to avoid exceptions
   // dont pass this pointer
-  if (auto resourceItem = dynamic_cast<const ResourceItem *>(&item))
-  {
+  if (auto resourceItem = dynamic_cast<const ResourceItem*>(&item)) {
     auto ri = findResource(resourceItem->resourceId);
 
     if (ri != NULL)
       return ri->count;
-  }
-  else
-  {
+  } else {
     int count = 0;
 
-    for (auto inventoryItem : items)
-    {
+    for (auto inventoryItem : items) {
       if (inventoryItem->matches(item))
         count++;
     }

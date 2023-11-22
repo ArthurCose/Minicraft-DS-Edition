@@ -13,10 +13,10 @@ private:
 public:
   Zombie(int lvl);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  void render(Screen &screen) override;
-  void touchedBy(Level &level, Entity &entity);
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  void render(Screen& screen) override;
+  void touchedBy(Level& level, Entity& entity);
 
 protected:
-  void die(Game &game, Level &level);
+  void die(Game& game, Level& level);
 };

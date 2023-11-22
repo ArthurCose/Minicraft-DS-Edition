@@ -8,12 +8,11 @@ GenerateMenu::GenerateMenu()
   currentStepName = "Generating Sky";
 }
 
-void GenerateMenu::tick(Game &game)
+void GenerateMenu::tick(Game& game)
 {
   int levelSize = 128;
 
-  switch (currentStep)
-  {
+  switch (currentStep) {
   case 0:
     game.frameSkipEnabled = false;
     game.levels.clear();
@@ -52,8 +51,7 @@ void GenerateMenu::tick(Game &game)
     currentStepName = "Spawning mobs";
     break;
   case 6:
-    for (size_t i = 0; i < game.levels.size(); i++)
-    {
+    for (size_t i = 0; i < game.levels.size(); i++) {
       game.levels[i].trySpawn(5000);
     }
 
@@ -68,7 +66,7 @@ void GenerateMenu::tick(Game &game)
   currentStep++;
 }
 
-void GenerateMenu::render(Screen &screen, Screen &bottomScreen)
+void GenerateMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
 

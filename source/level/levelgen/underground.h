@@ -4,4 +4,4 @@
 
 class Random;
 
-GeneratedLevel generateUnderground(Random &random, int w, int h, int depth);
+GeneratedLevel generateUnderground(Random& random, int w, int h, int depth);

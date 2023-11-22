@@ -9,9 +9,9 @@ protected:
   int xKnockback = 0;
   int yKnockback = 0;
 
-  virtual void doHurt(Level &level, int damage, int attackDir);
-  virtual void die(Game &game, Level &level);
-  virtual bool isSwimming(Level &level);
+  virtual void doHurt(Level& level, int damage, int attackDir);
+  virtual void die(Game& game, Level& level);
+  virtual bool isSwimming(Level& level);
 
 public:
   int hurtTime = 0;
@@ -23,11 +23,11 @@ public:
 
   Mob();
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  bool move(Level &, int xa, int ya) override;
-  bool blocks(Entity &e) override;
-  void hurt(Level &level, Tile &tile, int x, int y, int damage) override;
-  void hurt(Level &level, Mob &mob, int damage, int attackDir);
-  void heal(Level &level, int heal);
-  bool findStartPos(Level &level);
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  bool move(Level&, int xa, int ya) override;
+  bool blocks(Entity& e) override;
+  void hurt(Level& level, Tile& tile, int x, int y, int damage) override;
+  void hurt(Level& level, Mob& mob, int damage, int attackDir);
+  void heal(Level& level, int heal);
+  bool findStartPos(Level& level);
 };

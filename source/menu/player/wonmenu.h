@@ -7,5 +7,5 @@ class WonMenu : public ResultsMenu
 public:
   WonMenu(int time, int score);
 
-  void render(Screen &screen, Screen &bottomScreen) override;
+  void render(Screen& screen, Screen& bottomScreen) override;
 };

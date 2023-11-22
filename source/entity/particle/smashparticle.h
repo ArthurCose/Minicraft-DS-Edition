@@ -13,6 +13,6 @@ private:
 public:
   SmashParticle(int x, int y);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  void render(Screen &screen) override;
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  void render(Screen& screen) override;
 };

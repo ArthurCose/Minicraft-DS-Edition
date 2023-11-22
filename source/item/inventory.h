@@ -15,8 +15,8 @@ public:
   void add(int slot, std::shared_ptr<Item> item);
   bool hasResources(Resource::ID resourceId, int count);
   bool removeResource(Resource::ID resourceId, int count);
-  bool removeItem(Item &item);
-  int count(const Item &item);
+  bool removeItem(Item& item);
+  int count(const Item& item);
 
 private:
   std::shared_ptr<ResourceItem> findResource(Resource::ID resourceId);

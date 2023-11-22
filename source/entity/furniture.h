@@ -11,18 +11,18 @@ public:
   std::string name;
 
   Furniture(std::string name);
-  Furniture(Furniture &f);
+  Furniture(Furniture& f);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
 
-  void render(Screen &screen) override;
-  bool blocks(Entity &e) override;
-  void take(Player &player);
+  void render(Screen& screen) override;
+  bool blocks(Entity& e) override;
+  void take(Player& player);
   virtual std::shared_ptr<Furniture> clone();
 
 protected:
   bool shouldTake = false;
-  void touchedBy(Level &level, Entity &entity) override;
+  void touchedBy(Level& level, Entity& entity) override;
 
 private:
   int pushTime = 0;

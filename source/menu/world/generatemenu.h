@@ -11,6 +11,6 @@ private:
 public:
   GenerateMenu();
 
-  void tick(Game &game) override;
-  void render(Screen &screen, Screen &bottomScreen) override;
+  void tick(Game& game) override;
+  void render(Screen& screen, Screen& bottomScreen) override;
 };

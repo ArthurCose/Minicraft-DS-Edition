@@ -9,9 +9,9 @@
 #include "instructionsmenu.h"
 #include "aboutmenu.h"
 
-std::vector<std::string> options = {"Start game", "How to play", "About"};
+std::vector<std::string> options = { "Start game", "How to play", "About" };
 
-void TitleMenu::tick(Game &game)
+void TitleMenu::tick(Game& game)
 {
   if (game.justTapped(KEY_UP))
     selected--;
@@ -25,29 +25,23 @@ void TitleMenu::tick(Game &game)
   if (selected >= optionCount)
     selected = 0;
 
-  if (game.justTapped(KEY_A))
-  {
-    if (selected == 0)
-    {
+  if (game.justTapped(KEY_A)) {
+    if (selected == 0) {
       Sound::test.play();
       game.resetGame();
       game.setMenu(std::make_unique<GenerateMenu>());
     }
-    if (selected == 1)
-    {
+    if (selected == 1) {
       game.enterMenu(std::make_unique<InstructionsMenu>());
-    }
-    else if (selected == 2)
-    {
+    } else if (selected == 2) {
       game.enterMenu(std::make_unique<AboutMenu>());
     }
   }
 }
 
-void TitleMenu::render(Screen &screen, Screen &bottomScreen)
+void TitleMenu::render(Screen& screen, Screen& bottomScreen)
 {
-  if (!clearedSubScreen)
-  {
+  if (!clearedSubScreen) {
     bottomScreen.clear(0);
     clearedSubScreen = true;
   }
@@ -59,10 +53,8 @@ void TitleMenu::render(Screen &screen, Screen &bottomScreen)
   int titleColor = Color::get(0, 010, 131, 551);
   int xo = (screen.w - w * 8) / 2;
   int yo = 24;
-  for (int y = 0; y < h; y++)
-  {
-    for (int x = 0; x < w; x++)
-    {
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
       screen.renderTile(xo + x * 8, yo + y * 8, x + (y + 6) * 32, titleColor, 0);
     }
   }
@@ -73,13 +65,11 @@ void TitleMenu::render(Screen &screen, Screen &bottomScreen)
   int optionColor = Color::get(0, 222, 222, 222);
   int highlightColor = Color::get(0, 555, 555, 555);
 
-  for (int i = 0; i < 3; i++)
-  {
+  for (int i = 0; i < 3; i++) {
     auto msg = options[i];
 
     int col = optionColor;
-    if (i == selected)
-    {
+    if (i == selected) {
       msg = "> " + msg + " <";
       col = highlightColor;
     }

@@ -12,5 +12,5 @@ private:
 public:
   FoodResource(std::string name, int sprite, int color, int heal, int staminaCost);
 
-  bool interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) const override;
+  bool interactOn(Tile& tile, Level& level, int xt, int yt, Player& player, int attackDir) const override;
 };

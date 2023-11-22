@@ -10,16 +10,15 @@ SmashParticle::SmashParticle(int x, int y)
   Sound::monsterHurt.play();
 }
 
-void SmashParticle::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void SmashParticle::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   time++;
-  if (time > 10)
-  {
+  if (time > 10) {
     remove();
   }
 }
 
-void SmashParticle::render(Screen &screen)
+void SmashParticle::render(Screen& screen)
 {
   int col = Color::get(-1, 555, 555, 555);
   screen.renderTile(x - 8, y - 8, 5 + 12 * 32, col, 2);

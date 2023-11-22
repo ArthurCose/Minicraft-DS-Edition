@@ -5,19 +5,19 @@
 #include "../../gfx/screen.h"
 
 HoleTile::HoleTile(int id)
-    : Tile(id)
+  : Tile(id)
 {
   connectsToSand = true;
   connectsToWater = true;
   connectsToLava = true;
 }
 
-int HoleTile::getMapColor(Level &level, int x, int y)
+int HoleTile::getMapColor(Level& level, int x, int y)
 {
   return Color::get(111);
 }
 
-void HoleTile::render(Screen &screen, Level &level, int x, int y)
+void HoleTile::render(Screen& screen, Level& level, int x, int y)
 {
   int col = Color::get(111, 111, 110, 110);
   int transitionColor1 = Color::get(3, 111, level.dirtColor - 111, level.dirtColor);
@@ -33,35 +33,27 @@ void HoleTile::render(Screen &screen, Level &level, int x, int y)
   bool sl = l && Tile::tiles[level.getTile(x - 1, y)]->connectsToSand;
   bool sr = r && Tile::tiles[level.getTile(x + 1, y)]->connectsToSand;
 
-  if (!u && !l)
-  {
+  if (!u && !l) {
     screen.renderTile(x * 16 + 0, y * 16 + 0, 0, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
 
-  if (!u && !r)
-  {
+  if (!u && !r) {
     screen.renderTile(x * 16 + 8, y * 16 + 0, 1, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
 
-  if (!d && !l)
-  {
+  if (!d && !l) {
     screen.renderTile(x * 16 + 0, y * 16 + 8, 2, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
-  if (!d && !r)
-  {
+  if (!d && !r) {
     screen.renderTile(x * 16 + 8, y * 16 + 8, 3, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
 }
 
-bool HoleTile::mayPass(Level &level, int x, int y, Entity &e)
+bool HoleTile::mayPass(Level& level, int x, int y, Entity& e)
 {
   return e.canSwim();
 }

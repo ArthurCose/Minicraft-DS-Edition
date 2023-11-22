@@ -6,12 +6,12 @@
 
 InfiniteFallTile::InfiniteFallTile(int id) : Tile(id) {}
 
-int InfiniteFallTile::getMapColor(Level &level, int x, int y)
+int InfiniteFallTile::getMapColor(Level& level, int x, int y)
 {
   return Color::get(20);
 }
 
-bool InfiniteFallTile::mayPass(Level &level, int x, int y, Entity &e)
+bool InfiniteFallTile::mayPass(Level& level, int x, int y, Entity& e)
 {
-  return dynamic_cast<AirWizard *>(&e);
+  return dynamic_cast<AirWizard*>(&e);
 }

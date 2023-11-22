@@ -7,7 +7,7 @@ public:
   const int w, h;
   std::vector<double> values;
 
-  Noise(Random &random, int w, int h, int featureSize);
+  Noise(Random& random, int w, int h, int featureSize);
 
 private:
   double sample(int x, int y);

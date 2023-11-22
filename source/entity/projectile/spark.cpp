@@ -6,7 +6,7 @@
 #include "../../gfx/color.h"
 
 Spark::Spark(std::shared_ptr<Entity> owner, double xa, double ya)
-    : owner_weak(owner)
+  : owner_weak(owner)
 {
 
   xx = this->x = owner->x;
@@ -20,19 +20,17 @@ Spark::Spark(std::shared_ptr<Entity> owner, double xa, double ya)
   lifeTime = 60 * 10 + random.nextInt(30);
 }
 
-void Spark::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void Spark::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   auto owner = std::dynamic_pointer_cast<Mob>(owner_weak.lock());
 
-  if (!owner)
-  {
+  if (!owner) {
     remove();
     return;
   }
 
   time++;
-  if (time >= lifeTime)
-  {
+  if (time >= lifeTime) {
     remove();
     return;
   }
@@ -43,22 +41,19 @@ void Spark::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
 
   auto toHit = level.getEntities(x, y, x, y);
 
-  for (auto e : toHit)
-  {
+  for (auto e : toHit) {
     if (e.get() == owner.get())
       continue;
 
-    if (auto mob = std::dynamic_pointer_cast<Mob>(e))
-    {
+    if (auto mob = std::dynamic_pointer_cast<Mob>(e)) {
       e->hurt(level, *owner, 1, mob->dir ^ 1);
     }
   }
 }
 
-void Spark::render(Screen &screen)
+void Spark::render(Screen& screen)
 {
-  if (time >= lifeTime - 6 * 20)
-  {
+  if (time >= lifeTime - 6 * 20) {
     if (time / 6 % 2 == 0)
       return;
   }
@@ -70,7 +65,7 @@ void Spark::render(Screen &screen)
   screen.renderTile(x - 4, y - 4 + 2, xt + yt * 32, Color::get(-1, 000, 000, 000), random.nextInt(4));
 }
 
-bool Spark::isBlockableBy(Mob &mob)
+bool Spark::isBlockableBy(Mob& mob)
 {
   return false;
 }

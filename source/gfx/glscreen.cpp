@@ -5,7 +5,7 @@
 #include "color.h"
 
 GLScreen::GLScreen()
-    : Screen(SCREEN_WIDTH, SCREEN_HEIGHT) {}
+  : Screen(SCREEN_WIDTH, SCREEN_HEIGHT) {}
 
 void GLScreen::clear(int color)
 {
@@ -41,16 +41,16 @@ void GLScreen::renderBoxFilled(int x, int y, int w, int h, int col)
   glBoxFilled(x, y, x + w - 1, y + h - 1, palette[col]);
 }
 
-std::shared_ptr<Texture> GLScreen::genTexture(void *data, int width, int height)
+std::shared_ptr<Texture> GLScreen::genTexture(void* data, int width, int height)
 {
   int widthId = std::log2(width) - 3;
   int heightId = std::log2(height) - 3;
 
   sassert(
-      (int)std::pow(2, widthId + 3) + 1 == width && (int)std::pow(2, heightId + 3) + 1 == height &&
-          widthId >= TEXTURE_SIZE_8 && widthId <= TEXTURE_SIZE_1024 &&
-          heightId >= TEXTURE_SIZE_8 && heightId <= TEXTURE_SIZE_1024,
-      "Texture side length must be a power of two between 8 and 1024");
+    (int)std::pow(2, widthId + 3) + 1 == width && (int)std::pow(2, heightId + 3) + 1 == height &&
+    widthId >= TEXTURE_SIZE_8 && widthId <= TEXTURE_SIZE_1024 &&
+    heightId >= TEXTURE_SIZE_8 && heightId <= TEXTURE_SIZE_1024,
+    "Texture side length must be a power of two between 8 and 1024");
 
   int id;
   glGenTextures(1, &id);
@@ -58,19 +58,19 @@ std::shared_ptr<Texture> GLScreen::genTexture(void *data, int width, int height)
   glTexImage2D(0, 0, GL_RGBA, widthId, heightId, 0, TEXGEN_OFF, data);
 
   return std::make_shared<Texture>(
-      id,
-      glGetTexturePointer(id),
-      width,
-      height);
+    id,
+    glGetTexturePointer(id),
+    width,
+    height);
 }
 
-void GLScreen::renderTexture(Texture &texture, int x, int y, int scaleX, int scaleY)
+void GLScreen::renderTexture(Texture& texture, int x, int y, int scaleX, int scaleY)
 {
   x -= xOffset;
   y -= yOffset;
 
   glImage sprite = {
-    width : texture.width,
+    width: texture.width,
     height : texture.height,
     u_off : 0,
     v_off : 0,
@@ -79,14 +79,12 @@ void GLScreen::renderTexture(Texture &texture, int x, int y, int scaleX, int sca
 
   int flipmode = scaleX >= 0 && scaleY >= 0 ? GL_FLIP_NONE : 0;
 
-  if (scaleX < 0)
-  {
+  if (scaleX < 0) {
     flipmode |= GL_FLIP_H;
     scaleX = -scaleX;
   }
 
-  if (scaleY < 0)
-  {
+  if (scaleY < 0) {
     flipmode |= GL_FLIP_V;
     scaleY = -scaleY;
   }

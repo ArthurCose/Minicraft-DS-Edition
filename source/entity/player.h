@@ -20,10 +20,10 @@ public:
 
   Player();
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  void render(Screen &screen) override;
-  void touchItem(ItemEntity &itemEntity) override;
-  bool findStartPos(Level &level);
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  void render(Screen& screen) override;
+  void touchItem(ItemEntity& itemEntity) override;
+  bool findStartPos(Level& level);
   bool payStamina(int cost);
   bool canSwim() override;
   int getLightRadius() override;
@@ -39,16 +39,16 @@ private:
   int selectedItemIndex = 0;
   bool itemHeld = false;
 
-  void updateInventory(Game &game);
-  void attack(Level &level);
-  bool use(Game &game, Level &level);
-  bool use(Game &game, Level &level, int x0, int y0, int x1, int y1);
-  bool interact(Level &level, int x0, int y0, int x1, int y1);
-  void hurt(Level &level, int x0, int y0, int x1, int y1);
-  int getAttackDamage(Entity &e);
+  void updateInventory(Game& game);
+  void attack(Level& level);
+  bool use(Game& game, Level& level);
+  bool use(Game& game, Level& level, int x0, int y0, int x1, int y1);
+  bool interact(Level& level, int x0, int y0, int x1, int y1);
+  void hurt(Level& level, int x0, int y0, int x1, int y1);
+  int getAttackDamage(Entity& e);
 
 protected:
-  void die(Game &game, Level &level) override;
-  void touchedBy(Level &level, Entity &entity) override;
-  void doHurt(Level &level, int damage, int attackDir) override;
+  void die(Game& game, Level& level) override;
+  void touchedBy(Level& level, Entity& entity) override;
+  void doHurt(Level& level, int damage, int attackDir) override;
 };

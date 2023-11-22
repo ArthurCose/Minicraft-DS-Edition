@@ -17,6 +17,6 @@ public:
 
   TextParticle(std::string msg, int x, int y, int col);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  void render(Screen &screen) override;
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  void render(Screen& screen) override;
 };

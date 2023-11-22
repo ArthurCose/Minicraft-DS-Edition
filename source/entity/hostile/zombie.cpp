@@ -12,16 +12,14 @@ Zombie::Zombie(int lvl)
   health = maxHealth = lvl * lvl * 10;
 }
 
-void Zombie::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void Zombie::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   Mob::tick(game, level, self);
 
-  if (level.player != NULL && randomWalkTime == 0)
-  {
+  if (level.player != NULL && randomWalkTime == 0) {
     int xd = level.player->x - x;
     int yd = level.player->y - y;
-    if (xd * xd + yd * yd < 50 * 50)
-    {
+    if (xd * xd + yd * yd < 50 * 50) {
       xa = 0;
       ya = 0;
       if (xd < 0)
@@ -36,8 +34,7 @@ void Zombie::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   }
 
   int speed = tickTime & 1;
-  if (!move(level, xa * speed, ya * speed) || random.nextInt(200) == 0)
-  {
+  if (!move(level, xa * speed, ya * speed) || random.nextInt(200) == 0) {
     randomWalkTime = 60;
     xa = (random.nextInt(3) - 1) * random.nextInt(2);
     ya = (random.nextInt(3) - 1) * random.nextInt(2);
@@ -46,7 +43,7 @@ void Zombie::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
     randomWalkTime--;
 }
 
-void Zombie::render(Screen &screen)
+void Zombie::render(Screen& screen)
 {
   int xt = 0;
   int yt = 14;
@@ -54,17 +51,14 @@ void Zombie::render(Screen &screen)
   int flip1 = (walkDist >> 3) & 1;
   int flip2 = (walkDist >> 3) & 1;
 
-  if (dir == 1)
-  {
+  if (dir == 1) {
     xt += 2;
   }
-  if (dir > 1)
-  {
+  if (dir > 1) {
 
     flip1 = 0;
     flip2 = ((walkDist >> 4) & 1);
-    if (dir == 2)
-    {
+    if (dir == 2) {
       flip1 = 1;
     }
     xt += 4 + ((walkDist >> 3) & 1) * 2;
@@ -82,8 +76,7 @@ void Zombie::render(Screen &screen)
   if (lvl == 4)
     col = Color::get(-1, 000, 111, 020);
 
-  if (hurtTime > 0)
-  {
+  if (hurtTime > 0) {
     col = Color::get(-1, 555, 555, 555);
   }
 
@@ -93,27 +86,24 @@ void Zombie::render(Screen &screen)
   screen.renderTile(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
 }
 
-void Zombie::touchedBy(Level &level, Entity &entity)
+void Zombie::touchedBy(Level& level, Entity& entity)
 {
-  if (dynamic_cast<Player *>(&entity))
-  {
+  if (dynamic_cast<Player*>(&entity)) {
     entity.hurt(level, *this, lvl + 1, dir);
   }
 }
 
-void Zombie::die(Game &game, Level &level)
+void Zombie::die(Game& game, Level& level)
 {
   Mob::die(game, level);
 
   int count = random.nextInt(2) + 1;
 
-  for (int i = 0; i < count; i++)
-  {
+  for (int i = 0; i < count; i++) {
     level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::cloth), x + random.nextInt(11) - 5, y + random.nextInt(11) - 5));
   }
 
-  if (level.player != NULL)
-  {
+  if (level.player != NULL) {
     level.player->score += 50 * lvl;
   }
 }

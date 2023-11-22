@@ -11,18 +11,15 @@
 #include "../entity/hostile/zombie.h"
 #include "../gfx/lightmask.h"
 
-Level::Level(int w, int h, int depth, Level &parentLevel)
-    : Level(w, h, depth)
+Level::Level(int w, int h, int depth, Level& parentLevel)
+  : Level(w, h, depth)
 {
   for (int y = 0; y < h; y++)
-    for (int x = 0; x < w; x++)
-    {
-      if (parentLevel.getTile(x, y) == Tile::stairsDown)
-      {
+    for (int x = 0; x < w; x++) {
+      if (parentLevel.getTile(x, y) == Tile::stairsDown) {
         setTile(x, y, Tile::stairsUp, 0);
 
-        if (depth == 0)
-        {
+        if (depth == 0) {
           setTile(x - 1, y, Tile::hardRock, 0);
           setTile(x + 1, y, Tile::hardRock, 0);
           setTile(x, y - 1, Tile::hardRock, 0);
@@ -31,9 +28,7 @@ Level::Level(int w, int h, int depth, Level &parentLevel)
           setTile(x - 1, y + 1, Tile::hardRock, 0);
           setTile(x + 1, y - 1, Tile::hardRock, 0);
           setTile(x + 1, y + 1, Tile::hardRock, 0);
-        }
-        else
-        {
+        } else {
           setTile(x - 1, y, Tile::dirt, 0);
           setTile(x + 1, y, Tile::dirt, 0);
           setTile(x, y - 1, Tile::dirt, 0);
@@ -49,30 +44,25 @@ Level::Level(int w, int h, int depth, Level &parentLevel)
 
 Level::Level(int w, int h, int depth)
 {
-  if (depth < 0)
-  {
+  if (depth < 0) {
     dirtColor = 222;
   }
   this->depth = depth;
   this->w = w;
   this->h = h;
 
-  if (depth == 1)
-  {
+  if (depth == 1) {
     dirtColor = 444;
   }
 
   GeneratedLevel generatedData;
 
-  if (depth == 0)
+  if (depth == 0) {
     generatedData = generateOverworld(Random::globalRandom, w, h);
-  else if (depth < 0)
-  {
+  } else if (depth < 0) {
     generatedData = generateUnderground(Random::globalRandom, w, h, -depth);
     monsterDensity = 4;
-  }
-  else
-  {
+  } else {
     generatedData = generateSky(Random::globalRandom, w, h); // Sky level
     monsterDensity = 4;
   }
@@ -85,8 +75,7 @@ Level::Level(int w, int h, int depth)
 
   entitiesInTiles.resize(w * h);
 
-  if (depth == 1)
-  {
+  if (depth == 1) {
     auto aw = std::make_shared<AirWizard>();
     aw->x = w * 8;
     aw->y = h * 8;
@@ -94,19 +83,17 @@ Level::Level(int w, int h, int depth)
   }
 }
 
-void Level::tick(Game &game)
+void Level::tick(Game& game)
 {
   trySpawn(1);
 
-  for (int i = 0; i < w * h / 50; i++)
-  {
+  for (int i = 0; i < w * h / 50; i++) {
     int xt = random.nextInt(w);
     int yt = random.nextInt(h);
     Tile::tiles[getTile(xt, yt)]->tick(*this, xt, yt);
   }
 
-  for (size_t i = 0; i < entities.size(); i++)
-  {
+  for (size_t i = 0; i < entities.size(); i++) {
     auto e = entities[i];
 
     int xto = e->x >> 4;
@@ -114,18 +101,14 @@ void Level::tick(Game &game)
 
     e->tick(game, *this, e);
 
-    if (e->removed)
-    {
+    if (e->removed) {
       entities.erase(entities.begin() + i);
       removeEntity(xto, yto, e);
-    }
-    else
-    {
+    } else {
       int xt = e->x >> 4;
       int yt = e->y >> 4;
 
-      if (xto != xt || yto != yt)
-      {
+      if (xto != xt || yto != yt) {
         removeEntity(xto, yto, e);
         insertEntity(xt, yt, e);
       }
@@ -133,9 +116,9 @@ void Level::tick(Game &game)
   }
 
   updateMap(
-      game.player->x >> 4,
-      game.player->y >> 4,
-      depth < 0 ? game.player->getLightRadius() : 8);
+    game.player->x >> 4,
+    game.player->y >> 4,
+    depth < 0 ? game.player->getLightRadius() : 8);
 }
 
 void Level::updateMap(int mapX, int mapY, int viewDistance)
@@ -150,14 +133,14 @@ void Level::updateMap(int mapX, int mapY, int viewDistance)
   top = std::clamp(top, 0, h);
   bottom = std::clamp(bottom, 0, h);
 
-  auto &m = *map;
+  auto& m = *map;
 
   for (int y = top; y < bottom; y++)
     for (int x = left; x < right; x++)
       m[y * w + x] = Tile::tiles[getTile(x, y)]->getMapColor(*this, x, y);
 }
 
-void Level::render(Screen &screen, LightMask &lightMask, Player &player)
+void Level::render(Screen& screen, LightMask& lightMask, Player& player)
 {
   int xScroll = player.x - screen.w / 2;
   int yScroll = player.y - (screen.h - 8) / 2;
@@ -168,34 +151,30 @@ void Level::render(Screen &screen, LightMask &lightMask, Player &player)
   renderBackground(screen, xScroll, yScroll);
   renderSprites(screen, xScroll, yScroll);
 
-  if (depth < 0)
-  {
+  if (depth < 0) {
     lightMask.reset();
     renderLight(lightMask, xScroll, yScroll);
     lightMask.render(screen);
   }
 }
 
-void Level::renderBackground(Screen &screen, int xScroll, int yScroll)
+void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 {
-  if (depth == 1)
-  {
+  if (depth == 1) {
     int col = Color::get(20, 20, 121, 121);
 
-    for (int y = 0; y < screen.h / 8 + 1; y++)
-    {
-      for (int x = 0; x < screen.w / 8 + 1; x++)
-      {
+    for (int y = 0; y < screen.h / 8 + 1; y++) {
+      for (int x = 0; x < screen.w / 8 + 1; x++) {
         int screenX = x * 8 - ((xScroll / 4) & 7);
         int screenY = y * 8 - ((yScroll / 4) & 7);
         int worldX = screenX + xScroll;
         int worldY = screenY + yScroll;
 
         bool covered =
-            getTile((worldX + 0) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall &&
-            getTile((worldX + 0) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
-            getTile((worldX + 8) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
-            getTile((worldX + 8) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall;
+          getTile((worldX + 0) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall &&
+          getTile((worldX + 0) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
+          getTile((worldX + 8) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
+          getTile((worldX + 8) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall;
 
         if (!covered)
           screen.renderTile(screenX, screenY, 0, col, 0);
@@ -208,17 +187,15 @@ void Level::renderBackground(Screen &screen, int xScroll, int yScroll)
   int w = (screen.w + 15) >> 4;
   int h = (screen.h + 15) >> 4;
   screen.setOffset(xScroll, yScroll);
-  for (int y = yo; y <= h + yo; y++)
-  {
-    for (int x = xo; x <= w + xo; x++)
-    {
+  for (int y = yo; y <= h + yo; y++) {
+    for (int x = xo; x <= w + xo; x++) {
       Tile::tiles[getTile(x, y)]->render(screen, *this, x, y);
     }
   }
   screen.setOffset(0, 0);
 }
 
-void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
+void Level::renderSprites(Screen& screen, int xScroll, int yScroll)
 {
   int xo = xScroll >> 4;
   int yo = yScroll >> 4;
@@ -229,10 +206,8 @@ void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
 
   std::vector<std::shared_ptr<Entity>> rowSprites;
 
-  for (int y = yo; y <= h + yo; y++)
-  {
-    for (int x = xo; x <= w + xo; x++)
-    {
+  for (int y = yo; y <= h + yo; y++) {
+    for (int x = xo; x <= w + xo; x++) {
       if (x < 0 || y < 0 || x >= this->w || y >= this->h)
         continue;
 
@@ -240,8 +215,7 @@ void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
 
       rowSprites.insert(rowSprites.end(), entitiesInTile.begin(), entitiesInTile.end());
     }
-    if (rowSprites.size() > 0)
-    {
+    if (rowSprites.size() > 0) {
       sortAndRender(screen, rowSprites);
       rowSprites.clear();
     }
@@ -250,7 +224,7 @@ void Level::renderSprites(Screen &screen, int xScroll, int yScroll)
   screen.setOffset(0, 0);
 }
 
-void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
+void Level::renderLight(LightMask& lightMask, int xScroll, int yScroll)
 {
   int xo = xScroll >> 4;
   int yo = yScroll >> 4;
@@ -265,14 +239,11 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
   int x1 = std::min(w + xo + r, this->w);
   int y1 = std::min(h + yo + r, this->h);
 
-  for (int y = y0; y <= y1; y++)
-  {
-    for (int x = x0; x <= x1; x++)
-    {
+  for (int y = y0; y <= y1; y++) {
+    for (int x = x0; x <= x1; x++) {
       auto& entities = entitiesInTiles[x + y * this->w];
 
-      for (auto &e : entities)
-      {
+      for (auto& e : entities) {
         int lr = e->getLightRadius();
 
         if (lr > 0)
@@ -281,8 +252,7 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
 
       int lr = Tile::tiles[getTile(x, y)]->getLightRadius(*this, x, y);
 
-      if (lr > 0)
-      {
+      if (lr > 0) {
         bool aboveLit = Tile::tiles[getTile(x, y - 1)]->getLightRadius(*this, x, y - 1) > 1;
         bool belowLit = Tile::tiles[getTile(x, y + 1)]->getLightRadius(*this, x, y + 1) > 1;
         bool leftLit = Tile::tiles[getTile(x - 1, y)]->getLightRadius(*this, x - 1, y) > 1;
@@ -305,17 +275,16 @@ void Level::renderLight(LightMask &lightMask, int xScroll, int yScroll)
   }
 }
 
-static bool compareY(std::shared_ptr<Entity> &e0, std::shared_ptr<Entity> &e1)
+static bool compareY(std::shared_ptr<Entity>& e0, std::shared_ptr<Entity>& e1)
 {
   return e0->y < e1->y;
 }
 
-void Level::sortAndRender(Screen &screen, std::vector<std::shared_ptr<Entity>> list)
+void Level::sortAndRender(Screen& screen, std::vector<std::shared_ptr<Entity>> list)
 {
   std::sort(list.begin(), list.end(), compareY);
 
-  for (auto &e : list)
-  {
+  for (auto& e : list) {
     e->render(screen);
   }
 }
@@ -351,8 +320,7 @@ void Level::setData(int x, int y, int val)
 
 void Level::add(std::shared_ptr<Entity> entity)
 {
-  if (auto playerEntity = std::dynamic_pointer_cast<Player>(entity))
-  {
+  if (auto playerEntity = std::dynamic_pointer_cast<Player>(entity)) {
     player = playerEntity;
   }
   entity->removed = false;
@@ -394,18 +362,15 @@ void Level::removeEntity(int x, int y, std::shared_ptr<Entity> e)
 
 void Level::trySpawn(int count)
 {
-  for (int i = 0; i < count; i++)
-  {
+  for (int i = 0; i < count; i++) {
     std::shared_ptr<Mob> mob;
 
     int minLevel = 1;
     int maxLevel = 1;
-    if (depth < 0)
-    {
+    if (depth < 0) {
       maxLevel = (-depth) + 1;
     }
-    if (depth > 0)
-    {
+    if (depth > 0) {
       minLevel = maxLevel = 4;
     }
 
@@ -415,8 +380,7 @@ void Level::trySpawn(int count)
     else
       mob = std::make_shared<Zombie>(lvl);
 
-    if (mob->findStartPos(*this))
-    {
+    if (mob->findStartPos(*this)) {
       this->add(mob);
     }
   }
@@ -429,17 +393,15 @@ std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, 
   int yt0 = (y0 >> 4) - 1;
   int xt1 = (x1 >> 4) + 1;
   int yt1 = (y1 >> 4) + 1;
-  for (int y = yt0; y <= yt1; y++)
-  {
-    for (int x = xt0; x <= xt1; x++)
-    {
+
+  for (int y = yt0; y <= yt1; y++) {
+    for (int x = xt0; x <= xt1; x++) {
       if (x < 0 || y < 0 || x >= w || y >= h)
         continue;
 
       auto& entities = entitiesInTiles[x + y * this->w];
 
-      for (auto &e : entities)
-      {
+      for (auto& e : entities) {
         if (e->intersects(x0, y0, x1, y1))
           result.push_back(e);
       }

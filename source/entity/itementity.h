@@ -17,7 +17,7 @@ protected:
   int walkDist = 0;
   int dir = 0;
   int xKnockback, yKnockback;
-  void touchedBy(Level &level, Entity &entity) override;
+  void touchedBy(Level& level, Entity& entity) override;
 
 public:
   int hurtTime = 0;
@@ -27,8 +27,8 @@ public:
 
   ItemEntity(std::shared_ptr<Item> item, int x, int y);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  bool isBlockableBy(Mob &mob) override;
-  void render(Screen &screen) override;
-  void take(Player &player);
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  bool isBlockableBy(Mob& mob) override;
+  void render(Screen& screen) override;
+  void take(Player& player);
 };

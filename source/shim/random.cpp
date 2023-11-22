@@ -7,13 +7,13 @@ static std::uniform_real_distribution<> dis(1.0, 2.0);
 Random Random::globalRandom = Random();
 
 Random::Random()
-    : gaussian_distribution(-1, 1)
+  : gaussian_distribution(-1, 1)
 {
   generator = std::default_random_engine(time(NULL));
 }
 
 Random::Random(long long int seed)
-    : gaussian_distribution(-1, 1)
+  : gaussian_distribution(-1, 1)
 {
   generator = std::default_random_engine(seed);
 }

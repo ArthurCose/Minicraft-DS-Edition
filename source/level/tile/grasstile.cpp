@@ -7,17 +7,17 @@
 #include "../../gfx/screen.h"
 
 GrassTile::GrassTile(int id)
-    : Tile(id)
+  : Tile(id)
 {
   connectsToGrass = true;
 }
 
-int GrassTile::getMapColor(Level &level, int x, int y)
+int GrassTile::getMapColor(Level& level, int x, int y)
 {
   return Color::get(level.grassColor);
 }
 
-void GrassTile::render(Screen &screen, Level &level, int x, int y)
+void GrassTile::render(Screen& screen, Level& level, int x, int y)
 {
   int col = Color::get(level.grassColor, level.grassColor, level.grassColor + 111, level.grassColor + 111);
   int transitionColor = Color::get(level.grassColor - 111, level.grassColor, level.grassColor + 111, level.dirtColor);
@@ -27,36 +27,28 @@ void GrassTile::render(Screen &screen, Level &level, int x, int y)
   bool l = !Tile::tiles[level.getTile(x - 1, y)]->connectsToGrass;
   bool r = !Tile::tiles[level.getTile(x + 1, y)]->connectsToGrass;
 
-  if (!u && !l)
-  {
+  if (!u && !l) {
     screen.renderTile(x * 16 + 0, y * 16 + 0, 0, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 0, y * 16 + 0, (l ? 11 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
 
-  if (!u && !r)
-  {
+  if (!u && !r) {
     screen.renderTile(x * 16 + 8, y * 16 + 0, 1, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 8, y * 16 + 0, (r ? 13 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
 
-  if (!d && !l)
-  {
+  if (!d && !l) {
     screen.renderTile(x * 16 + 0, y * 16 + 8, 2, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 11 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
 
-  if (!d && !r)
-  {
+  if (!d && !r) {
     screen.renderTile(x * 16 + 8, y * 16 + 8, 3, col, 0);
-  }
-  else
+  } else
     screen.renderTile(x * 16 + 8, y * 16 + 8, (r ? 13 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
 }
 
-void GrassTile::tick(Level &level, int xt, int yt)
+void GrassTile::tick(Level& level, int xt, int yt)
 {
   if (random.nextInt(40) != 0)
     return;
@@ -69,37 +61,29 @@ void GrassTile::tick(Level &level, int xt, int yt)
   else
     yn += random.nextInt(2) * 2 - 1;
 
-  if (level.getTile(xn, yn) == Tile::dirt)
-  {
+  if (level.getTile(xn, yn) == Tile::dirt) {
     level.setTile(xn, yn, this->id, 0);
   }
 }
 
-bool GrassTile::interact(Level &level, int xt, int yt, Player &player, Item &item, int attackDir)
+bool GrassTile::interact(Level& level, int xt, int yt, Player& player, Item& item, int attackDir)
 {
-  if (auto tool = dynamic_cast<ToolItem *>(&item))
-  {
-    if (tool->type == &ToolType::shovel)
-    {
-      if (player.payStamina(4 - tool->level))
-      {
+  if (auto tool = dynamic_cast<ToolItem*>(&item)) {
+    if (tool->type == &ToolType::shovel) {
+      if (player.payStamina(4 - tool->level)) {
         level.setTile(xt, yt, Tile::dirt, 0);
         Sound::monsterHurt.play();
-        if (random.nextInt(5) == 0)
-        {
+        if (random.nextInt(5) == 0) {
           level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
           return true;
         }
       }
     }
 
-    if (tool->type == &ToolType::hoe)
-    {
-      if (player.payStamina(4 - tool->level))
-      {
+    if (tool->type == &ToolType::hoe) {
+      if (player.payStamina(4 - tool->level)) {
         Sound::monsterHurt.play();
-        if (random.nextInt(5) == 0)
-        {
+        if (random.nextInt(5) == 0) {
           level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
           return true;
         }

@@ -24,7 +24,7 @@ static std::vector<std::shared_ptr<Recipe>> anvilRecipes = {
 };
 
 Anvil::Anvil()
-    : Furniture("Anvil")
+  : Furniture("Anvil")
 {
   col = Color::get(-1, 000, 111, 222);
   sprite = 0;
@@ -32,7 +32,7 @@ Anvil::Anvil()
   yr = 2;
 }
 
-bool Anvil::use(Game &game, Level &level, Player &player, int attackDir)
+bool Anvil::use(Game& game, Level& level, Player& player, int attackDir)
 {
   game.enterMenu(std::make_unique<CraftingMenu>(anvilRecipes, player));
   return true;

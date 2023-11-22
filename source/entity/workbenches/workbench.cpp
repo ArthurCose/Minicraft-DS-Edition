@@ -38,7 +38,7 @@ Workbench::Workbench() : Furniture("Workbench")
   yr = 2;
 }
 
-bool Workbench::use(Game &game, Level &level, Player &player, int attackDir)
+bool Workbench::use(Game& game, Level& level, Player& player, int attackDir)
 {
   game.enterMenu(std::make_unique<CraftingMenu>(workbenchRecipes, player));
   return true;

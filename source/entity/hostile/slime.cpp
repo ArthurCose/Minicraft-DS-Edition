@@ -12,25 +12,21 @@ Slime::Slime(int lvl)
   health = maxHealth = lvl * lvl * 5;
 }
 
-void Slime::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void Slime::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   Mob::tick(game, level, self);
 
   int speed = 1;
-  if (!move(level, xa * speed, ya * speed) || random.nextInt(40) == 0)
-  {
-    if (jumpTime <= -10)
-    {
+  if (!move(level, xa * speed, ya * speed) || random.nextInt(40) == 0) {
+    if (jumpTime <= -10) {
       xa = (random.nextInt(3) - 1);
       ya = (random.nextInt(3) - 1);
 
-      if (level.player != NULL)
-      {
+      if (level.player != NULL) {
         int xd = level.player->x - x;
         int yd = level.player->y - y;
 
-        if (xd * xd + yd * yd < 50 * 50)
-        {
+        if (xd * xd + yd * yd < 50 * 50) {
           if (xd < 0)
             xa = -1;
           if (xd > 0)
@@ -48,13 +44,12 @@ void Slime::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   }
 
   jumpTime--;
-  if (jumpTime == 0)
-  {
+  if (jumpTime == 0) {
     xa = ya = 0;
   }
 }
 
-void Slime::render(Screen &screen)
+void Slime::render(Screen& screen)
 {
   int xt = 0;
   int yt = 18;
@@ -62,8 +57,7 @@ void Slime::render(Screen &screen)
   int xo = x - 8;
   int yo = y - 11;
 
-  if (jumpTime > 0)
-  {
+  if (jumpTime > 0) {
     xt += 2;
     yo -= 4;
   }
@@ -76,8 +70,7 @@ void Slime::render(Screen &screen)
   if (lvl == 4)
     col = Color::get(-1, 000, 111, 224);
 
-  if (hurtTime > 0)
-  {
+  if (hurtTime > 0) {
     col = Color::get(-1, 555, 555, 555);
   }
 
@@ -87,26 +80,23 @@ void Slime::render(Screen &screen)
   screen.renderTile(xo + 8, yo + 8, xt + 1 + (yt + 1) * 32, col, 0);
 }
 
-void Slime::touchedBy(Level &level, Entity &entity)
+void Slime::touchedBy(Level& level, Entity& entity)
 {
-  if (dynamic_cast<Player *>(&entity))
-  {
+  if (dynamic_cast<Player*>(&entity)) {
     entity.hurt(level, *this, lvl, dir);
   }
 }
 
-void Slime::die(Game &game, Level &level)
+void Slime::die(Game& game, Level& level)
 {
   Mob::die(game, level);
 
   int count = random.nextInt(2) + 1;
-  for (int i = 0; i < count; i++)
-  {
+  for (int i = 0; i < count; i++) {
     level.add(std::make_shared<ItemEntity>(std::make_shared<ResourceItem>(Resource::slime), x + random.nextInt(11) - 5, y + random.nextInt(11) - 5));
   }
 
-  if (level.player != NULL)
-  {
+  if (level.player != NULL) {
     level.player->score += 25 * lvl;
   }
 }

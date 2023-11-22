@@ -18,12 +18,12 @@ private:
   int depth;
 
   void updateMap(int x, int y, int viewDistance);
-  void sortAndRender(Screen &screen, std::vector<std::shared_ptr<Entity>> list);
+  void sortAndRender(Screen& screen, std::vector<std::shared_ptr<Entity>> list);
   void insertEntity(int x, int y, std::shared_ptr<Entity> e);
   void removeEntity(int x, int y, std::shared_ptr<Entity> e);
-  void renderBackground(Screen &screen, int xScroll, int yScroll);
-  void renderSprites(Screen &screen, int xScroll, int yScroll);
-  void renderLight(LightMask &screen, int xScroll, int yScroll);
+  void renderBackground(Screen& screen, int xScroll, int yScroll);
+  void renderSprites(Screen& screen, int xScroll, int yScroll);
+  void renderLight(LightMask& screen, int xScroll, int yScroll);
 
 public:
   int w, h;
@@ -39,10 +39,10 @@ public:
   std::shared_ptr<Player> player;
 
   Level(int w, int h, int level);
-  Level(int w, int h, int level, Level &parentLevel);
+  Level(int w, int h, int level, Level& parentLevel);
 
-  void tick(Game &game);
-  void render(Screen &screen, LightMask &LightMask, Player &player);
+  void tick(Game& game);
+  void render(Screen& screen, LightMask& LightMask, Player& player);
   unsigned char getTile(int x, int y);
   void setTile(int x, int y, unsigned char tile, int dataVal);
   int getData(int x, int y);

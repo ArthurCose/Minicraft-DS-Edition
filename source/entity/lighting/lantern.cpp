@@ -1,7 +1,7 @@
 #include "lantern.h"
 
 Lantern::Lantern()
-    : Furniture("Lantern")
+  : Furniture("Lantern")
 {
   col = Color::get(-1, 000, 111, 555);
   sprite = 5;

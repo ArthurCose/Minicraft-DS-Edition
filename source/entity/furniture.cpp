@@ -12,7 +12,7 @@ Furniture::Furniture(std::string name)
   yr = 3;
 }
 
-void Furniture::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void Furniture::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   if (pushDir == 0)
     move(level, 0, +1);
@@ -26,19 +26,18 @@ void Furniture::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
   if (pushTime > 0)
     pushTime--;
 
-  if (shouldTake)
-  {
+  if (shouldTake) {
     remove();
 
     game.player->inventory.add(
-        game.player->getSelectedItemIndex(),
-        std::make_shared<FurnitureItem>(std::static_pointer_cast<Furniture>(self)));
+      game.player->getSelectedItemIndex(),
+      std::make_shared<FurnitureItem>(std::static_pointer_cast<Furniture>(self)));
 
     shouldTake = false;
   }
 }
 
-void Furniture::render(Screen &screen)
+void Furniture::render(Screen& screen)
 {
   screen.renderTile(x - 8, y - 8 - 4, sprite * 2 + 8 * 32, col, 0);
   screen.renderTile(x - 0, y - 8 - 4, sprite * 2 + 8 * 32 + 1, col, 0);
@@ -46,25 +45,23 @@ void Furniture::render(Screen &screen)
   screen.renderTile(x - 0, y - 0 - 4, sprite * 2 + 8 * 32 + 33, col, 0);
 }
 
-bool Furniture::blocks(Entity &e)
+bool Furniture::blocks(Entity& e)
 {
   return true;
 }
 
-void Furniture::take(Player &player)
+void Furniture::take(Player& player)
 {
-  if (std::dynamic_pointer_cast<PowerGloveItem>(player.getActiveItem()))
-  {
+  if (std::dynamic_pointer_cast<PowerGloveItem>(player.getActiveItem())) {
     shouldTake = true;
   }
 }
 
-void Furniture::touchedBy(Level &level, Entity &entity)
+void Furniture::touchedBy(Level& level, Entity& entity)
 {
-  auto player = dynamic_cast<Player *>(&entity);
+  auto player = dynamic_cast<Player*>(&entity);
 
-  if (player && pushTime == 0)
-  {
+  if (player && pushTime == 0) {
     pushDir = player->dir;
     pushTime = 10;
   }

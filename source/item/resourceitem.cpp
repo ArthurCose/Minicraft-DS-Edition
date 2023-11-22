@@ -1,12 +1,12 @@
 #include "resourceitem.h"
 
 ResourceItem::ResourceItem(Resource::ID resourceId)
-    : resourceId(resourceId)
+  : resourceId(resourceId)
 {
 }
 
 ResourceItem::ResourceItem(Resource::ID resourceId, int count)
-    : resourceId(resourceId)
+  : resourceId(resourceId)
 {
   this->count = count;
 }
@@ -26,14 +26,14 @@ int ResourceItem::getSprite() const
   return Resource::resources[resourceId]->sprite;
 }
 
-void ResourceItem::renderIcon(Screen &screen, int x, int y)
+void ResourceItem::renderIcon(Screen& screen, int x, int y)
 {
   auto resource = Resource::resources[resourceId];
 
   screen.renderTile(x, y, resource->sprite, resource->color, 0);
 }
 
-void ResourceItem::renderInventory(Screen &screen, int x, int y)
+void ResourceItem::renderInventory(Screen& screen, int x, int y)
 {
   auto resource = Resource::resources[resourceId];
 
@@ -47,12 +47,11 @@ void ResourceItem::renderInventory(Screen &screen, int x, int y)
   screen.renderText(std::to_string(cc), x + 8, y, Color::get(-1, 444, 444, 444));
 }
 
-bool ResourceItem::interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir)
+bool ResourceItem::interactOn(Tile& tile, Level& level, int xt, int yt, Player& player, int attackDir)
 {
   auto resource = Resource::resources[resourceId];
 
-  if (resource->interactOn(tile, level, xt, yt, player, attackDir))
-  {
+  if (resource->interactOn(tile, level, xt, yt, player, attackDir)) {
     count--;
     return true;
   }

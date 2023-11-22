@@ -5,7 +5,7 @@
 #include "color.h"
 
 SoftwareScreen::SoftwareScreen()
-    : Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+  : Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
   pixels.resize(SCREEN_WIDTH * SCREEN_HEIGHT, 0);
 }
@@ -17,9 +17,9 @@ void SoftwareScreen::clear(int color)
 
   // unsigned int unsignedCol = color;
   unsigned int word = color |
-                      (color << 8) |
-                      (color << 16) |
-                      (color << 24);
+    (color << 8) |
+    (color << 16) |
+    (color << 24);
 
   for (size_t i = size - leftoverBytes; i < size; i++)
     pixels[i] = color;
@@ -44,28 +44,24 @@ void SoftwareScreen::renderPixel(int x, int y, int col)
     pixels[y * w + x] = col;
 }
 
-void SoftwareScreen::normalizeBox(int &x, int &y, int &w, int &h)
+void SoftwareScreen::normalizeBox(int& x, int& y, int& w, int& h)
 {
   // convert negative sizes into positive sizes
-  if (w < 0)
-  {
+  if (w < 0) {
     x += w;
     w = -w;
   }
-  if (h < 0)
-  {
+  if (h < 0) {
     y += h;
     h = -h;
   }
 
   // make sure box is within screen
-  if (x < 0)
-  {
+  if (x < 0) {
     w += x;
     x = 0;
   }
-  if (y < 0)
-  {
+  if (y < 0) {
     h += y;
     y = 0;
   }
@@ -82,14 +78,12 @@ void SoftwareScreen::renderBox(int x, int y, int w, int h, int col)
 
   normalizeBox(x, y, w, h);
 
-  for (int i = 0; i < w; i++)
-  {
+  for (int i = 0; i < w; i++) {
     pixels[y * this->w + x + i] = col;
     pixels[(y + h - 1) * this->w + x + i] = col;
   }
 
-  for (int i = 0; i < h; i++)
-  {
+  for (int i = 0; i < h; i++) {
     pixels[(y + i) * this->w + x] = col;
     pixels[(y + i) * this->w + x + w - 1] = col;
   }
@@ -105,25 +99,21 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
   int right = x + w;
   int bottom = y + h;
 
-  if (w * h < 256)
-  {
+  if (w * h < 256) {
     for (int i = y; i < bottom; i++)
       for (int j = x; j < right; j++)
         pixels[i * this->w + j] = col;
-  }
-  else
-  {
+  } else {
     int leftoverBytes = w % 4;
     unsigned int word = col |
-                        (col << 8) |
-                        (col << 16) |
-                        (col << 24);
+      (col << 8) |
+      (col << 16) |
+      (col << 24);
 
     while (dmaBusy(3))
       ;
 
-    for (int i = y; i < h; i++)
-    {
+    for (int i = y; i < h; i++) {
       for (int j = x + w - leftoverBytes; j < right; j++)
         pixels[i * this->w + j] = col;
 

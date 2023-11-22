@@ -18,7 +18,7 @@ Furnace::Furnace() : Furniture("Furnace")
   yr = 2;
 }
 
-bool Furnace::use(Game &game, Level &level, Player &player, int attackDir)
+bool Furnace::use(Game& game, Level& level, Player& player, int attackDir)
 {
   game.enterMenu(std::make_unique<CraftingMenu>(furnaceRecipes, player));
   return true;

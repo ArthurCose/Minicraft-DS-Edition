@@ -3,13 +3,12 @@
 #include "../tile/tile.h"
 #include "noise.h"
 
-static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int depth);
-static bool validateLevel(GeneratedLevel &result, int depth);
+static GeneratedLevel createUndergroundLevel(Random& random, int w, int h, int depth);
+static bool validateLevel(GeneratedLevel& result, int depth);
 
-GeneratedLevel generateUnderground(Random &random, int w, int h, int depth)
+GeneratedLevel generateUnderground(Random& random, int w, int h, int depth)
 {
-  do
-  {
+  do {
     GeneratedLevel result = createUndergroundLevel(random, w, h, depth);
 
     if (validateLevel(result, depth))
@@ -18,12 +17,11 @@ GeneratedLevel generateUnderground(Random &random, int w, int h, int depth)
   } while (true);
 }
 
-static bool validateLevel(GeneratedLevel &result, int depth)
+static bool validateLevel(GeneratedLevel& result, int depth)
 {
   int count[256];
 
-  for (size_t i = 0; i < result.map.size(); i++)
-  {
+  for (size_t i = 0; i < result.map.size(); i++) {
     count[result.map[i] & 0xff]++;
   }
 
@@ -39,7 +37,7 @@ static bool validateLevel(GeneratedLevel &result, int depth)
   return true;
 }
 
-static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int depth)
+static GeneratedLevel createUndergroundLevel(Random& random, int w, int h, int depth)
 {
   Noise mnoise1(random, w, h, 16);
   Noise mnoise2(random, w, h, 16);
@@ -60,10 +58,8 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
   result.map.resize(w * h);
   result.data.resize(w * h);
 
-  for (int y = 0; y < h; y++)
-  {
-    for (int x = 0; x < w; x++)
-    {
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
       int i = x + y * w;
 
       double val = std::abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
@@ -90,19 +86,14 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
       dist = dist * dist * dist * dist;
       val = val + 1 - dist * 20;
 
-      if (val > -2 && wval < -2.0 + (depth) / 2 * 3)
-      {
+      if (val > -2 && wval < -2.0 + (depth) / 2 * 3) {
         if (depth > 2)
           result.map[i] = Tile::lava;
         else
           result.map[i] = Tile::water;
-      }
-      else if (val > -2 && (mval < -1.7 || nval < -1.4))
-      {
+      } else if (val > -2 && (mval < -1.7 || nval < -1.4)) {
         result.map[i] = Tile::dirt;
-      }
-      else
-      {
+      } else {
         result.map[i] = Tile::rock;
       }
     }
@@ -110,18 +101,14 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
 
   {
     int r = 2;
-    for (int i = 0; i < w * h / 400; i++)
-    {
+    for (int i = 0; i < w * h / 400; i++) {
       int x = random.nextInt(w);
       int y = random.nextInt(h);
-      for (int j = 0; j < 30; j++)
-      {
+      for (int j = 0; j < 30; j++) {
         int xx = x + random.nextInt(5) - random.nextInt(5);
         int yy = y + random.nextInt(5) - random.nextInt(5);
-        if (xx >= r && yy >= r && xx < w - r && yy < h - r)
-        {
-          if (result.map[xx + yy * w] == Tile::rock)
-          {
+        if (xx >= r && yy >= r && xx < w - r && yy < h - r) {
+          if (result.map[xx + yy * w] == Tile::rock) {
             result.map[xx + yy * w] = (char)((Tile::ironOre & 0xff) + depth - 1);
           }
         }
@@ -129,23 +116,18 @@ static GeneratedLevel createUndergroundLevel(Random &random, int w, int h, int d
     }
   }
 
-  if (depth < 3)
-  {
+  if (depth < 3) {
     int count = 0;
     // stairsLoop:
-    for (int i = 0; i < w * h / 100; i++)
-    {
+    for (int i = 0; i < w * h / 100; i++) {
       int x = random.nextInt(w - 20) + 10;
       int y = random.nextInt(h - 20) + 10;
 
       bool continueStairsLoop = false;
 
-      for (int yy = y - 1; yy <= y + 1; yy++)
-      {
-        for (int xx = x - 1; xx <= x + 1; xx++)
-        {
-          if (result.map[xx + yy * w] != Tile::rock)
-          {
+      for (int yy = y - 1; yy <= y + 1; yy++) {
+        for (int xx = x - 1; xx <= x + 1; xx++) {
+          if (result.map[xx + yy * w] != Tile::rock) {
             continueStairsLoop = true;
             break;
           }

@@ -6,10 +6,9 @@
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
 
-void InstructionsMenu::tick(Game &game)
+void InstructionsMenu::tick(Game& game)
 {
-  if (game.justTapped(KEY_A) || game.justTapped(KEY_B))
-  {
+  if (game.justTapped(KEY_A) || game.justTapped(KEY_B)) {
     close(game);
   }
 }
@@ -33,7 +32,7 @@ static std::vector<std::string> winInstructions = {
     "to win the game!",
 };
 
-void InstructionsMenu::render(Screen &screen, Screen &bottomScreen)
+void InstructionsMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
 

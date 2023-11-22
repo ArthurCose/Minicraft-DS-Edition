@@ -1,9 +1,9 @@
 #include "deadmenu.h"
 
 DeadMenu::DeadMenu(int time, int score)
-    : ResultsMenu(time, score) {}
+  : ResultsMenu(time, score) {}
 
-void DeadMenu::render(Screen &screen, Screen &bottomScreen)
+void DeadMenu::render(Screen& screen, Screen& bottomScreen)
 {
   ResultsMenu::render(screen, bottomScreen);
   screen.renderText("You died! Aww!", 2 * 8, 4 * 8, Color::get(-1, 555, 555, 555));

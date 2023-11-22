@@ -50,13 +50,11 @@ static inline std::vector<char> precalculateLight(int r) {
   std::vector<char> precalculated;
   precalculated.resize(sideLen * sideLen, 0);
 
-  for (int y = 0; y < sideLen; y++)
-  {
+  for (int y = 0; y < sideLen; y++) {
     int yd = y - r;
     yd = yd * yd;
 
-    for (int x = 0; x < sideLen; x++)
-    {
+    for (int x = 0; x < sideLen; x++) {
       int xd = x - r;
       int dist = xd * xd + yd;
 
@@ -72,10 +70,10 @@ static inline std::vector<char> precalculateLight(int r) {
   return precalculated;
 }
 
-LightMask::LightMask(Screen &screen)
-    : w(screen.w), h(screen.h),
-      brightnessW(divCeil(w, SCALE)),
-      brightnessH(divCeil(h, SCALE))
+LightMask::LightMask(Screen& screen)
+  : w(screen.w), h(screen.h),
+  brightnessW(divCeil(w, SCALE)),
+  brightnessH(divCeil(h, SCALE))
 {
   brightness.resize(brightnessW * brightnessH, 0);
 
@@ -135,10 +133,8 @@ void LightMask::renderLight(int x, int y, int r)
   int pyOffset = (y0 - (y - r)) - y0;
   int sideLen = r * 2;
 
-  for (int yy = y0; yy < y1; yy++)
-  {
-    for (int xx = x0; xx < x1; xx++)
-    {
+  for (int yy = y0; yy < y1; yy++) {
+    for (int xx = x0; xx < x1; xx++) {
       size_t pIndex = (xx + pxOffset) + (yy + pyOffset) * sideLen;
       int br = precalculated[pIndex];
 
@@ -167,11 +163,11 @@ void LightMask::fillTile(int x, int y)
       brightness[xx + yy * brightnessW] = 255;
 }
 
-void LightMask::render(Screen &screen)
+void LightMask::render(Screen& screen)
 {
   Texture& texture = usingTextureB ? *textureB : *textureD;
 
-  unsigned short *textureData = (unsigned short *)texture.data;
+  unsigned short* textureData = (unsigned short*)texture.data;
 
   auto previousBankModes = VRAM_CR;
 

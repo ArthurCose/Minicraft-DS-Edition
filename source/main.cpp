@@ -43,8 +43,7 @@ int main()
   int refreshRate = 1000 / 59.8261;
   int lostTime = 0;
 
-  while (true)
-  {
+  while (true) {
     auto start = playtime;
     game.tick();
 
@@ -59,16 +58,14 @@ int main()
     glFlush(0);
     auto end = playtime;
 
-    if (game.frameSkipEnabled)
-    {
+    if (game.frameSkipEnabled) {
       auto totalTime = end - start;
 
       lostTime += std::max(totalTime - refreshRate, 0);
 
       int skips = 0;
 
-      while (skips < 3 && lostTime > refreshRate)
-      {
+      while (skips < 3 && lostTime > refreshRate) {
         game.tick();
         lostTime -= refreshRate;
         skips++;
@@ -103,12 +100,9 @@ void incrementTime()
 void initializePalette()
 {
   int pp = 0;
-  for (int r = 0; r < 6; r++)
-  {
-    for (int g = 0; g < 6; g++)
-    {
-      for (int b = 0; b < 6; b++)
-      {
+  for (int r = 0; r < 6; r++) {
+    for (int g = 0; g < 6; g++) {
+      for (int b = 0; b < 6; b++) {
         int rr = (r * 255 / 5);
         int gg = (g * 255 / 5);
         int bb = (b * 255 / 5);
@@ -179,12 +173,12 @@ void initializeResources()
 
   Resource::resources[Resource::wood] = new Resource("Wood", 1 + 4 * 32, Color::get(-1, 200, 531, 430));
   Resource::resources[Resource::stone] = new Resource("Stone", 2 + 4 * 32, Color::get(-1, 111, 333, 555));
-  Resource::resources[Resource::flower] = new PlantableResource("Flower", 0 + 4 * 32, Color::get(-1, 10, 444, 330), Tile::flower, {Tile::grass});
-  Resource::resources[Resource::acorn] = new PlantableResource("Acorn", 3 + 4 * 32, Color::get(-1, 100, 531, 320), Tile::treeSapling, {Tile::grass});
-  Resource::resources[Resource::dirt] = new PlantableResource("Dirt", 2 + 4 * 32, Color::get(-1, 100, 322, 432), Tile::dirt, {Tile::hole, Tile::water, Tile::lava});
-  Resource::resources[Resource::sand] = new PlantableResource("Sand", 2 + 4 * 32, Color::get(-1, 110, 440, 550), Tile::sand, {Tile::grass, Tile::dirt});
-  Resource::resources[Resource::cactusFlower] = new PlantableResource("Cactus", 4 + 4 * 32, Color::get(-1, 10, 40, 50), Tile::cactusSapling, {Tile::sand});
-  Resource::resources[Resource::seeds] = new PlantableResource("Seeds", 5 + 4 * 32, Color::get(-1, 10, 40, 50), Tile::wheat, {Tile::farmland});
+  Resource::resources[Resource::flower] = new PlantableResource("Flower", 0 + 4 * 32, Color::get(-1, 10, 444, 330), Tile::flower, { Tile::grass });
+  Resource::resources[Resource::acorn] = new PlantableResource("Acorn", 3 + 4 * 32, Color::get(-1, 100, 531, 320), Tile::treeSapling, { Tile::grass });
+  Resource::resources[Resource::dirt] = new PlantableResource("Dirt", 2 + 4 * 32, Color::get(-1, 100, 322, 432), Tile::dirt, { Tile::hole, Tile::water, Tile::lava });
+  Resource::resources[Resource::sand] = new PlantableResource("Sand", 2 + 4 * 32, Color::get(-1, 110, 440, 550), Tile::sand, { Tile::grass, Tile::dirt });
+  Resource::resources[Resource::cactusFlower] = new PlantableResource("Cactus", 4 + 4 * 32, Color::get(-1, 10, 40, 50), Tile::cactusSapling, { Tile::sand });
+  Resource::resources[Resource::seeds] = new PlantableResource("Seeds", 5 + 4 * 32, Color::get(-1, 10, 40, 50), Tile::wheat, { Tile::farmland });
   Resource::resources[Resource::wheat] = new Resource("Wheat", 6 + 4 * 32, Color::get(-1, 110, 330, 550));
   Resource::resources[Resource::bread] = new FoodResource("Bread", 8 + 4 * 32, Color::get(-1, 110, 330, 550), 2, 5);
   Resource::resources[Resource::apple] = new FoodResource("Apple", 9 + 4 * 32, Color::get(-1, 100, 300, 500), 1, 5);
@@ -196,6 +190,6 @@ void initializeResources()
   Resource::resources[Resource::slime] = new Resource("SLIME", 10 + 4 * 32, Color::get(-1, 10, 30, 50));
   Resource::resources[Resource::glass] = new Resource("glass", 12 + 4 * 32, Color::get(-1, 555, 555, 555));
   Resource::resources[Resource::cloth] = new Resource("cloth", 1 + 4 * 32, Color::get(-1, 25, 252, 141));
-  Resource::resources[Resource::cloud] = new PlantableResource("cloud", 2 + 4 * 32, Color::get(-1, 222, 555, 444), Tile::cloud, {Tile::infiniteFall});
+  Resource::resources[Resource::cloud] = new PlantableResource("cloud", 2 + 4 * 32, Color::get(-1, 222, 555, 444), Tile::cloud, { Tile::infiniteFall });
   Resource::resources[Resource::gem] = new Resource("gem", 13 + 4 * 32, Color::get(-1, 101, 404, 545));
 }

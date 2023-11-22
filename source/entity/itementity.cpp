@@ -16,19 +16,17 @@ ItemEntity::ItemEntity(std::shared_ptr<Item> item, int x, int y)
   lifeTime = 60 * 10 + random.nextInt(60);
 }
 
-void ItemEntity::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
+void ItemEntity::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
   time++;
-  if (time >= lifeTime)
-  {
+  if (time >= lifeTime) {
     remove();
     return;
   }
   xx += xa;
   yy += ya;
   zz += za;
-  if (zz < 0)
-  {
+  if (zz < 0) {
     zz = 0;
     za *= -0.5;
     xa *= 0.6;
@@ -51,15 +49,14 @@ void ItemEntity::tick(Game &game, Level &level, std::shared_ptr<Entity> self)
     hurtTime--;
 }
 
-bool ItemEntity::isBlockableBy(Mob &mob)
+bool ItemEntity::isBlockableBy(Mob& mob)
 {
   return false;
 }
 
-void ItemEntity::render(Screen &screen)
+void ItemEntity::render(Screen& screen)
 {
-  if (time >= lifeTime - 6 * 20)
-  {
+  if (time >= lifeTime - 6 * 20) {
     if (time / 6 % 2 == 0)
       return;
   }
@@ -67,14 +64,14 @@ void ItemEntity::render(Screen &screen)
   screen.renderTile(x - 4, y - 4 - (int)(zz), item->getSprite(), item->getColor(), 0);
 }
 
-void ItemEntity::take(Player &player)
+void ItemEntity::take(Player& player)
 {
   Sound::pickup.play();
   player.score++;
   remove();
 }
 
-void ItemEntity::touchedBy(Level &level, Entity &entity)
+void ItemEntity::touchedBy(Level& level, Entity& entity)
 {
   if (time > 30)
     entity.touchItem(*this);

@@ -5,5 +5,5 @@
 class ListItem
 {
 public:
-  virtual void renderInventory(Screen &screen, int i, int j){};
+  virtual void renderInventory(Screen& screen, int i, int j) {};
 };

@@ -10,16 +10,13 @@ ResultsMenu::ResultsMenu(int time, int score)
   minutes %= 60;
   seconds %= 60;
 
-  if (hours > 0)
-  {
+  if (hours > 0) {
     timeString = std::to_string(hours) + "h";
 
     if (minutes < 10)
       timeString += "0";
     timeString += std::to_string(minutes) + "m";
-  }
-  else
-  {
+  } else {
     timeString = std::to_string(minutes) + "m ";
 
     if (seconds < 10)
@@ -30,17 +27,16 @@ ResultsMenu::ResultsMenu(int time, int score)
   scoreString = std::to_string(score);
 }
 
-void ResultsMenu::tick(Game &game)
+void ResultsMenu::tick(Game& game)
 {
   if (inputDelay > 0)
     inputDelay--;
-  else if (game.justTapped(KEY_START))
-  {
+  else if (game.justTapped(KEY_START)) {
     game.setMenu(std::make_unique<TitleMenu>());
   }
 }
 
-void ResultsMenu::render(Screen &screen, Screen &bottomScreen)
+void ResultsMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.renderFrame("", 1, 3, 21, 9);
 

@@ -28,8 +28,7 @@ Sound::Sound(mm_word id)
 
 void Sound::play()
 {
-  if (!initialized)
-  {
+  if (!initialized) {
     mmInitDefaultMem((mm_addr)soundbank_bin);
     mmLoadEffect(SFX_PLAYERHURT);
     mmLoadEffect(SFX_DEATH);

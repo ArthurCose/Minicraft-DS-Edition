@@ -8,7 +8,7 @@ InventoryMenu::InventoryMenu(std::shared_ptr<Player> player) : player(player)
   player->setItemHeld(false);
 }
 
-void InventoryMenu::tick(Game &game)
+void InventoryMenu::tick(Game& game)
 {
   if (game.justTapped(KEY_X) || game.justTapped(KEY_B) || game.justTapped(KEY_START))
     close(game);
@@ -29,26 +29,21 @@ void InventoryMenu::tick(Game &game)
   if (selected >= len)
     selected = 0;
 
-  if (moving && lastPosition != selected)
-  {
+  if (moving && lastPosition != selected) {
     auto start = player->inventory.items.begin();
     std::iter_swap(start + lastPosition, start + selected);
   }
 
-  if (game.justTapped(KEY_SELECT))
-  {
+  if (game.justTapped(KEY_SELECT)) {
     moving = !moving;
 
     if (moving)
       blinkTimer = 15;
   }
 
-  if (moving && (game.justTapped(KEY_A) || game.justTapped(KEY_B)))
-  {
+  if (moving && (game.justTapped(KEY_A) || game.justTapped(KEY_B))) {
     moving = false;
-  }
-  else if (game.justTapped(KEY_A) && len > 0)
-  {
+  } else if (game.justTapped(KEY_A) && len > 0) {
     player->setItemHeld(true);
     player->setSelectedItemIndex(selected);
     close(game);
@@ -60,7 +55,7 @@ void InventoryMenu::tick(Game &game)
     blinkTimer = 0;
 }
 
-void InventoryMenu::render(Screen &screen, Screen &bottomScreen)
+void InventoryMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.renderFrame("inventory", 1, 1, 12, 11);
   renderItemList(screen, 1, 1, 12, 11, player->inventory.items, selected, blinkTimer < 15);

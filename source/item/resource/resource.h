@@ -34,7 +34,7 @@ public:
     gem,
   };
 
-  static Resource *resources[256];
+  static Resource* resources[256];
 
   const std::string name;
   const int sprite;
@@ -42,5 +42,5 @@ public:
 
   Resource(std::string name, int sprite, int color);
 
-  virtual bool interactOn(Tile &tile, Level &level, int xt, int yt, Player &player, int attackDir) const { return false; }
+  virtual bool interactOn(Tile& tile, Level& level, int xt, int yt, Player& player, int attackDir) const { return false; }
 };

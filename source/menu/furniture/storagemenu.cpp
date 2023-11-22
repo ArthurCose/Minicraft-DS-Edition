@@ -7,21 +7,19 @@ StorageMenu::StorageMenu(std::string title, std::shared_ptr<Inventory> storageIn
   this->player = player;
 }
 
-void StorageMenu::tick(Game &game)
+void StorageMenu::tick(Game& game)
 {
   if (game.justTapped(KEY_B) || game.justTapped(KEY_X) || game.justTapped(KEY_START))
     close(game);
 
-  if (game.justTapped(KEY_LEFT) || game.justTapped(KEY_L))
-  {
+  if (game.justTapped(KEY_LEFT) || game.justTapped(KEY_L)) {
     window = 0;
     int tmp = selected;
     selected = oSelected;
     oSelected = tmp;
     moving = false;
   }
-  if (game.justTapped(KEY_RIGHT) || game.justTapped(KEY_R))
-  {
+  if (game.justTapped(KEY_RIGHT) || game.justTapped(KEY_R)) {
     window = 1;
     int tmp = selected;
     selected = oSelected;
@@ -29,8 +27,8 @@ void StorageMenu::tick(Game &game)
     moving = false;
   }
 
-  Inventory &i = window == 1 ? player->inventory : *storageInventory;
-  Inventory &i2 = window == 0 ? player->inventory : *storageInventory;
+  Inventory& i = window == 1 ? player->inventory : *storageInventory;
+  Inventory& i2 = window == 0 ? player->inventory : *storageInventory;
 
   int len = i.items.size();
 
@@ -53,26 +51,21 @@ void StorageMenu::tick(Game &game)
   if (selected >= len)
     selected = 0;
 
-  if (moving && lastPosition != selected)
-  {
+  if (moving && lastPosition != selected) {
     auto start = i.items.begin();
     std::iter_swap(start + lastPosition, start + selected);
   }
 
-  if (game.justTapped(KEY_SELECT))
-  {
+  if (game.justTapped(KEY_SELECT)) {
     moving = !moving;
 
     if (moving)
       blinkTimer = 15;
   }
 
-  if (moving && (game.justTapped(KEY_A) || game.justTapped(KEY_B)))
-  {
+  if (moving && (game.justTapped(KEY_A) || game.justTapped(KEY_B))) {
     moving = false;
-  }
-  else if (game.justTapped(KEY_A) && len > 0)
-  {
+  } else if (game.justTapped(KEY_A) && len > 0) {
     auto item = i.items[selected];
 
     i.removeItem(*item);
@@ -90,7 +83,7 @@ void StorageMenu::tick(Game &game)
     blinkTimer = 0;
 }
 
-void StorageMenu::render(Screen &screen, Screen &bottomScreen)
+void StorageMenu::render(Screen& screen, Screen& bottomScreen)
 {
   if (window == 1)
     screen.setOffset(6 * 8, 0);
@@ -101,7 +94,7 @@ void StorageMenu::render(Screen &screen, Screen &bottomScreen)
   screen.setOffset(0, 0);
 }
 
-void StorageMenu::renderInventory(Screen &screen, int x, int y, std::string name, std::vector<std::shared_ptr<Item>> &items, bool active)
+void StorageMenu::renderInventory(Screen& screen, int x, int y, std::string name, std::vector<std::shared_ptr<Item>>& items, bool active)
 {
   int currentSelection = active ? selected : oSelected;
 

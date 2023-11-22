@@ -13,10 +13,10 @@ private:
 public:
   Slime(int lvl);
 
-  void tick(Game &game, Level &level, std::shared_ptr<Entity> self) override;
-  void render(Screen &screen) override;
-  void touchedBy(Level &level, Entity &entity) override;
+  void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
+  void render(Screen& screen) override;
+  void touchedBy(Level& level, Entity& entity) override;
 
 protected:
-  void die(Game &game, Level &level) override;
+  void die(Game& game, Level& level) override;
 };

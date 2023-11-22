@@ -15,20 +15,20 @@ class Menu
 public:
   bool blocksGameTick = true;
 
-  virtual void tick(Game &game){};
+  virtual void tick(Game& game) {};
 
-  virtual void render(Screen &screen, Screen &bottomScreen){};
+  virtual void render(Screen& screen, Screen& bottomScreen) {};
 
   template <class T,
-            class SharedPtr = typename T::value_type,
-            class Element = typename SharedPtr::element_type,
-            class IsDerived = typename std::enable_if<std::is_base_of<ListItem, Element>::value, void *>::type>
+    class SharedPtr = typename T::value_type,
+    class Element = typename SharedPtr::element_type,
+    class IsDerived = typename std::enable_if<std::is_base_of<ListItem, Element>::value, void*>::type>
   void renderItemList(
-      Screen &screen,
-      int xo, int yo, int x1, int y1,
-      const T &listItems,
-      int selected,
-      bool renderCursor)
+    Screen& screen,
+    int xo, int yo, int x1, int y1,
+    const T& listItems,
+    int selected,
+    bool renderCursor)
   {
     const int itemCount = listItems.size();
     renderCursor = renderCursor && itemCount > 0;
@@ -47,13 +47,11 @@ public:
     if (listStart < 0)
       listStart = 0;
 
-    for (int i = 0; i < visibleCount; i++)
-    {
+    for (int i = 0; i < visibleCount; i++) {
       listItems[i + listStart]->renderInventory(screen, (1 + xo) * 8, (i + 1 + yo) * 8);
     }
 
-    if (renderCursor)
-    {
+    if (renderCursor) {
       int yy = selected + 1 - listStart + yo;
       screen.renderText(">", (xo + 0) * 8, yy * 8, Color::get(5, 555, 555, 555));
       screen.renderText("<", (xo + w) * 8, yy * 8, Color::get(5, 555, 555, 555));
@@ -62,7 +60,7 @@ public:
 
   void setParent(std::unique_ptr<Menu> menu);
 
-  void close(Game &game);
+  void close(Game& game);
 
 protected:
   std::unique_ptr<Menu> parent;

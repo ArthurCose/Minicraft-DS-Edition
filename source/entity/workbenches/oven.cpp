@@ -9,7 +9,7 @@ static std::vector<std::shared_ptr<Recipe>> ovenRecipes = {
 };
 
 Oven::Oven()
-    : Furniture("Oven")
+  : Furniture("Oven")
 {
   col = Color::get(-1, 000, 332, 442);
   sprite = 2;
@@ -17,7 +17,7 @@ Oven::Oven()
   yr = 2;
 }
 
-bool Oven::use(Game &game, Level &level, Player &player, int attackDir)
+bool Oven::use(Game& game, Level& level, Player& player, int attackDir)
 {
   game.enterMenu(std::make_unique<CraftingMenu>(ovenRecipes, player));
   return true;

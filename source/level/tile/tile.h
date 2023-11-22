@@ -17,7 +17,7 @@ public:
   static int tickCount;
   static Random random;
 
-  static Tile *tiles[256]; // raw pointers for static addresses
+  static Tile* tiles[256]; // raw pointers for static addresses
   enum ID
   {
     grass,
@@ -54,28 +54,28 @@ public:
 
   Tile(unsigned char id);
 
-  virtual void render(Screen &screen, Level &level, int x, int y){};
+  virtual void render(Screen& screen, Level& level, int x, int y) {};
 
-  virtual bool mayPass(Level &level, int x, int y, Entity &e) { return true; };
+  virtual bool mayPass(Level& level, int x, int y, Entity& e) { return true; };
 
-  virtual int getMapColor(Level &level, int x, int y) { return 404; };
+  virtual int getMapColor(Level& level, int x, int y) { return 404; };
 
-  virtual int getLightRadius(Level &level, int x, int y) { return 0; };
+  virtual int getLightRadius(Level& level, int x, int y) { return 0; };
 
-  virtual void hurt(Level &level, int x, int y, Mob &source, int dmg, int attackDir){};
+  virtual void hurt(Level& level, int x, int y, Mob& source, int dmg, int attackDir) {};
 
-  virtual void bumpedInto(Level &level, int xt, int yt, Entity &entity){};
+  virtual void bumpedInto(Level& level, int xt, int yt, Entity& entity) {};
 
-  virtual void tick(Level &level, int xt, int yt){};
+  virtual void tick(Level& level, int xt, int yt) {};
 
-  virtual void steppedOn(Level &level, int xt, int yt, Entity &entity){};
+  virtual void steppedOn(Level& level, int xt, int yt, Entity& entity) {};
 
-  virtual bool interact(Level &level, int xt, int yt, Player &player, Item &item, int attackDir)
+  virtual bool interact(Level& level, int xt, int yt, Player& player, Item& item, int attackDir)
   {
     return false;
   }
 
-  virtual bool use(Level &level, int xt, int yt, Player &player, int attackDir)
+  virtual bool use(Level& level, int xt, int yt, Player& player, int attackDir)
   {
     return false;
   }

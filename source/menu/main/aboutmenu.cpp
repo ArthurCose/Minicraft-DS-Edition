@@ -5,10 +5,9 @@
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
 
-void AboutMenu::tick(Game &game)
+void AboutMenu::tick(Game& game)
 {
-  if (game.justTapped(KEY_A) || game.justTapped(KEY_B))
-  {
+  if (game.justTapped(KEY_A) || game.justTapped(KEY_B)) {
     close(game);
   }
 }
@@ -27,7 +26,7 @@ static std::vector<std::string> aboutText = {
     "by Arthur Cosentino",
 };
 
-void AboutMenu::render(Screen &screen, Screen &bottomScreen)
+void AboutMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
 
@@ -35,8 +34,7 @@ void AboutMenu::render(Screen &screen, Screen &bottomScreen)
 
   size_t widestLength = 0;
 
-  for (size_t i = 0; i < aboutText.size(); i++)
-  {
+  for (size_t i = 0; i < aboutText.size(); i++) {
     if (widestLength < aboutText[i].size())
       widestLength = aboutText[i].size();
   }

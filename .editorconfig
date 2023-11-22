@@ -1,0 +1,6 @@
+# https://learn.microsoft.com/en-us/visualstudio/ide/cpp-editorconfig-properties
+
+[*.{cpp,h}]
+cpp_space_pointer_reference_alignment = left
+cpp_new_line_before_open_brace_block = same_line
+cpp_new_line_before_else = false

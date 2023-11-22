@@ -4,4 +4,4 @@
 
 class Random;
 
-GeneratedLevel generateOverworld(Random &random, int w, int h);
+GeneratedLevel generateOverworld(Random& random, int w, int h);
