@@ -28,6 +28,9 @@ public:
   void tick();
   bool isHeld(int key);
   bool justTapped(int key);
+  bool justReleased(int key);
+  int touchX();
+  int touchY();
   void render();
   void setMenu(std::unique_ptr<Menu> menu);
   void enterMenu(std::unique_ptr<Menu> menu);
@@ -39,6 +42,7 @@ public:
 private:
   LightMask lightMask;
   static const int SCALE = 3;
+  touchPosition touchPos;
   int tickCount = 0;
   int gameTime = 0;
   int playerDeadTime;

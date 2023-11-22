@@ -14,6 +14,10 @@ public:
 private:
   std::shared_ptr<Player> player;
   std::shared_ptr<std::vector<unsigned char>> map;
+  int hoveredIndex = -1;
+  int draggedIndex = -1;
+  int dragX, dragY;
+  bool settingHeld;
 
   void renderHud(Screen& screen);
   void renderInventory(Screen& bottomScreen);

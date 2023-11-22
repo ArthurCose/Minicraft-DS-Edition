@@ -18,6 +18,7 @@ void Game::tick()
   tickCount++;
 
   scanKeys();
+  touchRead(&touchPos);
 
   bool blockTick = false;
 
@@ -63,6 +64,21 @@ bool Game::isHeld(int key)
 bool Game::justTapped(int key)
 {
   return keysDown() & key;
+}
+
+bool Game::justReleased(int key)
+{
+  return keysUp() & key;
+}
+
+int Game::touchX()
+{
+  return touchPos.px;
+}
+
+int Game::touchY()
+{
+  return touchPos.py;
 }
 
 void Game::render()

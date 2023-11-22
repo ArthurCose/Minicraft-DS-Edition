@@ -29,6 +29,7 @@ public:
   int getLightRadius() override;
   void setSelectedItemIndex(int index);
   int getSelectedItemIndex();
+  bool holdingItem();
   void setItemHeld(bool status);
   std::shared_ptr<Item> getActiveItem();
 

@@ -478,6 +478,11 @@ int Player::getSelectedItemIndex()
   return selectedItemIndex;
 }
 
+bool Player::holdingItem()
+{
+  return itemHeld;
+}
+
 void Player::setItemHeld(bool status)
 {
   itemHeld = status;

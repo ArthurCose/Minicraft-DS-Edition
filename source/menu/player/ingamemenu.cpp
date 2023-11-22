@@ -1,5 +1,65 @@
 #include "ingamemenu.h"
 
+#include <nds/arm9/input.h>
+#include <algorithm>
+
+static const int HOTBAR_Y = 8;
+static const int ITEM_W = 8;
+static const int ITEM_H = 8;
+static const int ITEM_SPACING = 4;
+
+static inline int calculateItemHotbarX(int i) {
+  // 16 for L padding, 8 for L
+  return i * (ITEM_W + ITEM_SPACING * 2) + 16 + 8 + ITEM_SPACING;
+}
+
+static inline int calculateHotbarLen(Screen& bottomScreen) {
+  return (bottomScreen.w - 48) / 16;
+}
+
+static inline int calculateHotbarInventoryStartIndex(Player& player, int hotbarLen) {
+  auto& items = player.inventory.items;
+  int itemCount = items.size();
+  int itemStart = player.getSelectedItemIndex() - hotbarLen / 2;
+
+  if (itemStart + hotbarLen >= itemCount) {
+    itemStart = itemCount - hotbarLen;
+  }
+
+  if (itemStart < 0) {
+    itemStart = 0;
+  }
+
+  return itemStart;
+}
+
+static inline int resolveHoveredIndex(Screen& bottomScreen, Player& player, int touchX, int touchY) {
+  if (touchY < HOTBAR_Y - ITEM_SPACING || touchY > HOTBAR_Y + ITEM_H + ITEM_SPACING) {
+    return -1;
+  }
+
+  auto& items = player.inventory.items;
+  int itemCount = items.size();
+  int hotbarLen = calculateHotbarLen(bottomScreen);
+  int startIndex = calculateHotbarInventoryStartIndex(player, hotbarLen);
+
+  for (int i = 0; i < hotbarLen; i++) {
+    int index = startIndex + i;
+
+    if (index >= itemCount) {
+      break;
+    }
+
+    int x = calculateItemHotbarX(i);
+
+    if (touchX >= x - ITEM_SPACING && touchX < x + ITEM_W + ITEM_SPACING) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
 InGameMenu::InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vector<unsigned char>> map)
 {
   this->player = player;
@@ -9,6 +69,59 @@ InGameMenu::InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vect
 
 void InGameMenu::tick(Game& game)
 {
+  auto& player = *game.player;
+
+  if (game.justReleased(KEY_TOUCH)) {
+    if (draggedIndex != -1) {
+      draggedIndex = -1;
+      player.setItemHeld(settingHeld);
+    }
+  }
+
+  if (!game.isHeld(KEY_TOUCH)) {
+    return;
+  }
+
+  if (draggedIndex == -1) {
+    // initializing settingHeld, default to toggle
+    settingHeld = !player.holdingItem();
+  } else if (hoveredIndex == -1) {
+    // prevent toggle if an item is dragged out of the hotbar
+    settingHeld = true;
+  }
+
+  dragX = game.touchX();
+  dragY = game.touchY();
+  hoveredIndex = resolveHoveredIndex(game.bottomScreen, player, dragX, dragY);
+
+  if (hoveredIndex != -1) {
+    auto& items = player.inventory.items;
+
+    if (draggedIndex != -1 && (uint)draggedIndex < items.size()) {
+      // dragging an item, and hovering an item
+      // rotating items to swap
+      if (draggedIndex < hoveredIndex) {
+        auto left = draggedIndex;
+        auto right = hoveredIndex;
+        std::rotate(items.begin() + left, items.begin() + left + 1, items.begin() + right + 1);
+      } else {
+        auto left = hoveredIndex;
+        auto right = draggedIndex;
+        std::rotate(items.begin() + left, items.begin() + right, items.begin() + right + 1);
+      }
+    }
+
+    if (player.getSelectedItemIndex() != hoveredIndex) {
+      player.setSelectedItemIndex(hoveredIndex);
+
+      // force holding if we weren't selecting this slot before
+      settingHeld = true;
+    }
+
+    player.setItemHeld(true);
+
+    draggedIndex = hoveredIndex;
+  }
 }
 
 void InGameMenu::render(Screen& screen, Screen& bottomScreen)
@@ -16,8 +129,8 @@ void InGameMenu::render(Screen& screen, Screen& bottomScreen)
   bottomScreen.clear(Color::get(5));
 
   renderHud(screen);
-  renderInventory(bottomScreen);
   renderMap(bottomScreen);
+  renderInventory(bottomScreen);
 }
 
 void InGameMenu::renderHud(Screen& screen)
@@ -50,34 +163,33 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   auto& items = player->inventory.items;
   auto activeItem = player->getActiveItem();
 
-  int inventoryY = 8;
-  bottomScreen.renderText("L", 8, inventoryY, Color::get(-1, 555, 555, 555));
-  bottomScreen.renderText("R", bottomScreen.w - 16, inventoryY, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("L", 8, HOTBAR_Y, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("R", bottomScreen.w - 16, HOTBAR_Y, Color::get(-1, 555, 555, 555));
 
   int itemCount = items.size();
-  int itemRenderCount = (bottomScreen.w - 48) / 16;
-  int itemStart = player->getSelectedItemIndex() - itemRenderCount / 2;
+  int hotbarLen = calculateHotbarLen(bottomScreen);
+  int startIndex = calculateHotbarInventoryStartIndex(*player, hotbarLen);
 
-  if (itemStart + itemRenderCount >= itemCount)
-    itemStart = itemCount - itemRenderCount;
-  if (itemStart < 0)
-    itemStart = 0;
+  for (int i = 0; i < hotbarLen; i++) {
+    int index = startIndex + i;
 
-  for (int i = 0; i < itemRenderCount; i++) {
-    int index = itemStart + i;
+    if (index >= itemCount) {
+      break;
+    }
 
-    if (index >= itemCount)
+    if (index == draggedIndex && hoveredIndex != draggedIndex) {
       continue;
+    }
 
-    // 16 for L padding, 8 for L, 4 to center
-    int x = i * 16 + 16 + 8 + 4;
+    int x = calculateItemHotbarX(i);
 
-    if (activeItem != NULL && player->getSelectedItemIndex() == index)
-      bottomScreen.renderBox(x, inventoryY, 8, 8, Color::get(444));
+    if (activeItem != NULL && player->getSelectedItemIndex() == index) {
+      bottomScreen.renderBox(x, HOTBAR_Y, ITEM_W, ITEM_H, Color::get(444));
+    }
 
     auto& item = *items[index];
 
-    bottomScreen.renderTile(x, inventoryY, item.getSprite(), item.getColor(), 0);
+    bottomScreen.renderTile(x, HOTBAR_Y, item.getSprite(), item.getColor(), 0);
   }
 
   if (activeItem != NULL) {
@@ -90,8 +202,16 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
     bottomScreen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
     bottomScreen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
 
-    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem))
+    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
       bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, itemNameTop + 12, Color::get(-1, 222, 222, 222));
+    }
+  }
+
+  if (hoveredIndex == -1 && draggedIndex != -1 && (uint)draggedIndex < items.size()) {
+    auto& item = *items[draggedIndex];
+    int x = dragX - ITEM_W / 2;
+    int y = dragY - ITEM_H / 2;
+    bottomScreen.renderTile(x, y, item.getSprite(), item.getColor(), 0);
   }
 }
 
@@ -104,9 +224,10 @@ void InGameMenu::renderMap(Screen& screen)
   if (auto sscreen = dynamic_cast<SoftwareScreen*>(&screen)) {
     for (int y = 0; y < levelSize; y++) {
       int channel = y % 4;
-      // wait for channel
-      while (dmaBusy(channel))
-        ;
+
+      while (dmaBusy(channel)) {
+        // wait for channel
+      }
 
       dmaCopyWordsAsynch(
         channel,
