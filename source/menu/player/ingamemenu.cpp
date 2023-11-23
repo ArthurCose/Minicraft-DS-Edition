@@ -7,10 +7,11 @@ static const int HOTBAR_Y = 8;
 static const int ITEM_W = 8;
 static const int ITEM_H = 8;
 static const int ITEM_SPACING = 4;
+static const int ROTATE_CHAR_MARGIN = 8;
+static const int ROTATE_BUTTON_W = ROTATE_CHAR_MARGIN * 2 + 8;
 
 static inline int calculateItemHotbarX(int i) {
-  // 16 for L padding, 8 for L
-  return i * (ITEM_W + ITEM_SPACING * 2) + 16 + 8 + ITEM_SPACING;
+  return ROTATE_BUTTON_W + i * (ITEM_W + ITEM_SPACING * 2) + ITEM_SPACING;
 }
 
 static inline int calculateHotbarLen(Screen& bottomScreen) {
@@ -69,6 +70,44 @@ InGameMenu::InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vect
 
 void InGameMenu::tick(Game& game)
 {
+  handleItemDragging(game);
+  handleTouchButtons(game);
+}
+
+void InGameMenu::handleTouchButtons(Game& game) {
+  if (!game.justTapped(KEY_TOUCH)) {
+    return;
+  }
+
+  int x = game.touchX();
+  int y = game.touchY();
+
+  if (y > HOTBAR_Y + ITEM_H + ITEM_SPACING) {
+    return;
+  }
+
+  auto& player = *game.player;
+
+  if (x < ROTATE_BUTTON_W) {
+    // tapped L
+    if (player.holdingItem()) {
+      player.setSelectedItemIndex(player.getSelectedItemIndex() - 1);
+    } else {
+      player.setItemHeld(true);
+    }
+  }
+
+  if (x > game.bottomScreen.w - ROTATE_BUTTON_W) {
+    // tapped R
+    if (player.holdingItem()) {
+      player.setSelectedItemIndex(player.getSelectedItemIndex() + 1);
+    } else {
+      player.setItemHeld(true);
+    }
+  }
+}
+
+void InGameMenu::handleItemDragging(Game& game) {
   auto& player = *game.player;
 
   if (game.justReleased(KEY_TOUCH)) {
@@ -163,8 +202,8 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   auto& items = player->inventory.items;
   auto activeItem = player->getActiveItem();
 
-  bottomScreen.renderText("L", 8, HOTBAR_Y, Color::get(-1, 555, 555, 555));
-  bottomScreen.renderText("R", bottomScreen.w - 16, HOTBAR_Y, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("L", ROTATE_CHAR_MARGIN, HOTBAR_Y, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("R", bottomScreen.w - ROTATE_CHAR_MARGIN * 2, HOTBAR_Y, Color::get(-1, 555, 555, 555));
 
   int itemCount = items.size();
   int hotbarLen = calculateHotbarLen(bottomScreen);

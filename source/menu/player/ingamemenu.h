@@ -19,6 +19,8 @@ private:
   int dragX, dragY;
   bool settingHeld;
 
+  void handleItemDragging(Game& game);
+  void handleTouchButtons(Game& game);
   void renderHud(Screen& screen);
   void renderInventory(Screen& bottomScreen);
   void renderMap(Screen& bottomScreen);
