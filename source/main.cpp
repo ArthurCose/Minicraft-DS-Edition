@@ -85,6 +85,7 @@ void initialize()
   vramSetBankC(VRAM_C_SUB_BG);
   vramSetBankD(VRAM_D_TEXTURE); // dedicated to lighting
   vramSetBankF(VRAM_F_TEX_PALETTE);
+  keysSetRepeat(20, 6);
 
   initializePalette();
   initializeMainEngine();

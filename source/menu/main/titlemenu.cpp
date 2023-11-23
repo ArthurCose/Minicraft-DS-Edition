@@ -13,9 +13,9 @@ std::vector<std::string> options = { "Start game", "How to play", "About" };
 
 void TitleMenu::tick(Game& game)
 {
-  if (game.justTapped(KEY_UP))
+  if (game.justTappedOrRepeat(KEY_UP))
     selected--;
-  if (game.justTapped(KEY_DOWN))
+  if (game.justTappedOrRepeat(KEY_DOWN))
     selected++;
 
   int optionCount = options.size();

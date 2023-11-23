@@ -18,6 +18,10 @@ void Game::tick()
   tickCount++;
 
   scanKeys();
+  tappedKeys = keysDown();
+  heldKeys = keysHeld();
+  tappedOrRepeatKeys = keysDownRepeat();
+  releasedKeys = keysUp();
   touchRead(&touchPos);
 
   bool blockTick = false;
@@ -58,17 +62,22 @@ void Game::tick()
 
 bool Game::isHeld(int key)
 {
-  return keysHeld() & key;
+  return heldKeys & key;
 }
 
 bool Game::justTapped(int key)
 {
-  return keysDown() & key;
+  return tappedKeys & key;
+}
+
+bool Game::justTappedOrRepeat(int key)
+{
+  return tappedOrRepeatKeys & key;
 }
 
 bool Game::justReleased(int key)
 {
-  return keysUp() & key;
+  return releasedKeys & key;
 }
 
 int Game::touchX()

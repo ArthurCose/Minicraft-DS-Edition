@@ -32,7 +32,7 @@ void CraftingMenu::tick(Game& game)
   if (len == 0)
     selected = 0;
 
-  if (game.justTapped(KEY_UP)) {
+  if (game.justTappedOrRepeat(KEY_UP)) {
     selected--;
 
     if (selected < 0)
@@ -41,7 +41,7 @@ void CraftingMenu::tick(Game& game)
     updateAmounts(*game.player);
   }
 
-  if (game.justTapped(KEY_DOWN)) {
+  if (game.justTappedOrRepeat(KEY_DOWN)) {
     selected++;
 
     if (selected >= len)

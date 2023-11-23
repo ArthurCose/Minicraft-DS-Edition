@@ -28,6 +28,7 @@ public:
   void tick();
   bool isHeld(int key);
   bool justTapped(int key);
+  bool justTappedOrRepeat(int key);
   bool justReleased(int key);
   int touchX();
   int touchY();
@@ -43,6 +44,10 @@ private:
   LightMask lightMask;
   static const int SCALE = 3;
   touchPosition touchPos;
+  int tappedKeys = 0;
+  int heldKeys = 0;
+  int tappedOrRepeatKeys = 0;
+  int releasedKeys = 0;
   int tickCount = 0;
   int gameTime = 0;
   int playerDeadTime;

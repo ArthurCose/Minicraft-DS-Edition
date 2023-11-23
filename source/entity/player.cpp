@@ -113,11 +113,11 @@ void Player::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 
 void Player::updateInventory(Game& game)
 {
-  if (itemHeld && game.justTapped(KEY_L))
+  if (itemHeld && game.justTappedOrRepeat(KEY_L))
     selectedItemIndex--;
-  if (itemHeld && game.justTapped(KEY_R))
+  if (itemHeld && game.justTappedOrRepeat(KEY_R))
     selectedItemIndex++;
-  if (!itemHeld && (game.justTapped(KEY_L) || game.justTapped(KEY_R)))
+  if (!itemHeld && (game.justTappedOrRepeat(KEY_L) || game.justTappedOrRepeat(KEY_R)))
     itemHeld = true;
 
   // make sure selectedItemIndex is within bounds

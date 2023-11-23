@@ -15,9 +15,9 @@ void InventoryMenu::tick(Game& game)
 
   int lastPosition = selected;
 
-  if (game.justTapped(KEY_UP))
+  if (game.justTappedOrRepeat(KEY_UP))
     selected--;
-  if (game.justTapped(KEY_DOWN))
+  if (game.justTappedOrRepeat(KEY_DOWN))
     selected++;
 
   int len = player->inventory.items.size();
