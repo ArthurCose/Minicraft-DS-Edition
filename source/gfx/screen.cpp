@@ -63,7 +63,9 @@ void Screen::renderFrame(std::string_view title, int x0, int y0, int x1, int y1)
   // background
   renderBoxFilled((x0 + 1) * 8, (y0 + 1) * 8, (x1 - x0 - 1) * 8, (y1 - y0 - 1) * 8, Color::get(5));
 
-  renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
+  if (!title.empty()) {
+    renderText(title, x0 * 8 + 8, y0 * 8, Color::get(5, 5, 5, 550));
+  }
 }
 
 std::shared_ptr<Texture> Screen::genTexture(void* loadData, int w, int h)
