@@ -2,16 +2,14 @@
 
 #include "../gfx/color.h"
 
-std::string LEVEL_NAMES[5] = {
-    "Wood", "Rock", "Iron", "Gold", "Gem" };
-
-int LEVEL_COLORS[5] = {
-    Color::get(-1, 100, 321, 431),
-    Color::get(-1, 100, 321, 111),
-    Color::get(-1, 100, 321, 555),
-    Color::get(-1, 100, 321, 550),
-    Color::get(-1, 100, 321, 055),
-};
+const std::array<std::string_view, ToolItem::MAX_LEVEL> ToolItem::LEVEL_NAMES = { "Wood", "Rock", "Iron", "Gold", "Gem" };
+const std::array<int, ToolItem::MAX_LEVEL> ToolItem::LEVEL_COLORS = {
+  Color::get(-1, 100, 321, 431),
+  Color::get(-1, 100, 321, 111),
+  Color::get(-1, 100, 321, 555),
+  Color::get(-1, 100, 321, 550),
+  Color::get(-1, 100, 321, 055),
+};;
 
 ToolItem::ToolItem(ToolType* type, int level)
 {
@@ -19,9 +17,9 @@ ToolItem::ToolItem(ToolType* type, int level)
   this->level = level;
 }
 
-std::string ToolItem::getName() const
+std::string_view ToolItem::getName() const
 {
-  return LEVEL_NAMES[level] + " " + type->name;
+  return type->levelNames[level];
 }
 
 int ToolItem::getColor() const

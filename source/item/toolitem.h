@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string_view>
 #include "item.h"
 #include "tooltype.h"
 #include "../shim/random.h"
@@ -11,12 +12,15 @@ private:
 
 public:
   static const int MAX_LEVEL = 5;
+  static const std::array<std::string_view, ToolItem::MAX_LEVEL> LEVEL_NAMES;
+  static const std::array<int, ToolItem::MAX_LEVEL> LEVEL_COLORS;
+
   ToolType* type;
   int level = 0;
 
   ToolItem(ToolType* type, int level);
 
-  std::string getName() const override;
+  std::string_view getName() const override;
   int getColor() const override;
   int getSprite() const override;
   void renderIcon(Screen& screen, int x, int y) override;

@@ -1,5 +1,6 @@
 #include "screen.h"
 
+#include <string>
 #include "color.h"
 
 unsigned short Screen::palette[256];
@@ -13,9 +14,9 @@ void Screen::setOffset(int xOffset, int yOffset)
   this->yOffset = yOffset;
 }
 
-static std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=/\\%()<>:;     ";
+static std::string_view chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=/\\%()<>:;     ";
 
-void Screen::renderText(std::string msg, int x, int y, int col)
+void Screen::renderText(std::string_view msg, int x, int y, int col)
 {
   int backgroundColor = col & 255;
   bool renderBackground = backgroundColor != 255;
@@ -32,12 +33,12 @@ void Screen::renderText(std::string msg, int x, int y, int col)
   }
 }
 
-void Screen::renderTextCentered(std::string msg, int x, int y, int col)
+void Screen::renderTextCentered(std::string_view msg, int x, int y, int col)
 {
   renderText(msg, x - msg.size() * 4, y - 4, col);
 }
 
-void Screen::renderFrame(std::string title, int x0, int y0, int x1, int y1)
+void Screen::renderFrame(std::string_view title, int x0, int y0, int x1, int y1)
 {
   int borderColor = Color::get(-1, 1, 5, 445);
 

@@ -11,7 +11,7 @@ public:
 
   FurnitureItem(std::shared_ptr<Furniture> furniture);
 
-  std::string getName() const override;
+  std::string_view getName() const override;
   int getColor() const override;
   int getSprite() const override;
   void renderIcon(Screen& screen, int x, int y) override;

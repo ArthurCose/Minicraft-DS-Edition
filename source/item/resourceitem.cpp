@@ -11,7 +11,7 @@ ResourceItem::ResourceItem(Resource::ID resourceId, int count)
   this->count = count;
 }
 
-std::string ResourceItem::getName() const
+std::string_view ResourceItem::getName() const
 {
   return Resource::resources[resourceId]->name;
 }

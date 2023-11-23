@@ -13,7 +13,7 @@ class ItemEntity;
 class Item : public ListItem
 {
 public:
-  virtual std::string getName() const { return "ERROR"; }
+  virtual std::string_view getName() const { return "ERROR"; }
 
   virtual int getColor() const { return 0; }
 

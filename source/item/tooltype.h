@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <array>
 
 class ToolType
 {
@@ -12,8 +13,9 @@ public:
   static ToolType axe;
 
   const std::string name;
+  std::array<std::string, 5> levelNames;
   const int sprite;
 
 private:
-  ToolType(std::string name, int sprite) : name(name), sprite(sprite) {}
+  ToolType(std::string name, int sprite);
 };

@@ -3,7 +3,7 @@
 FurnitureItem::FurnitureItem(std::shared_ptr<Furniture> furniture)
   : furniture(furniture) {}
 
-std::string FurnitureItem::getName() const
+std::string_view FurnitureItem::getName() const
 {
   return furniture->name;
 }

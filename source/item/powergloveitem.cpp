@@ -3,7 +3,7 @@
 #include "../gfx/color.h"
 #include "../entity/furniture.h"
 
-std::string PowerGloveItem::getName() const
+std::string_view PowerGloveItem::getName() const
 {
   return "Pow glove";
 }
