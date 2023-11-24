@@ -76,7 +76,7 @@ void InGameMenu::tick(Game& game)
 }
 
 void InGameMenu::handleTouchButtons(Game& game) {
-  if (!game.justTapped(KEY_TOUCH)) {
+  if (!game.justTappedOrRepeat(KEY_TOUCH)) {
     return;
   }
 
