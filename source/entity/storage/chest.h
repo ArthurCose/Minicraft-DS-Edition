@@ -13,4 +13,7 @@ public:
 
   bool use(Game& game, Level& level, Player& player, int attackDir) override;
   std::shared_ptr<Furniture> clone() override;
+  std::string_view serializedClassName() override { return "Chest"; }
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 };

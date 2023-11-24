@@ -15,10 +15,14 @@ class Game
 {
 public:
   static const std::string NAME;
+  static const std::string SAVE_FOLDER;
+  static const std::string SAVE_EXTENSION;
+
   GLScreen screen;
   SoftwareScreen bottomScreen;
   std::shared_ptr<Player> player;
   std::unique_ptr<Menu> menu;
+  std::string worldName;
   std::vector<Level> levels;
   int currentLevel = 3;
   bool frameSkipEnabled = true;
@@ -39,6 +43,9 @@ public:
   void changeLevel(int dir);
   void win();
   void resetGame();
+  void resolveNameConflict();
+  void save();
+  void load(std::string worldName);
 
 private:
   LightMask lightMask;
@@ -54,5 +61,4 @@ private:
   int pendingLevelChange = 0;
   int wonTimer = 0;
   bool hasWon = false;
-  void init();
 };

@@ -63,3 +63,21 @@ std::shared_ptr<Item> FurnitureItem::clone()
 {
   return std::make_shared<FurnitureItem>(furniture->clone());
 }
+
+void FurnitureItem::serializeData(std::ostream& s)
+{
+  Item::serializeData(s);
+  nbt::begin_named_compound(s, "furniture");
+  furniture->serialize(s);
+  nbt::close_compound(s);
+}
+
+void FurnitureItem::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "furniture") {
+    std::shared_ptr entity = Entity::deserialize(s, tag);
+    furniture = std::dynamic_pointer_cast<Furniture>(entity);
+  } else {
+    Item::deserializeDataProperty(s, tag, name);
+  }
+}

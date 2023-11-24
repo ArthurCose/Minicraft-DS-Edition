@@ -10,7 +10,6 @@ class Player : public Mob
 {
 public:
   Inventory inventory;
-  std::shared_ptr<Item> attackItem;
   int stamina = 0;
   int staminaRecharge = 0;
   int staminaRechargeDelay = 0;
@@ -32,6 +31,9 @@ public:
   bool holdingItem();
   void setItemHeld(bool status);
   std::shared_ptr<Item> getActiveItem();
+  std::string_view serializedClassName() override { return "Player"; }
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 
 private:
   int attackTime = 0, attackDir = 0;

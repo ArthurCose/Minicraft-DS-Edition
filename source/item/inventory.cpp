@@ -92,3 +92,24 @@ int Inventory::count(const Item& item)
   }
   return 0;
 }
+
+void Inventory::serialize(std::ostream& s, std::string_view keyName)
+{
+  nbt::begin_named_list(s, keyName, nbt::Tag::COMPOUND, items.size());
+
+  for (auto& item : items) {
+    item->serialize(s);
+    nbt::close_compound(s);
+  }
+}
+
+void Inventory::deserialize(std::istream& s, nbt::Tag tag)
+{
+  items.clear();
+
+  nbt::read_tagged_list(s, tag, nbt::Tag::COMPOUND, [this, &s](int i) {
+    if (std::shared_ptr item = Item::deserialize(s, nbt::Tag::COMPOUND)) {
+      items.push_back(item);
+    }
+  });
+}

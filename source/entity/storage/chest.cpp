@@ -20,3 +20,18 @@ std::shared_ptr<Furniture> Chest::clone()
 {
   return std::make_shared<Chest>();
 }
+
+void Chest::serializeData(std::ostream& s)
+{
+  Furniture::serializeData(s);
+  inventory->serialize(s, "inventory");
+}
+
+void Chest::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "inventory") {
+    inventory->deserialize(s, tag);
+  } else {
+    Furniture::deserializeDataProperty(s, tag, name);
+  }
+}

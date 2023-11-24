@@ -6,17 +6,21 @@
 class Spark : public Entity
 {
 private:
-  int lifeTime;
-  int time;
+  int lifeTime{};
+  int time{};
   std::weak_ptr<Entity> owner_weak;
 
 public:
-  double xa, ya;
-  double xx, yy;
+  float xa{}, ya{};
+  float xx{}, yy{};
 
-  Spark(std::shared_ptr<Entity> owner, double xa, double ya);
+  Spark() {}
+  Spark(std::shared_ptr<Entity> owner, float xa, float ya);
 
   void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
   void render(Screen& screen) override;
   bool isBlockableBy(Mob& mob) override;
+  std::string_view serializedClassName() override { return "Spark"; }
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 };

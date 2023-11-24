@@ -29,4 +29,7 @@ public:
   int getAttackDamageBonus(Entity& e);
   bool matches(const Item& item) override;
   std::shared_ptr<Item> clone() override;
+  std::string_view serializedClassName() override { return "ToolItem"; }
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 };

@@ -75,3 +75,35 @@ std::shared_ptr<Item> ToolItem::clone()
 {
   return std::make_shared<ToolItem>(type, level);
 }
+
+void ToolItem::serializeData(std::ostream& s)
+{
+  Item::serializeData(s);
+  nbt::write_named_string(s, "type", type->name);
+  nbt::write_named_int(s, "level", level);
+}
+
+void ToolItem::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "type") {
+    auto typeName = nbt::read_tagged_string(s, tag);
+
+    std::array<ToolType*, 5> toolTypes = {
+      &ToolType::shovel,
+      &ToolType::hoe,
+      &ToolType::sword,
+      &ToolType::pickaxe,
+      &ToolType::axe
+    };
+
+    for (ToolType* toolType : toolTypes) {
+      if (typeName == toolType->name) {
+        type = toolType;
+      }
+    }
+  } else if (name == "level") {
+    level = nbt::read_tagged_number<int>(s, tag);
+  } else {
+    Item::deserializeDataProperty(s, tag, name);
+  }
+}

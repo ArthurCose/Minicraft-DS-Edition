@@ -100,3 +100,25 @@ void Slime::die(Game& game, Level& level)
     level.player->score += 25 * lvl;
   }
 }
+
+void Slime::serializeData(std::ostream& s) {
+  Mob::serializeData(s);
+  nbt::write_named_int(s, "xa", xa);
+  nbt::write_named_int(s, "ya", ya);
+  nbt::write_named_int(s, "jumpTime", jumpTime);
+  nbt::write_named_int(s, "lvl", lvl);
+}
+
+void Slime::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
+  if (name == "xa") {
+    xa = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "ya") {
+    ya = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "jumpTime") {
+    jumpTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "lvl") {
+    lvl = nbt::read_tagged_number<int>(s, tag);
+  } else {
+    Mob::deserializeDataProperty(s, tag, name);
+  }
+}

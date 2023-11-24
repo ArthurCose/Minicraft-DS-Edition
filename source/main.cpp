@@ -1,5 +1,6 @@
 #include <nds.h>
 #include <nds/arm9/background.h>
+#include <fat.h>
 #include <gl2d.h>
 #include "game.h"
 #include "icons.h"
@@ -80,6 +81,7 @@ void initialize()
 {
   timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
 
+  fatInitDefault();
   vramSetBankA(VRAM_A_TEXTURE);
   vramSetBankB(VRAM_B_TEXTURE); // dedicated to lighting
   vramSetBankC(VRAM_C_SUB_BG);

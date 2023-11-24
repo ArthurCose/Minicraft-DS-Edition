@@ -5,7 +5,7 @@
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
 
-Spark::Spark(std::shared_ptr<Entity> owner, double xa, double ya)
+Spark::Spark(std::shared_ptr<Entity> owner, float xa, float ya)
   : owner_weak(owner)
 {
 
@@ -68,4 +68,34 @@ void Spark::render(Screen& screen)
 bool Spark::isBlockableBy(Mob& mob)
 {
   return false;
+}
+
+void Spark::serializeData(std::ostream& s) {
+  Entity::serializeData(s);
+  nbt::write_named_float(s, "xa", xa);
+  nbt::write_named_float(s, "ya", ya);
+  nbt::write_named_float(s, "xx", xx);
+  nbt::write_named_float(s, "yy", yy);
+  nbt::write_named_int(s, "lifeTime", lifeTime);
+  nbt::write_named_int(s, "time", time);
+  // todo: owner
+  // nbt::write_named_int(s, "life", life);
+}
+
+void Spark::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
+  if (name == "xa") {
+    xa = nbt::read_tagged_number<float>(s, tag);
+  } else if (name == "ya") {
+    ya = nbt::read_tagged_number<float>(s, tag);
+  } else if (name == "xx") {
+    xx = nbt::read_tagged_number<float>(s, tag);
+  } else if (name == "yy") {
+    yy = nbt::read_tagged_number<float>(s, tag);
+  } else if (name == "lifeTime") {
+    lifeTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "time") {
+    time = nbt::read_tagged_number<int>(s, tag);
+  } else {
+    Entity::deserializeDataProperty(s, tag, name);
+  }
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../shim/random.h"
-
 #include <memory>
+#include "../shim/random.h"
+#include "../nbt.h"
 
 class Game;
 class Screen;
@@ -13,7 +13,7 @@ class Item;
 class ItemEntity;
 class Mob;
 
-class Entity
+class Entity : public nbt::Serializable
 {
 protected:
   static Random random;
@@ -42,4 +42,9 @@ public:
   virtual bool canSwim() { return false; }
   virtual bool use(Game& game, Level& level, Player& player, int attackDir) { return false; }
   virtual int getLightRadius() { return 0; }
+
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
+
+  static std::unique_ptr<Entity> deserialize(std::istream& s, nbt::Tag tag);
 };

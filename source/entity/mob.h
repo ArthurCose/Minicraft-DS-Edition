@@ -30,4 +30,6 @@ public:
   void hurt(Level& level, Mob& mob, int damage, int attackDir);
   void heal(Level& level, int heal);
   bool findStartPos(Level& level);
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 };

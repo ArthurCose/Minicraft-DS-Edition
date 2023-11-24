@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "../menu/listitem.h"
+#include "../nbt.h"
 
 class Screen;
 class Tile;
@@ -10,7 +11,7 @@ class Entity;
 class Player;
 class ItemEntity;
 
-class Item : public ListItem
+class Item : public ListItem, public nbt::Serializable
 {
 public:
   virtual std::string_view getName() const { return "ERROR"; }
@@ -34,4 +35,6 @@ public:
   virtual bool matches(const Item& item) { return item.getName() == getName(); }
 
   virtual std::shared_ptr<Item> clone() { return std::make_shared<Item>(); }
+
+  static std::unique_ptr<Item> deserialize(std::istream& s, nbt::Tag tag);
 };

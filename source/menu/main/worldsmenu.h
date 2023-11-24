@@ -2,13 +2,15 @@
 
 #include "../menu.h"
 
-class PauseMenu : public Menu
+class WorldsMenu : public Menu
 {
 public:
+  WorldsMenu();
+
   void tick(Game& game) override;
   void render(Screen& screen, Screen& bottomScreen) override;
 
 private:
   int selected = 0;
-  bool saving = false;
+  std::vector<std::string> worldNames;
 };

@@ -3,6 +3,7 @@
 #include "../projectile/spark.h"
 #include "../../sound/sound.h"
 #include "../../level/level.h"
+#include "../../nbt.h"
 
 AirWizard::AirWizard()
 {
@@ -163,4 +164,32 @@ void AirWizard::die(Game& game, Level& level)
   }
 
   Sound::bossdeath.play();
+}
+
+void AirWizard::serializeData(std::ostream& s) {
+  Mob::serializeData(s);
+  nbt::write_named_int(s, "xa", xa);
+  nbt::write_named_int(s, "ya", ya);
+  nbt::write_named_int(s, "randomWalkTime", randomWalkTime);
+  nbt::write_named_int(s, "attackDelay", attackDelay);
+  nbt::write_named_int(s, "attackTime", attackTime);
+  nbt::write_named_int(s, "attackType", attackType);
+}
+
+void AirWizard::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
+  if (name == "xa") {
+    xa = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "ya") {
+    ya = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "randomWalkTime") {
+    randomWalkTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "attackDelay") {
+    attackDelay = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "attackTime") {
+    attackTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "attackType") {
+    attackType = nbt::read_tagged_number<int>(s, tag);
+  } else {
+    Mob::deserializeDataProperty(s, tag, name);
+  }
 }

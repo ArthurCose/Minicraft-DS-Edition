@@ -10,6 +10,7 @@
 #include "../entity/hostile/slime.h"
 #include "../entity/hostile/zombie.h"
 #include "../gfx/lightmask.h"
+#include "../nbt.h"
 
 Level::Level(int w, int h, int depth, Level& parentLevel)
   : Level(w, h, depth)
@@ -408,4 +409,82 @@ std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, 
     }
   }
   return result;
+}
+
+// expects to write into a compound payload
+void Level::serialize(std::ostream& s)
+{
+  nbt::write_named_int(s, "Depth", depth);
+  nbt::write_named_int(s, "Width", w);
+  nbt::write_named_int(s, "Height", h);
+  nbt::write_named_int(s, "GrassColor", grassColor);
+  nbt::write_named_int(s, "DirtColor", dirtColor);
+  nbt::write_named_int(s, "SandColor", sandColor);
+  nbt::write_named_int(s, "MonsterDensity", monsterDensity);
+  nbt::write_named_byte_array(s, "Tiles", (const char*)&tiles[0], tiles.size());
+  nbt::write_named_byte_array(s, "TileData", (const char*)&data[0], data.size());
+  nbt::write_named_byte_array(s, "MapData", (const char*)&(*map)[0], (*map).size());
+
+  nbt::begin_named_list(s, "Entities", nbt::Tag::COMPOUND, entities.size());
+
+  for (auto& entity : entities) {
+    entity->serialize(s);
+    nbt::close_compound(s);
+  }
+}
+
+// expects to be reading from a compound payload
+Level Level::deserialize(std::istream& s)
+{
+  Level level;
+
+  std::vector<std::shared_ptr<Entity>> entities;
+
+  nbt::read_tagged_compound(s, nbt::Tag::COMPOUND, [&level, &entities, &s](nbt::Tag tag, std::string name) {
+    if (name == "Depth") {
+      level.depth = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "Width") {
+      level.w = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "Height") {
+      level.h = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "GrassColor") {
+      level.grassColor = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "DirtColor") {
+      level.dirtColor = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "SandColor") {
+      level.sandColor = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "MonsterDensity") {
+      level.monsterDensity = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "Tiles") {
+      level.tiles = nbt::read_byte_array<unsigned char>(s);
+    } else if (name == "TileData") {
+      level.data = nbt::read_byte_array<unsigned char>(s);
+    } else if (name == "MapData") {
+      level.map = std::make_shared<std::vector<unsigned char>>(
+        nbt::read_byte_array<unsigned char>(s)
+      );
+    } else if (name == "Entities") {
+      nbt::read_tagged_list(s, tag, nbt::Tag::COMPOUND, [&entities, &s](int i) {
+        if (auto entity = Entity::deserialize(s, nbt::Tag::COMPOUND)) {
+          entities.push_back(std::move(entity));
+        }
+      });
+    } else {
+      nbt::skip_tag_payload(s, tag);
+    }
+  });
+
+  // enforce consistent dimensions for tile related vectors
+  size_t totalTiles = level.w * level.h;
+  level.entitiesInTiles.resize(totalTiles);
+  level.tiles.resize(totalTiles);
+  level.data.resize(totalTiles);
+  level.map->resize(totalTiles);
+
+  // add entities now that entitiesInTiles has the proper size
+  for (auto entity : entities) {
+    level.add(entity);
+  }
+
+  return level;
 }

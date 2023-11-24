@@ -128,7 +128,7 @@ void Player::attack(Level& level)
 {
   walkDist += 8;
   attackDir = dir;
-  attackItem = getActiveItem();
+  auto attackItem = getActiveItem();
   bool done = false;
 
   if (attackItem != NULL) {
@@ -278,7 +278,9 @@ void Player::hurt(Level& level, int x0, int y0, int x1, int y1)
 
 int Player::getAttackDamage(Entity& e)
 {
+  auto attackItem = getActiveItem();
   int dmg = random.nextInt(3) + 1;
+
   if (attackItem != NULL) {
     dmg += attackItem->getAttackDamageBonus(e);
   }
@@ -287,6 +289,7 @@ int Player::getAttackDamage(Entity& e)
 
 void Player::render(Screen& screen)
 {
+  auto attackItem = getActiveItem();
   int xt = 0;
   int yt = 14;
 
@@ -526,4 +529,54 @@ void Player::die(Game& game, Level& level)
 {
   Mob::die(game, level);
   Sound::playerDeath.play();
+}
+
+void Player::serializeData(std::ostream& s)
+{
+  Mob::serializeData(s);
+  inventory.serialize(s, "inventory");
+  nbt::write_named_int(s, "stamina", stamina);
+  nbt::write_named_int(s, "staminaRecharge", staminaRecharge);
+  nbt::write_named_int(s, "staminaRechargeDelay", staminaRechargeDelay);
+  // balancing save scumming
+  // nbt::write_named_int(s, "score", score);
+  nbt::write_named_int(s, "maxStamina", maxStamina);
+  nbt::write_named_int(s, "invulnerableTime", invulnerableTime);
+  nbt::write_named_int(s, "attackTime", attackTime);
+  nbt::write_named_int(s, "attackDir", attackDir);
+  nbt::write_named_int(s, "onStairDelay", onStairDelay);
+  nbt::write_named_byte(s, "swimming", swimming);
+  nbt::write_named_int(s, "selectedItemIndex", selectedItemIndex);
+  nbt::write_named_byte(s, "itemHeld", itemHeld);
+}
+
+void Player::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "inventory") {
+    inventory.deserialize(s, tag);
+  } else if (name == "stamina") {
+    stamina = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "staminaRecharge") {
+    staminaRecharge = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "staminaRechargeDelay") {
+    staminaRechargeDelay = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "maxStamina") {
+    maxStamina = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "invulnerableTime") {
+    invulnerableTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "attackTime") {
+    attackTime = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "attackDir") {
+    attackDir = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "onStairDelay") {
+    onStairDelay = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "swimming") {
+    swimming = nbt::read_tagged_number<bool>(s, tag);
+  } else if (name == "selectedItemIndex") {
+    selectedItemIndex = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "itemHeld") {
+    itemHeld = nbt::read_tagged_number<bool>(s, tag);
+  } else {
+    Mob::deserializeDataProperty(s, tag, name);
+  }
 }

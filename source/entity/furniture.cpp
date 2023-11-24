@@ -75,3 +75,35 @@ std::shared_ptr<Furniture> Furniture::clone()
 
   return furniture;
 };
+
+void Furniture::serializeData(std::ostream& s) {
+  Entity::serializeData(s);
+
+  nbt::begin_named_compound(s, "Furniture");
+  nbt::write_named_int(s, "col", col);
+  nbt::write_named_int(s, "sprite", sprite);
+  // skipping shouldTake
+  nbt::write_named_int(s, "pushTime", pushTime);
+  nbt::write_named_int(s, "pushDir", pushDir);
+  nbt::close_compound(s);
+}
+
+void Furniture::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
+  if (name == "Furniture") {
+    nbt::read_tagged_compound(s, tag, [this, &s](nbt::Tag tag, std::string name) {
+      if (name == "col") {
+        col = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "sprite") {
+        sprite = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "pushTime") {
+        pushTime = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "pushDir") {
+        pushDir = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "name") {
+        name = nbt::read_tagged_string(s, tag);
+      }
+    });
+  } else {
+    Entity::deserializeDataProperty(s, tag, name);
+  }
+}

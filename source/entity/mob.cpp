@@ -154,3 +154,50 @@ bool Mob::findStartPos(Level& level)
 
   return false;
 }
+
+void Mob::serializeData(std::ostream& s)
+{
+  Entity::serializeData(s);
+
+  nbt::begin_named_compound(s, "Mob");
+  nbt::write_named_int(s, "walkDist", walkDist);
+  nbt::write_named_int(s, "xKnockback", xKnockback);
+  nbt::write_named_int(s, "yKnockback", yKnockback);
+  nbt::write_named_int(s, "hurtTime", hurtTime);
+  nbt::write_named_int(s, "maxHealth", maxHealth);
+  nbt::write_named_int(s, "health", health);
+  nbt::write_named_int(s, "swimTimer", swimTimer);
+  nbt::write_named_int(s, "tickTime", tickTime);
+  nbt::write_named_int(s, "dir", dir);
+  nbt::close_compound(s);
+}
+
+void Mob::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "Mob") {
+    nbt::read_tagged_compound(s, tag, [this, &s](nbt::Tag tag, std::string name) {
+      if (name == "walkDist") {
+        walkDist = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "xKnockback") {
+        xKnockback = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "yKnockback") {
+        yKnockback = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "hurtTime") {
+        hurtTime = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "maxHealth") {
+        maxHealth = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "health") {
+        health = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "swimTimer") {
+        swimTimer = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "tickTime") {
+        tickTime = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "dir") {
+        dir = nbt::read_tagged_number<int>(s, tag);
+      }
+    });
+  } else {
+    Entity::deserializeDataProperty(s, tag, name);
+  }
+}
+

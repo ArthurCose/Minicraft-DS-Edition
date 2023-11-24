@@ -38,6 +38,7 @@ public:
   std::vector<std::vector<std::shared_ptr<Entity>>> entitiesInTiles;
   std::shared_ptr<Player> player;
 
+  Level() {};
   Level(int w, int h, int level);
   Level(int w, int h, int level, Level& parentLevel);
 
@@ -52,4 +53,6 @@ public:
   void trySpawn(int count);
 
   std::vector<std::shared_ptr<Entity>> getEntities(int x0, int y0, int x1, int y1);
+  void serialize(std::ostream& s);
+  static Level deserialize(std::istream& s);
 };

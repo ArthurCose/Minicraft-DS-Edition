@@ -21,8 +21,8 @@ protected:
 
 public:
   int hurtTime = 0;
-  double xa, ya, za;
-  double xx, yy, zz;
+  float xa{}, ya{}, za{};
+  float xx{}, yy{}, zz{};
   std::shared_ptr<Item> item;
 
   ItemEntity(std::shared_ptr<Item> item, int x, int y);
@@ -31,4 +31,7 @@ public:
   bool isBlockableBy(Mob& mob) override;
   void render(Screen& screen) override;
   void take(Player& player);
+  std::string_view serializedClassName() override { return "ItemEntity"; }
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 };

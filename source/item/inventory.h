@@ -18,6 +18,8 @@ public:
   bool removeItem(Item& item);
   int count(const Item& item);
 
+  void serialize(std::ostream& s, std::string_view keyName);
+  void deserialize(std::istream& s, nbt::Tag tag);
 private:
   std::shared_ptr<ResourceItem> findResource(Resource::ID resourceId);
 };

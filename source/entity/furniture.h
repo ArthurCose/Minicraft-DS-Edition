@@ -19,6 +19,8 @@ public:
   bool blocks(Entity& e) override;
   void take(Player& player);
   virtual std::shared_ptr<Furniture> clone();
+  void serializeData(std::ostream& s) override;
+  void deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) override;
 
 protected:
   bool shouldTake = false;

@@ -64,3 +64,21 @@ std::shared_ptr<Item> ResourceItem::clone()
 {
   return std::make_shared<ResourceItem>(resourceId);
 }
+
+void ResourceItem::serializeData(std::ostream& s)
+{
+  Item::serializeData(s);
+  nbt::write_named_byte(s, "resourceId", resourceId);
+  nbt::write_named_int(s, "count", count);
+}
+
+void ResourceItem::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name)
+{
+  if (name == "resourceId") {
+    resourceId = (Resource::ID)nbt::read_tagged_number<uint8_t>(s, tag);
+  } else if (name == "count") {
+    count = nbt::read_tagged_number<int>(s, tag);
+  } else {
+    Item::deserializeDataProperty(s, tag, name);
+  }
+}
