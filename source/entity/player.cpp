@@ -120,8 +120,15 @@ void Player::updateInventory(Game& game)
   if (!itemHeld && (game.justTappedOrRepeat(KEY_L) || game.justTappedOrRepeat(KEY_R)))
     itemHeld = true;
 
-  // make sure selectedItemIndex is within bounds
-  setSelectedItemIndex(selectedItemIndex);
+  // wrap selectedItemIndex
+  int totalItems = inventory.items.size();
+
+  if (selectedItemIndex < 0) {
+    selectedItemIndex = totalItems - 1;
+  }
+  if (selectedItemIndex >= totalItems) {
+    selectedItemIndex = 0;
+  }
 }
 
 void Player::attack(Level& level)
