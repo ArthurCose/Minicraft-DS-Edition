@@ -56,7 +56,6 @@ void WorldsMenu::tick(Game& game)
 
   if (game.justTapped(KEY_A) && optionCount > 0) {
     game.load(worldNames[selected]);
-    game.frameSkipEnabled = true;
     game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
   }
 }

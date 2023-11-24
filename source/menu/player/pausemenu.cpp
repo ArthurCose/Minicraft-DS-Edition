@@ -16,7 +16,6 @@ void PauseMenu::tick(Game& game)
   }
 
   if (game.justTapped(KEY_START) || game.justTapped(KEY_B)) {
-    game.frameSkipEnabled = true;
     close(game);
   }
 

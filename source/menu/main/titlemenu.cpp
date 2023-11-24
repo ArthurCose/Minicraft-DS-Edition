@@ -21,6 +21,8 @@ static std::vector<std::string_view> options = {
 
 void TitleMenu::tick(Game& game)
 {
+  game.frameSkipEnabled = false;
+
   if (game.justTappedOrRepeat(KEY_UP))
     selected--;
   if (game.justTappedOrRepeat(KEY_DOWN))

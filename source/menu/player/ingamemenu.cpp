@@ -70,6 +70,7 @@ InGameMenu::InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vect
 
 void InGameMenu::tick(Game& game)
 {
+  game.frameSkipEnabled = true;
   handleItemDragging(game);
   handleTouchButtons(game);
 }
