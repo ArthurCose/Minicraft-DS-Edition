@@ -39,7 +39,6 @@ void TitleMenu::tick(Game& game)
     switch (selected) {
     case 0:
       Sound::test.play();
-      game.resetGame();
       game.setMenu(std::make_unique<GenerateMenu>());
       break;
     case 1:

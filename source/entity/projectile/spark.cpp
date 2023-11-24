@@ -6,9 +6,8 @@
 #include "../../gfx/color.h"
 
 Spark::Spark(std::shared_ptr<Entity> owner, float xa, float ya)
-  : owner_weak(owner)
 {
-
+  ownerId = owner->id;
   xx = this->x = owner->x;
   yy = this->y = owner->y;
   xr = 0;
@@ -22,7 +21,7 @@ Spark::Spark(std::shared_ptr<Entity> owner, float xa, float ya)
 
 void Spark::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 {
-  auto owner = std::dynamic_pointer_cast<Mob>(owner_weak.lock());
+  auto owner = std::dynamic_pointer_cast<Mob>(Entity::getEntityById(ownerId));
 
   if (!owner) {
     remove();
@@ -78,8 +77,7 @@ void Spark::serializeData(std::ostream& s) {
   nbt::write_named_float(s, "yy", yy);
   nbt::write_named_int(s, "lifeTime", lifeTime);
   nbt::write_named_int(s, "time", time);
-  // todo: owner
-  // nbt::write_named_int(s, "life", life);
+  nbt::write_named_int(s, "ownerId", ownerId);
 }
 
 void Spark::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
@@ -95,6 +93,8 @@ void Spark::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_v
     lifeTime = nbt::read_tagged_number<int>(s, tag);
   } else if (name == "time") {
     time = nbt::read_tagged_number<int>(s, tag);
+  } else if (name == "ownerId") {
+    ownerId = nbt::read_tagged_number<int>(s, tag);
   } else {
     Entity::deserializeDataProperty(s, tag, name);
   }

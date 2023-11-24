@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include "../shim/random.h"
 #include "../nbt.h"
 
@@ -15,16 +16,25 @@ class Mob;
 
 class Entity : public nbt::Serializable
 {
+private:
+  static std::vector<std::optional<std::weak_ptr<Entity>>> slots;
 protected:
   static Random random;
 
   bool move2(Level& level, int xa, int ya);
 
 public:
+  int id = -1;
   int x, y;
   int xr = 6;
   int yr = 6;
   bool removed = false;
+
+  ~Entity();
+
+  static std::shared_ptr<Entity> getEntityById(int id);
+  static void associateId(std::shared_ptr<Entity> entity);
+  static void resetIds();
 
   bool interact(Player& player, Item& item, int attackDir);
   void remove();

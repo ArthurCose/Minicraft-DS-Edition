@@ -17,7 +17,66 @@
 #include "workbenches/workbench.h"
 #include "../item/powergloveitem.h"
 
+std::vector<std::optional<std::weak_ptr<Entity>>> Entity::slots;
 Random Entity::random(time(NULL));
+
+Entity::~Entity()
+{
+  if (id > -1) {
+    slots[id] = {};
+  }
+}
+
+void Entity::associateId(std::shared_ptr<Entity> entity)
+{
+  if (entity->id > -1) {
+    // not enough slots
+    if ((int)slots.size() <= entity->id) {
+      slots.resize(entity->id + 1);
+    }
+
+    slots[entity->id] = entity;
+    return;
+  }
+
+  // entity needs an id
+  for (int i = 0; i < (int)slots.size(); i++) {
+    if (!slots[i].has_value()) {
+      entity->id = i;
+      slots[i] = entity;
+      return;
+    }
+  }
+
+  // no empty slots, append
+  entity->id = slots.size();
+  slots.push_back(entity);
+}
+
+void Entity::resetIds()
+{
+  for (int i = 0; i < (int)slots.size(); i++) {
+    if (!slots[i].has_value()) {
+      continue;
+    }
+
+    if (auto entity = slots[i].value().lock()) {
+      entity->id = -1;
+    }
+
+    slots[i] = {};
+  }
+}
+
+
+std::shared_ptr<Entity> Entity::getEntityById(int id)
+{
+  if (id < 0 || id >= (int)slots.size() || !slots[id].has_value()) {
+    return nullptr;
+  }
+
+  return slots[id].value().lock();
+}
 
 void Entity::remove()
 {
@@ -119,6 +178,7 @@ bool Entity::interact(Player& player, Item& item, int attackDir)
 void Entity::serializeData(std::ostream& s) {
 
   nbt::begin_named_compound(s, "Entity");
+  nbt::write_named_int(s, "id", id);
   nbt::write_named_int(s, "x", x);
   nbt::write_named_int(s, "y", y);
   nbt::write_named_int(s, "xr", xr);
@@ -130,7 +190,9 @@ void Entity::serializeData(std::ostream& s) {
 void Entity::deserializeDataProperty(std::istream& s, nbt::Tag tag, std::string_view name) {
   if (name == "Entity") {
     nbt::read_tagged_compound(s, tag, [this, &s](nbt::Tag tag, std::string name) {
-      if (name == "x") {
+      if (name == "id") {
+        id = nbt::read_tagged_number<int>(s, tag);
+      } else if (name == "x") {
         x = nbt::read_tagged_number<int>(s, tag);
       } else if (name == "y") {
         y = nbt::read_tagged_number<int>(s, tag);

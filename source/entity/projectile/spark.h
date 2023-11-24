@@ -8,7 +8,7 @@ class Spark : public Entity
 private:
   int lifeTime{};
   int time{};
-  std::weak_ptr<Entity> owner_weak;
+  int ownerId = -1;
 
 public:
   float xa{}, ya{};

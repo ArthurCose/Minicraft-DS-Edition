@@ -152,6 +152,7 @@ void Game::resetGame()
   wonTimer = 0;
   gameTime = 0;
   hasWon = false;
+  Entity::resetIds();
 }
 
 

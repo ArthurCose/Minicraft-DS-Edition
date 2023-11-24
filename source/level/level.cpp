@@ -326,6 +326,7 @@ void Level::add(std::shared_ptr<Entity> entity)
   }
   entity->removed = false;
   entities.push_back(entity);
+  Entity::associateId(entity);
 
   insertEntity(entity->x >> 4, entity->y >> 4, entity);
 }
