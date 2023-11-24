@@ -21,11 +21,11 @@ void SoftwareScreen::clear(int color)
     (color << 16) |
     (color << 24);
 
-  for (size_t i = size - leftoverBytes; i < size; i++)
+  for (size_t i = size - leftoverBytes; i < size; i++) {
     pixels[i] = color;
+  }
 
-  while (dmaBusy(3))
-    ;
+  while (dmaBusy(3)) {}
 
   dmaFillWords(word, &pixels[0], w * h);
 }
@@ -40,8 +40,9 @@ void SoftwareScreen::renderPixel(int x, int y, int col)
   x -= xOffset;
   y -= yOffset;
 
-  if (x >= 0 && x < w && y >= 0 && y < h)
+  if (x >= 0 && x < w && y >= 0 && y < h) {
     pixels[y * w + x] = col;
+  }
 }
 
 void SoftwareScreen::normalizeBox(int& x, int& y, int& w, int& h)
@@ -65,10 +66,12 @@ void SoftwareScreen::normalizeBox(int& x, int& y, int& w, int& h)
     h += y;
     y = 0;
   }
-  if (x + w > this->w)
+  if (x + w > this->w) {
     w = this->w - x;
-  if (y + h > this->h)
+  }
+  if (y + h > this->h) {
     h = this->h - y;
+  }
 }
 
 void SoftwareScreen::renderBox(int x, int y, int w, int h, int col)
@@ -100,9 +103,11 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
   int bottom = y + h;
 
   if (w * h < 256) {
-    for (int i = y; i < bottom; i++)
-      for (int j = x; j < right; j++)
+    for (int i = y; i < bottom; i++) {
+      for (int j = x; j < right; j++) {
         pixels[i * this->w + j] = col;
+      }
+    }
   } else {
     int leftoverBytes = w % 4;
     unsigned int word = col |
@@ -110,12 +115,12 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
       (col << 16) |
       (col << 24);
 
-    while (dmaBusy(3))
-      ;
+    while (dmaBusy(3)) {}
 
     for (int i = y; i < y + h; i++) {
-      for (int j = x + w - leftoverBytes; j < right; j++)
+      for (int j = x + w - leftoverBytes; j < right; j++) {
         pixels[i * this->w + j] = col;
+      }
 
       dmaFillWords(word, &pixels[i * this->w + x], w);
     }
