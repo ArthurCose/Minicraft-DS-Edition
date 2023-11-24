@@ -4,6 +4,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 
 ## Notable Version Differences
 
+- Save files
 - Loading screen
 - Separate button used for interacting with furniture
 - New level map on the bottom screen
@@ -13,6 +14,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
   - Opening the inventory doesn't place the cursor at the top
     - Cursor is placed on the active item instead
   - Item wheel and cycle with L/R
+  - Touchscreen can be used for player inventory management
 - Active item name moved to the bottom screen
 - Lighting is lower resolution (1/3)
 
