@@ -102,27 +102,32 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
   int right = x + w;
   int bottom = y + h;
 
-  if (w * h < 256) {
+  if (w * h < 256 || w < 16) {
     for (int i = y; i < bottom; i++) {
       for (int j = x; j < right; j++) {
         pixels[i * this->w + j] = col;
       }
     }
   } else {
-    int leftoverBytes = w % 4;
     unsigned int word = col |
       (col << 8) |
       (col << 16) |
       (col << 24);
 
-    while (dmaBusy(3)) {}
-
     for (int i = y; i < y + h; i++) {
+      auto dest = &pixels[i * this->w + x];
+
+      auto leftoverBytes = (int)(dest + w) / 4 * 4 - (int)dest;
+
       for (int j = x + w - leftoverBytes; j < right; j++) {
         pixels[i * this->w + j] = col;
       }
 
-      dmaFillWords(word, &pixels[i * this->w + x], w);
+      DC_FlushRange(dest, w);
+
+      while (dmaBusy(3)) {}
+
+      dmaFillWords(word, dest, w);
     }
   }
 }
