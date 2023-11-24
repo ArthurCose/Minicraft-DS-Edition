@@ -18,23 +18,7 @@ static inline int calculateHotbarLen(Screen& bottomScreen) {
   return (bottomScreen.w - 48) / 16;
 }
 
-static inline int calculateHotbarInventoryStartIndex(Player& player, int hotbarLen) {
-  auto& items = player.inventory.items;
-  int itemCount = items.size();
-  int itemStart = player.getSelectedItemIndex() - hotbarLen / 2;
-
-  if (itemStart + hotbarLen >= itemCount) {
-    itemStart = itemCount - hotbarLen;
-  }
-
-  if (itemStart < 0) {
-    itemStart = 0;
-  }
-
-  return itemStart;
-}
-
-static inline int resolveHoveredIndex(Screen& bottomScreen, Player& player, int touchX, int touchY) {
+static inline int resolveHoveredIndex(Screen& bottomScreen, Player& player, int startIndex, int touchX, int touchY) {
   if (touchY < HOTBAR_Y - ITEM_SPACING || touchY > HOTBAR_Y + ITEM_H + ITEM_SPACING) {
     return -1;
   }
@@ -42,7 +26,6 @@ static inline int resolveHoveredIndex(Screen& bottomScreen, Player& player, int 
   auto& items = player.inventory.items;
   int itemCount = items.size();
   int hotbarLen = calculateHotbarLen(bottomScreen);
-  int startIndex = calculateHotbarInventoryStartIndex(player, hotbarLen);
 
   for (int i = 0; i < hotbarLen; i++) {
     int index = startIndex + i;
@@ -54,7 +37,7 @@ static inline int resolveHoveredIndex(Screen& bottomScreen, Player& player, int 
     int x = calculateItemHotbarX(i);
 
     if (touchX >= x - ITEM_SPACING && touchX < x + ITEM_W + ITEM_SPACING) {
-      return i;
+      return index;
     }
   }
 
@@ -65,6 +48,8 @@ InGameMenu::InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vect
 {
   this->player = player;
   this->map = map;
+  lastSelectedItemIndex = player->getSelectedItemIndex();
+  previouslyHoldingItem = player->holdingItem();
   blocksGameTick = false;
 }
 
@@ -73,6 +58,7 @@ void InGameMenu::tick(Game& game)
   game.frameSkipEnabled = true;
   handleItemDragging(game);
   handleTouchButtons(game);
+  clampHotbar(game);
 }
 
 void InGameMenu::handleTouchButtons(Game& game) {
@@ -90,21 +76,11 @@ void InGameMenu::handleTouchButtons(Game& game) {
   auto& player = *game.player;
 
   if (x < ROTATE_BUTTON_W) {
-    // tapped L
-    if (player.holdingItem()) {
-      player.setSelectedItemIndex(player.getSelectedItemIndex() - 1);
-    } else {
-      player.setItemHeld(true);
-    }
+    startIndex--;
   }
 
   if (x > game.bottomScreen.w - ROTATE_BUTTON_W) {
-    // tapped R
-    if (player.holdingItem()) {
-      player.setSelectedItemIndex(player.getSelectedItemIndex() + 1);
-    } else {
-      player.setItemHeld(true);
-    }
+    startIndex++;
   }
 }
 
@@ -132,7 +108,7 @@ void InGameMenu::handleItemDragging(Game& game) {
 
   dragX = game.touchX();
   dragY = game.touchY();
-  hoveredIndex = resolveHoveredIndex(game.bottomScreen, player, dragX, dragY);
+  hoveredIndex = resolveHoveredIndex(game.bottomScreen, player, startIndex, dragX, dragY);
 
   if (hoveredIndex != -1) {
     auto& items = player.inventory.items;
@@ -162,6 +138,27 @@ void InGameMenu::handleItemDragging(Game& game) {
 
     draggedIndex = hoveredIndex;
   }
+}
+
+void InGameMenu::clampHotbar(Game& game) {
+  auto& player = *game.player;
+  int selected = player.getSelectedItemIndex();
+  int hotbarLen = calculateHotbarLen(game.bottomScreen);
+  bool selectionModified =
+    selected != lastSelectedItemIndex || player.holdingItem() != previouslyHoldingItem;
+
+  if (selectionModified && draggedIndex == -1) {
+    // clamp to keep selection on screen
+    startIndex = std::clamp(startIndex, selected - hotbarLen + 1, selected);
+  }
+
+  // clamp to keep items on screen
+  int totalItems = player.inventory.items.size();
+  startIndex = std::clamp(startIndex, 0, std::max(totalItems - hotbarLen, 0));
+
+  // update tracking for clamping
+  lastSelectedItemIndex = player.getSelectedItemIndex();
+  previouslyHoldingItem = player.holdingItem();
 }
 
 void InGameMenu::render(Screen& screen, Screen& bottomScreen)
@@ -203,12 +200,11 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   auto& items = player->inventory.items;
   auto activeItem = player->getActiveItem();
 
-  bottomScreen.renderText("L", ROTATE_CHAR_MARGIN, HOTBAR_Y, Color::get(-1, 555, 555, 555));
-  bottomScreen.renderText("R", bottomScreen.w - ROTATE_CHAR_MARGIN * 2, HOTBAR_Y, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText("<", ROTATE_CHAR_MARGIN, HOTBAR_Y, Color::get(-1, 555, 555, 555));
+  bottomScreen.renderText(">", bottomScreen.w - ROTATE_CHAR_MARGIN * 2, HOTBAR_Y, Color::get(-1, 555, 555, 555));
 
   int itemCount = items.size();
   int hotbarLen = calculateHotbarLen(bottomScreen);
-  int startIndex = calculateHotbarInventoryStartIndex(*player, hotbarLen);
 
   for (int i = 0; i < hotbarLen; i++) {
     int index = startIndex + i;
