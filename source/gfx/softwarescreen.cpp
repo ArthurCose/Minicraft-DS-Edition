@@ -113,7 +113,7 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
     while (dmaBusy(3))
       ;
 
-    for (int i = y; i < h; i++) {
+    for (int i = y; i < y + h; i++) {
       for (int j = x + w - leftoverBytes; j < right; j++)
         pixels[i * this->w + j] = col;
 
