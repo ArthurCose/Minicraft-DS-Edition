@@ -34,29 +34,34 @@ const int KEY_H_STRIDE = KEY_WIDTH + KEY_SPACING * 2;
 const int KEY_V_STRIDE = KEY_HEIGHT + KEY_SPACING * 2;
 const int KEY_H_PADDING = (KEY_WIDTH - 8) / 2;
 const int KEY_V_PADDING = (KEY_HEIGHT - 8) / 2;
-const int KEYBOARD_X = 16;
+const int KEYBOARD_X = 14;
 const int KEYBOARD_Y = 70;
 
 
 struct SpecialKey {
   bool requiresInput{};
   int x, y, defaultColor, highlightColor;
+  int definedWidth{};
   std::string_view text;
   std::function<void(Game&, KeyboardMenu&)> action;
 
   int width() const {
+    if (definedWidth > 0) {
+      return definedWidth;
+    }
+
     return (int)text.size() * 8 + KEY_V_PADDING * 2;
   }
 };
 
-const int SUBMIT_X = KEYBOARD_X + KEY_H_STRIDE * (int)rows[0].size() + KEY_SPACING;
+const int SUBMIT_X = KEYBOARD_X + KEY_H_STRIDE * (int)rows[0].size();
 
 static const std::vector<SpecialKey> specialKeys = {
   // submit
   SpecialKey {
     .requiresInput = true,
     .x = SUBMIT_X,
-    .y = KEYBOARD_Y + KEY_V_STRIDE * 4,
+    .y = KEYBOARD_Y + KEY_V_STRIDE * 2,
     .defaultColor = Color::get(252),
     .highlightColor = Color::get(141),
     .text = "- >",
@@ -81,7 +86,8 @@ static const std::vector<SpecialKey> specialKeys = {
     .y = KEYBOARD_Y + KEY_V_STRIDE * 4,
     .defaultColor = DEFAULT_KEY_COLOR,
     .highlightColor = KEY_HIGHLIGHT_COLOR,
-    .text = "                 ",
+    .definedWidth = KEY_H_STRIDE * ((int)rows[2].size() - 1) + KEY_WIDTH,
+    .text = "",
     .action = [](Game& game, KeyboardMenu& menu) {
       menu.insertChar(' ');
     },
