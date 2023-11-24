@@ -55,6 +55,7 @@ void WorldsMenu::tick(Game& game)
   }
 
   if (game.justTapped(KEY_A) && optionCount > 0) {
+    Sound::test.play();
     game.load(worldNames[selected]);
     game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
   }
@@ -68,7 +69,6 @@ void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
 
   const int OPTION_TEXT_COLOR = Color::get(0, 333, 333, 333);
   const int HIGHLIGHT_COLOR = Color::get(0, 555, 555, 555);
-  const int ARROW_COLOR = Color::get(0, 551, 551, 551);
 
   int centerX = screen.w / 2;
 
