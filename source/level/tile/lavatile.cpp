@@ -48,7 +48,7 @@ void LavaTile::render(Screen& screen, Level& level, int x, int y)
     randomInt >>= 2;
 
     screen.renderTile(x, y, tile, col, bits);
-    };
+  };
 
   if (!lu && !ll) {
     renderLiquid(x * 16 + 0, y * 16 + 0);

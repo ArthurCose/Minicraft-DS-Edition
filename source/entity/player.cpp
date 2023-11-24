@@ -412,7 +412,7 @@ bool Player::findStartPos(Level& level)
     }
 
     return false;
-    };
+  };
 
   // attempt to start on a grass tile
   bool foundAcceptableStart = findAcceptablePos([](Tile::ID tile) { return tile == Tile::grass; });
@@ -423,7 +423,7 @@ bool Player::findStartPos(Level& level)
       return tile != Tile::water &&
         tile != Tile::lava &&
         Tile::tiles[tile]->mayPass(level, x, y, *this);
-      });
+    });
   }
 
   if (!foundAcceptableStart) {

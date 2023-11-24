@@ -48,7 +48,7 @@ void WaterTile::render(Screen& screen, Level& level, int x, int y)
     randomInt >>= 2;
 
     screen.renderTile(x, y, tile, col, bits);
-    };
+  };
 
   if (!wu && !wl) {
     renderLiquid(x * 16 + 0, y * 16 + 0);
