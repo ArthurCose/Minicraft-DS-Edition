@@ -15,6 +15,9 @@ namespace fs = std::filesystem;
 
 WorldsMenu::WorldsMenu() {
   if (fs::exists(Game::SAVE_FOLDER)) {
+    std::vector<fs::directory_entry> validEntries;
+
+    // find save files
     for (auto& entry : fs::directory_iterator(Game::SAVE_FOLDER)) {
       if (entry.is_directory()) {
         continue;
@@ -24,8 +27,17 @@ WorldsMenu::WorldsMenu() {
         continue;
       }
 
-      auto name = entry.path().stem().string();
+      validEntries.push_back(entry);
+    }
 
+    // sort entries, putting recently played/saved at the top
+    std::sort(validEntries.begin(), validEntries.end(), [](auto& a, auto& b) {
+      return a.last_write_time() > b.last_write_time();
+    });
+
+    // add entries to the viewable list
+    for (auto& entry : validEntries) {
+      auto name = entry.path().stem().string();
       worldNames.push_back(name);
     }
   }
