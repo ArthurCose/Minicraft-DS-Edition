@@ -41,8 +41,7 @@ void GenerateMenu::tick(Game& game)
     currentStepName = "Choosing spawn location";
     break;
   case 5:
-    // game.currentLevel = game.levels.size() - 2;
-    game.currentLevel = game.levels.size() - 1;
+    game.currentLevel = game.levels.size() - 2;
 
     game.player = std::make_shared<Player>();
     game.player->findStartPos(game.levels[game.currentLevel]);
