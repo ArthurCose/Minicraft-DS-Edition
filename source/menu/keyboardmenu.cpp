@@ -139,6 +139,11 @@ static inline char touchedChar(int touchX, int touchY) {
 
 void KeyboardMenu::tick(Game& game)
 {
+  if (game.justTappedOrRepeat(KEY_B)) {
+    close(game);
+    return;
+  }
+
   touchX = game.touchX();
   touchY = game.touchY();
 
@@ -154,7 +159,7 @@ void KeyboardMenu::tick(Game& game)
     caretTimer = 0;
   }
 
-  if (game.justTappedOrRepeat(KEY_B)) {
+  if (game.justTappedOrRepeat(KEY_Y)) {
     backspace();
   }
 
