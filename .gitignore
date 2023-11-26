@@ -1,6 +1,5 @@
 .vscode
 build
-original-src
 *.nds
 *.elf
 _*
