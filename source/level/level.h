@@ -52,6 +52,7 @@ public:
   void remove(std::shared_ptr<Entity> e);
   void trySpawn(int count);
 
+  int countEntities(int x0, int y0, int x1, int y1);
   std::vector<std::shared_ptr<Entity>> getEntities(int x0, int y0, int x1, int y1);
   void serialize(std::ostream& s);
   static Level deserialize(std::istream& s);

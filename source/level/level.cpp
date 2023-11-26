@@ -392,6 +392,25 @@ void Level::trySpawn(int count)
   }
 }
 
+int Level::countEntities(int x0, int y0, int x1, int y1)
+{
+  int result = 0;
+  int xt0 = std::max((x0 >> 4) - 1, 0);
+  int yt0 = std::max((y0 >> 4) - 1, 0);
+  int xt1 = std::min((x1 >> 4) + 1, w - 1);
+  int yt1 = std::max((y1 >> 4) + 1, h - 1);
+
+  for (int y = yt0; y <= yt1; y++) {
+    for (int x = xt0; x <= xt1; x++) {
+      auto& entities = entitiesInTiles[x + y * this->w];
+
+      result += entities.size();
+    }
+  }
+
+  return result;
+}
+
 std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, int y1)
 {
   std::vector<std::shared_ptr<Entity>> result;

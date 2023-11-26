@@ -143,7 +143,7 @@ bool Mob::findStartPos(Level& level)
   }
 
   int r = level.monsterDensity * 16;
-  if (level.getEntities(xx - r, yy - r, xx + r, yy + r).size() > 0)
+  if (level.countEntities(xx - r, yy - r, xx + r, yy + r) > 0)
     return false;
 
   if (Tile::tiles[level.getTile(x, y)]->mayPass(level, x, y, *this)) {
