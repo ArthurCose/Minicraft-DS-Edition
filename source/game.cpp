@@ -157,7 +157,7 @@ void Game::resetGame()
 
 
 void Game::resolveNameConflict() {
-  int i = 1;
+  int i = 2;
   auto originalName = worldName;
 
   while (fs::exists(Game::SAVE_FOLDER + worldName + Game::SAVE_EXTENSION)) {
