@@ -4,7 +4,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 
 ## Notable Version Differences
 
-- Save files
+- Save files (NBT format)
 - Loading screen
 - Separate button used for interacting with furniture
 - New level map on the bottom screen
@@ -37,6 +37,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
   - No longer using static class methods
   - New Noise class
 - Menus and entities are organized into folders
+- Spark entities reference owners using an ID to preserve ownership after reloading
 
 ## Screenshots
 
