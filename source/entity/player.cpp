@@ -10,6 +10,7 @@
 #include "particle/textparticle.h"
 #include "../menu/player/inventorymenu.h"
 #include "../menu/player/pausemenu.h"
+#include "../sound/sound.h"
 
 Player::Player()
 {

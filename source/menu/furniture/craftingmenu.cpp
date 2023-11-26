@@ -1,6 +1,7 @@
 #include "craftingmenu.h"
 
 #include <algorithm>
+#include "../../sound/sound.h"
 
 bool compareCraftability(std::shared_ptr<Recipe>& a, std::shared_ptr<Recipe>& b)
 {

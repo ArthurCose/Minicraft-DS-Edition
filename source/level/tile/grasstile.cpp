@@ -5,6 +5,7 @@
 #include "../level.h"
 #include "../../entity/entity.h"
 #include "../../gfx/screen.h"
+#include "../../sound/sound.h"
 
 GrassTile::GrassTile(int id)
   : Tile(id)

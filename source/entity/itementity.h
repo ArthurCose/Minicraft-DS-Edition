@@ -1,11 +1,7 @@
 #pragma once
 
-#include "../gfx/color.h"
-#include "../gfx/screen.h"
-#include "../item/item.h"
-#include "../sound/sound.h"
-#include "../level/level.h"
 #include "entity.h"
+#include "../gfx/screen.h"
 
 class ItemEntity : public Entity
 {

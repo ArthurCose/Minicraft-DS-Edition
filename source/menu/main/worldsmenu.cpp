@@ -7,6 +7,7 @@
 #include "titlemenu.h"
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
+#include "../../sound/sound.h"
 #include "../player/ingamemenu.h"
 #include "../keyboardmenu.h"
 #include "deletemenu.h"

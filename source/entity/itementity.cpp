@@ -1,5 +1,10 @@
 #include "itementity.h"
 
+#include "../gfx/color.h"
+#include "../sound/sound.h"
+#include "../item/item.h"
+#include "player.h"
+
 ItemEntity::ItemEntity(std::shared_ptr<Item> item, int x, int y)
 {
   this->item = item;

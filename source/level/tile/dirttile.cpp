@@ -4,6 +4,7 @@
 #include "../level.h"
 #include "../../entity/entity.h"
 #include "../../gfx/screen.h"
+#include "../../sound/sound.h"
 
 DirtTile::DirtTile(int id) : Tile(id) {}
 
