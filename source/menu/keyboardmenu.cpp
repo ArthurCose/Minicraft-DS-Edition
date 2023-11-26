@@ -159,7 +159,7 @@ void KeyboardMenu::tick(Game& game)
     caretTimer = 0;
   }
 
-  if (game.justTappedOrRepeat(KEY_Y)) {
+  if (game.justTappedOrRepeat(KEY_X) || game.justTappedOrRepeat(KEY_Y)) {
     backspace();
   }
 
