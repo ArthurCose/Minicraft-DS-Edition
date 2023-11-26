@@ -4,7 +4,7 @@
 #include "../main/titlemenu.h"
 #include "../keyboardmenu.h"
 
-static const std::array<std::string_view, 3> options = { "SAVE", "QUIT", "CANCEL" };
+static const std::array<std::string_view, 4> options = { "SAVE", "QUIT", "DEBUG", "CANCEL" };
 
 void PauseMenu::tick(Game& game)
 {
@@ -59,6 +59,10 @@ void PauseMenu::tick(Game& game)
       game.setMenu(std::make_unique<TitleMenu>());
       break;
     case 2:
+      // debug
+      game.debugEnabled = !game.debugEnabled;
+      break;
+    default:
       // cancel
       close(game);
       break;
@@ -73,15 +77,16 @@ void PauseMenu::render(Screen& screen, Screen& bottomScreen)
   int horizontalTiles = bottomScreen.w / 8;
   int verticalTiles = bottomScreen.h / 8;
 
+  int totalOptions = options.size();
   int width = 7;
-  int height = 4;
+  int height = totalOptions + 1;
   int marginX = (horizontalTiles - width) / 2;
   int marginY = verticalTiles / 2 + 2;
   screen.renderFrame("PAUSED", marginX, marginY, marginX + width, marginY + height);
 
   int textColor = Color::get(5, 555, 555, 555);
 
-  for (int i = 0; i < (int)options.size(); i++) {
+  for (int i = 0; i < totalOptions; i++) {
     int x = marginX * 8;
     int y = (marginY + i + 1) * 8;
     screen.renderText(options[i], x + 8, y, textColor);

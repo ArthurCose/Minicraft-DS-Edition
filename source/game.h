@@ -25,7 +25,10 @@ public:
   std::string worldName;
   std::vector<Level> levels;
   int currentLevel = 3;
+  int skippedFrames = 0;
+  int frameMs = 0;
   bool frameSkipEnabled = true;
+  bool debugEnabled = false;
 
   Game();
 

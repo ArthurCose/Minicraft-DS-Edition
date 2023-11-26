@@ -108,6 +108,15 @@ void Game::render()
   if (menu != NULL) {
     menu->render(screen, bottomScreen);
   }
+
+  if (debugEnabled) {
+    const int DEBUG_TEXT_COLOR = Color::get(0, 555, 555, 555);
+
+    int fps = 1000 / frameMs;
+    screen.renderText("fps:" + std::to_string(fps), 0, 0, DEBUG_TEXT_COLOR);
+    screen.renderText("ms:" + std::to_string(frameMs), 0, 8, DEBUG_TEXT_COLOR);
+    screen.renderText("skips:" + std::to_string(skippedFrames), 0, 16, DEBUG_TEXT_COLOR);
+  }
 }
 
 void Game::setMenu(std::unique_ptr<Menu> menu)

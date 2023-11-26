@@ -55,6 +55,10 @@ void TitleMenu::tick(Game& game)
       break;
     }
   }
+
+  if (game.justTapped(KEY_SELECT)) {
+    game.debugEnabled = !game.debugEnabled;
+  }
 }
 
 void TitleMenu::render(Screen& screen, Screen& bottomScreen)
