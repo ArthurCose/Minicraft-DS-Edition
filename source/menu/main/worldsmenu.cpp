@@ -138,7 +138,7 @@ void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
   };
 
   // render title
-  renderWorldName("Saved Worlds", HIGHLIGHT_COLOR, -2);
+  renderWorldName("Saved Worlds", HIGHLIGHT_COLOR, -3);
 
   if (worldNames.empty()) {
     screen.renderTextCentered("No Saved Worlds", centerX, screen.h / 2 - 4, OPTION_TEXT_COLOR);

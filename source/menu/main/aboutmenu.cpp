@@ -30,7 +30,7 @@ void AboutMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
 
-  screen.renderTextCentered("About Minicraft", screen.w / 2, 28, Color::get(0, 555, 555, 555));
+  screen.renderTextCentered("About Minicraft", screen.w / 2, 4 * 8, Color::get(0, 555, 555, 555));
 
   size_t widestLength = 0;
 
@@ -42,5 +42,5 @@ void AboutMenu::render(Screen& screen, Screen& bottomScreen)
   size_t leftPadding = (screen.w - widestLength * 8) / 2;
 
   for (size_t i = 0; i < aboutText.size(); i++)
-    screen.renderText(aboutText[i], leftPadding, i * 8 + 6 * 8, Color::get(0, 333, 333, 333));
+    screen.renderText(aboutText[i], leftPadding, i * 8 + 7 * 8, Color::get(0, 333, 333, 333));
 }

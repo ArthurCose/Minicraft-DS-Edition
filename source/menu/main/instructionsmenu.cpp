@@ -36,13 +36,11 @@ void InstructionsMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
 
-  int topPadding = (screen.h - 8 - 16 - controlInstructions.size() * 8 - 24 - winInstructions.size() * 8) / 2;
-
-  screen.renderTextCentered("HOW TO PLAY", screen.w / 2, topPadding + 4, Color::get(0, 555, 555, 555));
+  screen.renderTextCentered("HOW TO PLAY", screen.w / 2, 4 * 8, Color::get(0, 555, 555, 555));
 
   for (size_t i = 0; i < controlInstructions.size(); i++)
-    screen.renderText(controlInstructions[i], 4, i * 8 + topPadding + 2 * 8, Color::get(0, 333, 333, 333));
+    screen.renderText(controlInstructions[i], 4, i * 8 + 6 * 8, Color::get(0, 333, 333, 333));
 
   for (size_t i = 0; i < winInstructions.size(); i++)
-    screen.renderTextCentered(winInstructions[i], screen.w / 2, i * 8 + controlInstructions.size() * 8 + topPadding + 5 * 8, Color::get(0, 333, 333, 333));
+    screen.renderTextCentered(winInstructions[i], screen.w / 2, i * 8 + controlInstructions.size() * 8 + 8 * 8, Color::get(0, 333, 333, 333));
 }
