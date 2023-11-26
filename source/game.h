@@ -43,6 +43,7 @@ public:
   void changeLevel(int dir);
   void win();
   void resetGame();
+  static std::string savePath(const std::string& name);
   void resolveNameConflict();
   void save();
   void load(std::string worldName);

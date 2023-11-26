@@ -155,12 +155,16 @@ void Game::resetGame()
   Entity::resetIds();
 }
 
+std::string Game::savePath(const std::string& name)
+{
+  return Game::SAVE_FOLDER + name + Game::SAVE_EXTENSION;
+}
 
 void Game::resolveNameConflict() {
   int i = 2;
   auto originalName = worldName;
 
-  while (fs::exists(Game::SAVE_FOLDER + worldName + Game::SAVE_EXTENSION)) {
+  while (fs::exists(savePath(worldName))) {
     worldName = originalName + " " + std::to_string(i);
     i++;
   }
@@ -188,7 +192,7 @@ static inline void ensureFolder(const std::string& path) {
 void Game::save() {
   ensureFolder(Game::SAVE_FOLDER);
 
-  auto fileName = Game::SAVE_FOLDER + worldName + Game::SAVE_EXTENSION;
+  auto fileName = savePath(worldName);
   auto s = std::ofstream(fileName.c_str(), std::ios::out | std::ios::binary);
 
   nbt::begin_named_compound(s, "");
@@ -209,7 +213,7 @@ void Game::load(std::string worldName) {
 
   this->worldName = worldName;
 
-  auto fileName = Game::SAVE_FOLDER + worldName + Game::SAVE_EXTENSION;
+  auto fileName = savePath(worldName);
   auto s = std::ifstream(fileName.c_str(), std::ios::in | std::ios::binary);
 
   // compound start
