@@ -49,15 +49,20 @@ void SpriteSheet::renderTile(GLScreen& screen, int xp, int yp, int tile, int com
   yp -= screen.yOffset;
 
   if (lastBoundPalette != compressedColors) {
-    auto palettesIt = palettes.find(compressedColors);
+    auto lowerBound = std::lower_bound(paletteColors.begin(), paletteColors.end(), compressedColors);
 
     std::shared_ptr<TilePalette> palette;
 
-    if (palettesIt == palettes.end()) {
+    if (lowerBound == paletteColors.end()) {
       palette = std::make_shared<TilePalette>(compressedColors);
-      palettes.emplace(compressedColors, palette);
+      palettes.push_back(palette);
+      paletteColors.push_back(compressedColors);
+    } else if (*lowerBound != compressedColors) {
+      palette = std::make_shared<TilePalette>(compressedColors);
+      palettes.insert(palettes.begin() + std::distance(paletteColors.begin(), lowerBound), palette);
+      paletteColors.insert(lowerBound, compressedColors);
     } else {
-      palette = palettesIt->second;
+      palette = palettes[std::distance(paletteColors.begin(), lowerBound)];
     }
 
     glSetActiveTexture(textureId);

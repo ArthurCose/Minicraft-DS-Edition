@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <unordered_map>
 #include <memory>
 #include <gl2d.h>
 #include "tilepalette.h"
@@ -13,7 +12,8 @@ class SpriteSheet
 {
 private:
   std::vector<glImage> tiles;
-  std::unordered_map<int, std::shared_ptr<TilePalette>> palettes;
+  std::vector<int> paletteColors;
+  std::vector<std::shared_ptr<TilePalette>> palettes;
   int lastBoundPalette = -1;
   int textureId;
   const unsigned char* bitmap;
