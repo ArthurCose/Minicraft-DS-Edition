@@ -116,3 +116,8 @@ void SpriteSheet::renderTile(SoftwareScreen& screen, int xp, int yp, int tile, i
     }
   }
 }
+
+int SpriteSheet::totalPalettes()
+{
+  return palettes.size();
+}

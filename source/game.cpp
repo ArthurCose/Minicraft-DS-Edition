@@ -124,6 +124,7 @@ void Game::render()
     display("tick ms:" + std::to_string(tickMs));
     display("render ms:" + std::to_string(renderMs));
     display("skips:" + std::to_string(skippedFrames));
+    display("palettes:" + std::to_string(Screen::spriteSheet->totalPalettes()));
 
     if ((size_t)currentLevel < levels.size()) {
       display("entities:" + std::to_string(levels[currentLevel].entities.size()));

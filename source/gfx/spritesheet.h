@@ -24,4 +24,5 @@ public:
   SpriteSheet(const unsigned char* bitmap, int width, int height, int tileW);
   void renderTile(GLScreen& screen, int xp, int yp, int tile, int colors, int bits);
   void renderTile(SoftwareScreen& screen, int xp, int yp, int tile, int colors, int bits);
+  int totalPalettes();
 };
