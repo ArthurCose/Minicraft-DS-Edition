@@ -39,7 +39,7 @@ void WaterTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = wl && l->connectsToSand;
   bool sr = wr && r->connectsToSand;
 
-  int randomInt = wRandom.nextBits(8);
+  int randomInt = wRandom.nextBits(16);
 
   auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
     int tile = randomInt & 0b11;
