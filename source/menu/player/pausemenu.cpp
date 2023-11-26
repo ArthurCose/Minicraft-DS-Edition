@@ -4,7 +4,7 @@
 #include "../main/titlemenu.h"
 #include "../keyboardmenu.h"
 
-static const std::array<std::string_view, 4> options = { "SAVE", "QUIT", "DEBUG", "CANCEL" };
+static const std::array<std::string_view, 3> options = { "SAVE", "QUIT", "CANCEL" };
 
 void PauseMenu::tick(Game& game)
 {
@@ -58,15 +58,15 @@ void PauseMenu::tick(Game& game)
       game.resetGame();
       game.setMenu(std::make_unique<TitleMenu>());
       break;
-    case 2:
-      // debug
-      game.debugEnabled = !game.debugEnabled;
-      break;
     default:
       // cancel
       close(game);
       break;
     }
+  }
+
+  if (game.justTapped(KEY_SELECT)) {
+    game.debugEnabled = !game.debugEnabled;
   }
 }
 
