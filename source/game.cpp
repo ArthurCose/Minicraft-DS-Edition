@@ -112,10 +112,18 @@ void Game::render()
   if (debugEnabled) {
     const int DEBUG_TEXT_COLOR = Color::get(0, 555, 555, 555);
 
-    int fps = 1000 / frameMs;
-    screen.renderText("fps:" + std::to_string(fps), 0, 0, DEBUG_TEXT_COLOR);
-    screen.renderText("ms:" + std::to_string(frameMs), 0, 8, DEBUG_TEXT_COLOR);
-    screen.renderText("skips:" + std::to_string(skippedFrames), 0, 16, DEBUG_TEXT_COLOR);
+    int fps = 1000 / totalMs;
+    int y = 0;
+    auto display = [&](std::string_view message) {
+      screen.renderText(message, 0, y, DEBUG_TEXT_COLOR);
+      y += 8;
+    };
+
+    display("fps:" + std::to_string(fps));
+    display("total ms:" + std::to_string(totalMs));
+    display("tick ms:" + std::to_string(tickMs));
+    display("render ms:" + std::to_string(renderMs));
+    display("skips:" + std::to_string(skippedFrames));
   }
 }
 

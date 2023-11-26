@@ -42,11 +42,14 @@ int main()
   Game game;
 
   int refreshRate = 1000 / 59.8261;
-  int lostTime = 0;
+  int lostMs = 0;
+
+  auto start = playtime;
 
   while (true) {
-    auto start = playtime;
+    int tickStart = playtime;
     game.tick();
+    int renderStart = playtime;
 
     glBegin2D();
     game.render();
@@ -62,20 +65,24 @@ int main()
     glFlush(0);
 
     auto end = playtime;
-    game.frameMs = end - start;
+    game.tickMs = renderStart - tickStart;
+    game.renderMs = end - renderStart;
+    game.totalMs = end - start;
+    start = end;
 
     if (game.frameSkipEnabled) {
-      lostTime += std::max(game.frameMs - refreshRate, 0);
+      lostMs += std::max(game.totalMs - refreshRate, 0);
 
       game.skippedFrames = 0;
 
-      while (game.skippedFrames < 3 && lostTime > refreshRate) {
+      while (game.skippedFrames < 3 && lostMs > refreshRate) {
         game.tick();
-        lostTime -= refreshRate;
+        lostMs -= refreshRate;
         game.skippedFrames++;
       }
     } else {
       game.skippedFrames = 0;
+      lostMs = 0;
     }
   }
 
