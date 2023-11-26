@@ -55,6 +55,7 @@ void PauseMenu::tick(Game& game)
       break;
     case 1:
       // quit
+      game.resetGame();
       game.setMenu(std::make_unique<TitleMenu>());
       break;
     case 2:
