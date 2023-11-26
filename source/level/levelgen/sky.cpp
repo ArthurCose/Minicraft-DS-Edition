@@ -10,6 +10,8 @@ GeneratedLevel generateSky(Random& random, int w, int h)
 {
   do {
     GeneratedLevel result = createSkyLevel(random, w, h);
+    result.monsterDensity = 4;
+    result.tickRate = 0;
 
     if (validateLevel(result))
       return result;

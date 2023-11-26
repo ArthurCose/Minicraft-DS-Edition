@@ -10,6 +10,7 @@ GeneratedLevel generateUnderground(Random& random, int w, int h, int depth)
 {
   do {
     GeneratedLevel result = createUndergroundLevel(random, w, h, depth);
+    result.monsterDensity = 4;
 
     if (validateLevel(result, depth))
       return result;

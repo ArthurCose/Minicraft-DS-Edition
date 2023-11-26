@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math.h>
 #include <cstdint>
 #include <nds/arm9/math.h>
 #include <nds/arm9/trig_lut.h>

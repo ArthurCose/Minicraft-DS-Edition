@@ -10,6 +10,7 @@ GeneratedLevel generateOverworld(Random& random, int w, int h)
 {
   do {
     GeneratedLevel result = createOverworldLevel(random, w, h);
+    result.monsterDensity = 8;
 
     if (validateLevel(result))
       return result;

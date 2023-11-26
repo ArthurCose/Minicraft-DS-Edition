@@ -7,6 +7,7 @@
 #include "../entity/player.h"
 #include "../entity/entity.h"
 #include "../shim/random.h"
+#include "levelgen/generatedlevel.h"
 
 class Screen;
 class LightMask;
@@ -30,7 +31,8 @@ public:
   int grassColor = 141;
   int dirtColor = 322;
   int sandColor = 550;
-  int monsterDensity = 8;
+  int monsterDensity = GeneratedLevel::DEFAULT_MONSTER_DENSITY;
+  fixed32 tickRate = GeneratedLevel::DEFAULT_TICK_RATE;
   std::shared_ptr<std::vector<unsigned char>> map;
   std::vector<unsigned char> tiles;
   std::vector<unsigned char> data;

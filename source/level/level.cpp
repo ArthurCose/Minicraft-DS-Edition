@@ -62,14 +62,14 @@ Level::Level(int w, int h, int depth)
     generatedData = generateOverworld(Random::globalRandom, w, h);
   } else if (depth < 0) {
     generatedData = generateUnderground(Random::globalRandom, w, h, -depth);
-    monsterDensity = 4;
   } else {
     generatedData = generateSky(Random::globalRandom, w, h); // Sky level
-    monsterDensity = 4;
   }
 
   tiles = generatedData.map;
   data = generatedData.data;
+  tickRate = generatedData.tickRate;
+  monsterDensity = generatedData.monsterDensity = 4;
 
   map = std::make_shared<std::vector<unsigned char>>();
   map->resize(w * h, depth < 0 ? Color::get(0) : Color::get(451));
@@ -90,8 +90,9 @@ void Level::tick(Game& game)
 
   int bitW = std::ceil(std::log2(w));
   int bitH = std::ceil(std::log2l(h));
+  int totalBlockTicks = fixed32(w * h) * tickRate;
 
-  for (int i = 0; i < w * h / 50; i++) {
+  for (int i = 0; i < totalBlockTicks; i++) {
     int r = random.nextBits(bitW + bitH);
     int xt = r % w;
     int yt = (r >> bitW) % h;
@@ -443,6 +444,7 @@ void Level::serialize(std::ostream& s)
   nbt::write_named_int(s, "DirtColor", dirtColor);
   nbt::write_named_int(s, "SandColor", sandColor);
   nbt::write_named_int(s, "MonsterDensity", monsterDensity);
+  nbt::write_named_float(s, "TickRate", tickRate);
   nbt::write_named_byte_array(s, "Tiles", (const char*)&tiles[0], tiles.size());
   nbt::write_named_byte_array(s, "TileData", (const char*)&data[0], data.size());
   nbt::write_named_byte_array(s, "MapData", (const char*)&(*map)[0], (*map).size());
@@ -477,6 +479,8 @@ Level Level::deserialize(std::istream& s)
       level.sandColor = nbt::read_tagged_number<int>(s, tag);
     } else if (name == "MonsterDensity") {
       level.monsterDensity = nbt::read_tagged_number<int>(s, tag);
+    } else if (name == "TickRate") {
+      level.tickRate = nbt::read_tagged_number<float>(s, tag);
     } else if (name == "Tiles") {
       level.tiles = nbt::read_byte_array<unsigned char>(s);
     } else if (name == "TileData") {
