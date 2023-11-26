@@ -241,8 +241,8 @@ void Level::renderLight(LightMask& lightMask, int xScroll, int yScroll)
 
   int x0 = std::max(xo - r, 0);
   int y0 = std::max(yo - r, 0);
-  int x1 = std::min(w + xo + r, this->w);
-  int y1 = std::min(h + yo + r, this->h);
+  int x1 = std::min(w + xo + r, this->w - 1);
+  int y1 = std::min(h + yo + r, this->h - 1);
 
   for (int y = y0; y <= y1; y++) {
     for (int x = x0; x <= x1; x++) {
