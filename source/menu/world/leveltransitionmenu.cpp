@@ -7,26 +7,55 @@ LevelTransitionMenu::LevelTransitionMenu(int dir)
   this->dir = dir;
 }
 
+inline int calculateAddedBarHeightFromWidth(Screen& screen) {
+  return ((screen.w + 7) / 8 + 2) / 3;
+}
+
+inline int calculateBarHeight(Screen& screen) {
+  return screen.h / 8 + calculateAddedBarHeightFromWidth(screen);
+}
+
 void LevelTransitionMenu::tick(Game& game)
 {
-  time += 2;
-  if (time == 30)
+  time++;
+
+  int height = calculateBarHeight(game.screen);
+  int maxTime = height * 3 / 2;
+
+  if (time == maxTime / 2 - 2)
     game.changeLevel(dir);
-  if (time == 60)
+  if (time == maxTime)
     game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
 }
 
 void LevelTransitionMenu::render(Screen& screen, Screen& bottomScreen)
 {
-  for (int x = 0; x < screen.w / 8; x++) {
-    for (int y = 0; y < screen.h / 8; y++) {
-      int dd = (y + x % 2 * 2 + x / 3) - time;
-      if (dd < 0 && dd > -30) {
-        if (dir > 0)
-          screen.renderTile(x * 8, y * 8, 0, 0, 0);
-        else
-          screen.renderTile(x * 8, screen.h - y * 8 - 8, 0, 0, 0);
-      }
+  int height = calculateBarHeight(screen);
+  int yOffset = height * 2;
+
+  if (dir > 0) {
+    yOffset -= height;
+  }
+
+  for (int i = 0; i < screen.w / 8; i++) {
+    int dd = (i % 2 * 2 + i / 3) - time * 2;
+    int x = i * 8;
+    int y = (dd + yOffset) * 8;
+
+    if (dir < 0) {
+      y = screen.h - y - 8;
     }
+
+    screen.renderBoxFilled(x, y, 8, height * 8, 0);
+
+    // for (int y = 0; y < screen.h / 8; y++) {
+    //   int dd = (y + x % 2 * 2 + x / 3) - time;
+    //   if (dd < 0 && dd > -30) {
+    //     if (dir > 0)
+    //       screen.renderTile(x * 8, y * 8, 0, 0, 0);
+    //     else
+    //       screen.renderTile(x * 8, screen.h - y * 8 - 8, 0, 0, 0);
+    //   }
+    // }
   }
 }
