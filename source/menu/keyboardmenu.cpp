@@ -86,7 +86,7 @@ static const std::vector<SpecialKey> specialKeys = {
     .y = KEYBOARD_Y + KEY_V_STRIDE * 4,
     .defaultColor = DEFAULT_KEY_COLOR,
     .highlightColor = KEY_HIGHLIGHT_COLOR,
-    .definedWidth = KEY_H_STRIDE * ((int)rows[2].size() - 1) + KEY_WIDTH,
+    .definedWidth = KEY_H_STRIDE * ((int)rows[2].size()) + KEY_WIDTH,
     .text = "",
     .action = [](Game& game, KeyboardMenu& menu) {
       menu.insertChar(' ');
