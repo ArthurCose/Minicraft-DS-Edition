@@ -19,8 +19,6 @@ void DeleteMenu::tick(Game& game)
     return;
   }
 
-  int selected = yes;
-
   if (game.justTappedOrRepeat(KEY_UP)) {
     yes = !yes;
   }
@@ -46,8 +44,6 @@ void DeleteMenu::render(Screen& screen, Screen& bottomScreen)
 
   const int OPTION_TEXT_COLOR = Color::get(0, 333, 333, 333);
   const int HIGHLIGHT_COLOR = Color::get(0, 555, 555, 555);
-
-  int centerX = screen.w / 2;
 
   std::string_view yesText = "YES";
   int yesColor = OPTION_TEXT_COLOR;

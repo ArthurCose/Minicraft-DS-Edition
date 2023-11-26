@@ -73,8 +73,6 @@ void InGameMenu::handleTouchButtons(Game& game) {
     return;
   }
 
-  auto& player = *game.player;
-
   if (x < ROTATE_BUTTON_W) {
     startIndex--;
   }
