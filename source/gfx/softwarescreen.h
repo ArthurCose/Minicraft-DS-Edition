@@ -10,9 +10,10 @@ private:
   void normalizeBox(int& x, int& y, int& w, int& h);
 
 public:
-  std::vector<unsigned char> pixels;
+  unsigned char* pixels;
 
   SoftwareScreen();
+  ~SoftwareScreen();
 
   void clear(int color) override;
   void renderTile(int xp, int yp, int tile, int colors, int bits) override;

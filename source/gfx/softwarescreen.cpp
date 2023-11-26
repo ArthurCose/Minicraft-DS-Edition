@@ -7,13 +7,17 @@
 SoftwareScreen::SoftwareScreen()
   : Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-  pixels.resize(SCREEN_WIDTH * SCREEN_HEIGHT, 0);
+  pixels = (unsigned char*)aligned_alloc(4, SCREEN_WIDTH * SCREEN_HEIGHT);
+}
+
+SoftwareScreen::~SoftwareScreen()
+{
+  free(pixels);
 }
 
 void SoftwareScreen::clear(int color)
 {
   size_t size = w * h;
-  size_t leftoverBytes = size % 4;
 
   // unsigned int unsignedCol = color;
   unsigned int word = color |
@@ -21,13 +25,14 @@ void SoftwareScreen::clear(int color)
     (color << 16) |
     (color << 24);
 
-  for (size_t i = size - leftoverBytes; i < size; i++) {
-    pixels[i] = color;
+  // fill in the last 4 bytes to avoid alignment issues
+  for (size_t i = 0; i < 4; i++) {
+    pixels[size - i - 1] = color;
   }
 
   while (dmaBusy(3)) {}
 
-  dmaFillWords(word, &pixels[0], w * h);
+  dmaFillWords(word, pixels, size - 3);
 }
 
 void SoftwareScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)

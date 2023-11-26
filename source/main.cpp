@@ -55,7 +55,7 @@ int main()
     // wait until work is done
     while (dmaBusy(0) || dmaBusy(1) || dmaBusy(2) || dmaBusy(3))
       ;
-    dmaCopy(&game.bottomScreen.pixels[0], BG_GFX_SUB, game.bottomScreen.pixels.size());
+    dmaCopy(game.bottomScreen.pixels, BG_GFX_SUB, game.bottomScreen.w * game.bottomScreen.h);
     glFlush(0);
     auto end = playtime;
 
