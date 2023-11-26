@@ -248,6 +248,8 @@ void InGameMenu::renderMap(Screen& screen)
   int levelSize = 128;
 
   if (auto sscreen = dynamic_cast<SoftwareScreen*>(&screen)) {
+    DC_FlushRange(&(*map)[0], map->size());
+
     for (int y = 0; y < levelSize; y++) {
       int channel = y % 4;
 
@@ -257,7 +259,7 @@ void InGameMenu::renderMap(Screen& screen)
 
       dmaCopyWordsAsynch(
         channel,
-        &map->at(y * levelSize),
+        &(*map)[y * levelSize],
         &sscreen->pixels[(y + mapTop) * screen.w + mapLeft],
         levelSize);
     }

@@ -53,10 +53,14 @@ int main()
     glEnd2D();
 
     // wait until work is done
-    while (dmaBusy(0) || dmaBusy(1) || dmaBusy(2) || dmaBusy(3))
-      ;
-    dmaCopy(game.bottomScreen.pixels, BG_GFX_SUB, game.bottomScreen.w * game.bottomScreen.h);
+    while (dmaBusy(0) || dmaBusy(1) || dmaBusy(2) || dmaBusy(3)) {
+    }
+
+    auto pixelCount = game.bottomScreen.w * game.bottomScreen.h;
+    DC_FlushRange(game.bottomScreen.pixels, pixelCount);
+    dmaCopy(game.bottomScreen.pixels, BG_GFX_SUB, pixelCount);
     glFlush(0);
+
     auto end = playtime;
 
     if (game.frameSkipEnabled) {
@@ -142,6 +146,7 @@ void initializeSubEngine()
   REG_BG3X_SUB = 0;
   REG_BG3Y_SUB = 0;
 
+  DC_FlushRange(Screen::palette, 512);
   dmaCopy(Screen::palette, BG_PALETTE_SUB, 512);
 }
 
