@@ -3,6 +3,7 @@
 #include "../entity.h"
 #include "../../gfx/color.h"
 #include "../../gfx/screen.h"
+#include "../../fixedpoint.h"
 
 class TextParticle : public Entity
 {
@@ -12,8 +13,8 @@ private:
   int time = 0;
 
 public:
-  double xa, ya, za;
-  double xx, yy, zz;
+  fixed32 xa, ya, za;
+  fixed32 xx, yy, zz;
 
   TextParticle(std::string msg, int x, int y, int col);
 

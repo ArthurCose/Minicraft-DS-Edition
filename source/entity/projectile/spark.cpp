@@ -5,7 +5,7 @@
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
 
-Spark::Spark(std::shared_ptr<Entity> owner, float xa, float ya)
+Spark::Spark(std::shared_ptr<Entity> owner, fixed32 xa, fixed32 ya)
 {
   ownerId = owner->id;
   xx = this->x = owner->x;
@@ -60,8 +60,10 @@ void Spark::render(Screen& screen)
   int xt = 8;
   int yt = 13;
 
-  screen.renderTile(x - 4, y - 4 - 2, xt + yt * 32, Color::get(-1, 555, 555, 555), random.nextInt(4));
-  screen.renderTile(x - 4, y - 4 + 2, xt + yt * 32, Color::get(-1, 000, 000, 000), random.nextInt(4));
+  int r = random.nextInt();
+
+  screen.renderTile(x - 4, y - 4 - 2, xt + yt * 32, Color::get(-1, 555, 555, 555), r & 0b11);
+  screen.renderTile(x - 4, y - 4 + 2, xt + yt * 32, Color::get(-1, 000, 000, 000), (r >> 2) & 0b11);
 }
 
 bool Spark::isBlockableBy(Mob& mob)

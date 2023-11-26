@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "../gfx/screen.h"
+#include "../fixedpoint.h"
 
 class ItemEntity : public Entity
 {
@@ -17,8 +18,8 @@ protected:
 
 public:
   int hurtTime = 0;
-  float xa{}, ya{}, za{};
-  float xx{}, yy{}, zz{};
+  fixed32 xa{}, ya{}, za{};
+  fixed32 xx{}, yy{}, zz{};
   std::shared_ptr<Item> item;
 
   ItemEntity(std::shared_ptr<Item> item, int x, int y);

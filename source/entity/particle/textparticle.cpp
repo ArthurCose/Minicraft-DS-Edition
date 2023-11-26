@@ -9,9 +9,9 @@ TextParticle::TextParticle(std::string msg, int x, int y, int col)
   xx = x;
   yy = y;
   zz = 2;
-  xa = random.nextGaussian() * 0.3;
-  ya = random.nextGaussian() * 0.2;
-  za = random.nextFloat() * 0.7 + 2;
+  xa = fixed32(random.nextGaussian() * 0.3);
+  ya = fixed32(random.nextGaussian() * 0.2);
+  za = fixed32(random.nextFloat() * 0.7 + 2);
 }
 
 void TextParticle::tick(Game& game, Level& level, std::shared_ptr<Entity> self)

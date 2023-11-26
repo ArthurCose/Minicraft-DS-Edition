@@ -36,9 +36,9 @@ void AirWizard::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 
   if (attackTime > 0) {
     attackTime--;
-    double dir = attackTime * 0.25 * (attackTime % 2 * 2 - 1);
-    double speed = (0.7) + attackType * 0.2;
-    level.add(std::make_shared<Spark>(self, cos(dir) * speed, sin(dir) * speed));
+    fixed32 dir = fixed32(attackTime) * fixed32(0.25) * fixed32(attackTime % 2 * 2 - 1);
+    fixed32 speed = fixed32(0.7) + fixed32(attackType) * fixed32(0.2);
+    level.add(std::make_shared<Spark>(self, dir.cos() * speed, dir.sin() * speed));
     return;
   }
 
