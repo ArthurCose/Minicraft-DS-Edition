@@ -30,8 +30,7 @@ void InventoryMenu::tick(Game& game)
     selected = 0;
 
   if (moving && lastPosition != selected) {
-    auto start = player->inventory.items.begin();
-    std::iter_swap(start + lastPosition, start + selected);
+    player->inventory.swapSlots(lastPosition, selected);
   }
 
   if (game.justTapped(KEY_SELECT)) {

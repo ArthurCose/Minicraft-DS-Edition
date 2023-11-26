@@ -114,15 +114,7 @@ void InGameMenu::handleItemDragging(Game& game) {
     if (draggedIndex != -1 && (uint)draggedIndex < items.size()) {
       // dragging an item, and hovering an item
       // rotating items to swap
-      if (draggedIndex < hoveredIndex) {
-        auto left = draggedIndex;
-        auto right = hoveredIndex;
-        std::rotate(items.begin() + left, items.begin() + left + 1, items.begin() + right + 1);
-      } else {
-        auto left = hoveredIndex;
-        auto right = draggedIndex;
-        std::rotate(items.begin() + left, items.begin() + right, items.begin() + right + 1);
-      }
+      player.inventory.swapSlots(draggedIndex, hoveredIndex);
     }
 
     if (player.getSelectedItemIndex() != hoveredIndex) {

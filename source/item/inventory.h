@@ -16,6 +16,7 @@ public:
   bool hasResources(Resource::ID resourceId, int count);
   bool removeResource(Resource::ID resourceId, int count);
   bool removeItem(Item& item);
+  void swapSlots(int fromSlot, int toSlot);
   int count(const Item& item);
 
   void serialize(std::ostream& s, std::string_view keyName);

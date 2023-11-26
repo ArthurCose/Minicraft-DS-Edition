@@ -71,6 +71,19 @@ bool Inventory::removeItem(Item& item)
   return false;
 }
 
+void Inventory::swapSlots(int fromSlot, int toSlot)
+{
+  if (fromSlot < toSlot) {
+    auto left = fromSlot;
+    auto right = toSlot;
+    std::rotate(items.begin() + left, items.begin() + left + 1, items.begin() + right + 1);
+  } else {
+    auto left = toSlot;
+    auto right = fromSlot;
+    std::rotate(items.begin() + left, items.begin() + right, items.begin() + right + 1);
+  }
+}
+
 int Inventory::count(const Item& item)
 {
   // unsafe hack to avoid exceptions
