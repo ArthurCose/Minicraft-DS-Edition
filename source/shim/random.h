@@ -10,6 +10,7 @@ public:
   Random();
   Random(long long int seed);
   void setSeed(long long int seed);
+  int nextBits(int bits);
   bool nextBoolean();
   int nextInt();
   int nextInt(int max);
@@ -21,4 +22,6 @@ private:
   std::uniform_int_distribution<int> uniform_int_distribution;
   std::uniform_real_distribution<float> uniform_float_distribution;
   std::normal_distribution<float> gaussian_distribution;
+  int bitStorage = 0;
+  int remainingBits = 0;
 };

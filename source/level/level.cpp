@@ -88,9 +88,13 @@ void Level::tick(Game& game)
 {
   trySpawn(1);
 
+  int bitW = std::ceil(std::log2(w));
+  int bitH = std::ceil(std::log2l(h));
+
   for (int i = 0; i < w * h / 50; i++) {
-    int xt = random.nextInt(w);
-    int yt = random.nextInt(h);
+    int r = random.nextBits(bitW + bitH);
+    int xt = r % w;
+    int yt = (r >> bitW) % h;
     Tile::tiles[getTile(xt, yt)]->tick(*this, xt, yt);
   }
 

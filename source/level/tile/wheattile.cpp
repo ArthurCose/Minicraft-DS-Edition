@@ -14,7 +14,7 @@ int WheatTile::getMapColor(Level& level, int x, int y)
 
 void WheatTile::tick(Level& level, int xt, int yt)
 {
-  if (random.nextInt(2) == 0)
+  if (random.nextBoolean())
     return;
 
   int age = level.getData(xt, yt);

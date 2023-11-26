@@ -39,7 +39,7 @@ void LavaTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = ll && l->connectsToSand;
   bool sr = lr && r->connectsToSand;
 
-  int randomInt = wRandom.nextInt();
+  int randomInt = wRandom.nextBits(8);
 
   auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
     int tile = randomInt & 0b11;
@@ -81,9 +81,9 @@ void LavaTile::tick(Level& level, int xt, int yt)
   int yn = yt;
 
   if (random.nextBoolean())
-    xn += random.nextInt(2) * 2 - 1;
+    xn += random.nextBits(1) * 2 - 1;
   else
-    yn += random.nextInt(2) * 2 - 1;
+    yn += random.nextBits(1) * 2 - 1;
 
   if (level.getTile(xn, yn) == Tile::hole) {
     level.setTile(xn, yn, this->id, 0);
