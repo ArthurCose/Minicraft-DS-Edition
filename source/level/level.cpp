@@ -108,8 +108,10 @@ void Level::tick(Game& game)
     e->tick(game, *this, e);
 
     if (e->removed) {
-      entities.erase(entities.begin() + i);
+      std::iter_swap(entities.begin() + i, entities.end() - 1);
+      entities.pop_back();
       removeEntity(xto, yto, e);
+      i--;
     } else {
       int xt = e->x >> 4;
       int yt = e->y >> 4;
