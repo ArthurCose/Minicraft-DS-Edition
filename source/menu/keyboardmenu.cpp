@@ -107,6 +107,12 @@ void KeyboardMenu::insertChar(char c) {
   }
 }
 
+void KeyboardMenu::setText(std::string text)
+{
+  this->text = text;
+  caret = text.size();
+}
+
 void KeyboardMenu::submit(Game& game) {
   callback(text);
   close(game);

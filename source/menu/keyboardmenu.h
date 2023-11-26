@@ -9,6 +9,7 @@ public:
 
   void setCharacterLimit(size_t limit) { characterLimit = limit; }
   void setPlaceholder(std::string text) { placeholder = text; }
+  void setText(std::string text);
   void submit(Game& game);
   void backspace();
   void insertChar(char c);

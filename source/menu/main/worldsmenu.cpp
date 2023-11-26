@@ -8,6 +8,8 @@
 #include "../../gfx/screen.h"
 #include "../../gfx/color.h"
 #include "../player/ingamemenu.h"
+#include "../keyboardmenu.h"
+#include "deletemenu.h"
 
 const int PAGE_LEN = 10;
 
@@ -50,6 +52,10 @@ void WorldsMenu::tick(Game& game)
     return;
   }
 
+  if (worldNames.empty()) {
+    return;
+  }
+
   if (game.justTappedOrRepeat(KEY_UP)) {
     selected--;
   }
@@ -66,18 +72,61 @@ void WorldsMenu::tick(Game& game)
     selected = 0;
   }
 
-  if (game.justTapped(KEY_A) && optionCount > 0) {
+  if (game.justTapped(KEY_A)) {
+    // load world
     Sound::test.play();
     game.load(worldNames[selected]);
     game.setMenu(std::make_unique<InGameMenu>(game.player, game.levels[game.currentLevel].map));
+    return;
+  }
+
+  if (game.justTapped(KEY_Y)) {
+    // rename world
+    auto menu = std::make_unique<KeyboardMenu>([this, &game](std::string name) {
+      if (name == worldNames[selected]) {
+        // the name was not modified
+        return;
+      }
+
+      game.worldName = name;
+      game.resolveNameConflict();
+
+      fs::rename(Game::savePath(worldNames[selected]), Game::savePath(game.worldName));
+
+      worldNames[selected] = game.worldName;
+    });
+
+    menu->setPlaceholder("World Name");
+    menu->setText(worldNames[selected]);
+    menu->setCharacterLimit(16);
+    game.enterMenu(std::move(menu));
+    return;
+  }
+
+  if (game.justTapped(KEY_X)) {
+    // delete world
+    auto menu = std::make_unique<DeleteMenu>(worldNames[selected], [this](bool yes) {
+      if (!yes) {
+        return;
+      }
+
+      fs::remove(Game::savePath(worldNames[selected]));
+      worldNames.erase(worldNames.begin() + selected);
+
+      if (selected > 0) {
+        selected--;
+      }
+    });
+
+    game.enterMenu(std::move(menu));
+    return;
   }
 }
 
 void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
 {
   screen.clear(0);
-
-  screen.renderTextCentered("Saved Worlds", screen.w / 2, 28, Color::get(0, 555, 555, 555));
+  bottomScreen.clear(0);
 
   const int OPTION_TEXT_COLOR = Color::get(0, 333, 333, 333);
   const int HIGHLIGHT_COLOR = Color::get(0, 555, 555, 555);
@@ -87,6 +136,9 @@ void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
   auto renderWorldName = [&screen, centerX](std::string_view name, int color, int i) {
     screen.renderTextCentered(name, centerX, i * 8 + 7 * 8, color);
   };
+
+  // render title
+  renderWorldName("Saved Worlds", HIGHLIGHT_COLOR, -2);
 
   if (worldNames.empty()) {
     screen.renderTextCentered("No Saved Worlds", centerX, screen.h / 2 - 4, OPTION_TEXT_COLOR);
@@ -109,4 +161,7 @@ void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
 
     renderWorldName(worldName, color, i + 2);
   }
+
+  // render help
+  screen.renderTextCentered("(Y)rename        (X)delete", centerX, screen.h - 8, OPTION_TEXT_COLOR);
 }
