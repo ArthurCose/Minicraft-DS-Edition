@@ -23,8 +23,8 @@ static std::vector<std::string> controlInstructions = {
     " Y to unequip held item",
     " START to pause the game",
     "",
-    "Select an item in the inventory",
-    "to equip it.",
+    "Interact with an item in the",
+    "inventory to equip it.",
 };
 
 static std::vector<std::string> winInstructions = {
