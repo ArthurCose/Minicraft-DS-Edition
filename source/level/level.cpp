@@ -202,24 +202,24 @@ void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 
 void Level::renderSprites(Screen& screen, int xScroll, int yScroll)
 {
-  int xo = xScroll >> 4;
-  int yo = yScroll >> 4;
   int w = (screen.w + 15) >> 4;
   int h = (screen.h + 15) >> 4;
+  int x0 = std::max(xScroll >> 4, 0);
+  int y0 = std::max(yScroll >> 4, 0);
+  int x1 = std::min(x0 + w, this->w - 1);
+  int y1 = std::min(y0 + h, this->h - 1);
 
   screen.setOffset(xScroll, yScroll);
 
   std::vector<std::shared_ptr<Entity>> rowSprites;
 
-  for (int y = yo; y <= h + yo; y++) {
-    for (int x = xo; x <= w + xo; x++) {
-      if (x < 0 || y < 0 || x >= this->w || y >= this->h)
-        continue;
-
+  for (int y = y0; y <= y1; y++) {
+    for (int x = x0; x <= x1; x++) {
       auto& entitiesInTile = entitiesInTiles[x + y * this->w];
 
       rowSprites.insert(rowSprites.end(), entitiesInTile.begin(), entitiesInTile.end());
     }
+
     if (rowSprites.size() > 0) {
       sortAndRender(screen, rowSprites);
       rowSprites.clear();
@@ -414,16 +414,13 @@ int Level::countEntities(int x0, int y0, int x1, int y1)
 std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, int y1)
 {
   std::vector<std::shared_ptr<Entity>> result;
-  int xt0 = (x0 >> 4) - 1;
-  int yt0 = (y0 >> 4) - 1;
-  int xt1 = (x1 >> 4) + 1;
-  int yt1 = (y1 >> 4) + 1;
+  int xt0 = std::max((x0 >> 4) - 1, 0);
+  int yt0 = std::max((y0 >> 4) - 1, 0);
+  int xt1 = std::min((x1 >> 4) + 1, w - 1);
+  int yt1 = std::max((y1 >> 4) + 1, h - 1);
 
   for (int y = yt0; y <= yt1; y++) {
     for (int x = xt0; x <= xt1; x++) {
-      if (x < 0 || y < 0 || x >= w || y >= h)
-        continue;
-
       auto& entities = entitiesInTiles[x + y * this->w];
 
       for (auto& e : entities) {
@@ -432,6 +429,7 @@ std::vector<std::shared_ptr<Entity>> Level::getEntities(int x0, int y0, int x1, 
       }
     }
   }
+
   return result;
 }
 
