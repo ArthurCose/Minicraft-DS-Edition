@@ -32,6 +32,7 @@ void ResultsMenu::tick(Game& game)
   if (inputDelay > 0)
     inputDelay--;
   else if (game.justTapped(KEY_START)) {
+    game.resetGame();
     game.setMenu(std::make_unique<TitleMenu>());
   }
 }
