@@ -40,6 +40,7 @@ int main()
   initialize();
 
   Game game;
+  game.debugEnabled = true;
 
   int refreshRate = 1000 / 59.8261;
   int lostMs = 0;
@@ -71,11 +72,11 @@ int main()
     start = end;
 
     if (game.frameSkipEnabled) {
-      lostMs += std::clamp(game.totalMs - refreshRate, 0, refreshRate * 3);
+      lostMs = std::clamp(lostMs + game.totalMs - refreshRate, 0, refreshRate * 3);
 
       game.skippedFrames = 0;
 
-      while (lostMs > refreshRate) {
+      while (lostMs >= refreshRate) {
         game.tick();
         lostMs -= refreshRate;
         game.skippedFrames++;
