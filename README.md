@@ -38,6 +38,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
   - New Noise class
 - Menus and entities are organized into folders
 - Spark entities reference owners using an ID to preserve ownership after reloading
+- Sky level has no random tick
 
 ## Screenshots
 
