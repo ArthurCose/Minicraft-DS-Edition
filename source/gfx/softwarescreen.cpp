@@ -37,7 +37,42 @@ void SoftwareScreen::clear(int color)
 
 void SoftwareScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)
 {
-  spriteSheet->renderTile(*this, xp, yp, tile, compressedColors, bits);
+  xp -= xOffset;
+  yp -= yOffset;
+
+  bool mirrorX = (bits & BIT_MIRROR_X) > 0;
+  bool mirrorY = (bits & BIT_MIRROR_Y) > 0;
+
+  int colors[5] = {
+      255,
+      (compressedColors >> (0 * 8)) & 255,
+      (compressedColors >> (1 * 8)) & 255,
+      (compressedColors >> (2 * 8)) & 255,
+      (compressedColors >> (3 * 8)) & 255
+  };
+
+  for (int y = 0; y < 8; y++) {
+    int ys = y;
+    if (mirrorY)
+      ys = 7 - y;
+    if (y + yp < 0 || y + yp >= h)
+      continue;
+    for (int x = 0; x < 8; x++) {
+      if (x + xp < 0 || x + xp >= w)
+        continue;
+
+      int xs = x;
+      if (mirrorX)
+        xs = 7 - x;
+
+      int colorIndex = spriteSheet->resolvePixelColorIndex(xs, ys, tile);
+
+      int col = colors[colorIndex];
+
+      if (col < 255)
+        pixels[(x + xp) + (y + yp) * w] = col;
+    }
+  }
 }
 
 void SoftwareScreen::renderPixel(int x, int y, int col)

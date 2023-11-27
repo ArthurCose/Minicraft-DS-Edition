@@ -12,6 +12,9 @@ protected:
   Screen(int w, int h);
 
 public:
+  static constexpr int BIT_MIRROR_X = 0x01;
+  static constexpr int BIT_MIRROR_Y = 0x02;
+
   static unsigned short palette[256];
   static std::unique_ptr<SpriteSheet> spriteSheet;
 

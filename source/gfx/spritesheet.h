@@ -12,17 +12,24 @@ class SpriteSheet
 {
 private:
   std::vector<glImage> tiles;
-  std::vector<int> paletteColors;
-  std::vector<std::shared_ptr<TilePalette>> palettes;
-  int lastBoundPalette = -1;
-  int textureId;
   const unsigned char* bitmap;
 
 public:
-  const int w, h, tileW;
+  const int w, h, tileW, textureId;
 
   SpriteSheet(const unsigned char* bitmap, int width, int height, int tileW);
-  void renderTile(GLScreen& screen, int xp, int yp, int tile, int colors, int bits);
-  void renderTile(SoftwareScreen& screen, int xp, int yp, int tile, int colors, int bits);
-  int totalPalettes();
+
+  const glImage* tileGlImage(int tile) {
+    return &tiles[tile];
+  }
+
+  int resolvePixelColorIndex(int x, int y, int tile) {
+    int tileX = tile % 32;
+    int tileY = tile / 32;
+    int tileOffset = tileX * 8 + tileY * 8 * w;
+
+    int bitmapIndex = y * w + x + tileOffset;
+
+    return bitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
+  }
 };

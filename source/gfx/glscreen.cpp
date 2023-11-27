@@ -4,6 +4,9 @@
 #include <gl2d.h>
 #include "color.h"
 
+std::vector<int> GLScreen::paletteColors;
+std::vector<std::shared_ptr<TilePalette>> GLScreen::palettes;
+
 GLScreen::GLScreen()
   : Screen(SCREEN_WIDTH, SCREEN_HEIGHT) {}
 
@@ -12,9 +15,23 @@ void GLScreen::clear(int color)
   glBoxFilled(0, 0, w, h, palette[color]);
 }
 
-void GLScreen::renderTile(int xp, int yp, int tile, int colors, int bits)
+void GLScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)
 {
-  spriteSheet->renderTile(*this, xp, yp, tile, colors, bits);
+  xp -= xOffset;
+  yp -= yOffset;
+
+  if (lastBoundPalette != compressedColors) {
+    auto palette = resolvePalette(compressedColors);
+    glSetActiveTexture(spriteSheet->textureId);
+    palette->assignToActiveTexture();
+
+    lastBoundPalette = compressedColors;
+  }
+
+  // convert to GL_FLIP_H and GL_FLIP_V
+  int flipMode = ((bits & Screen::BIT_MIRROR_X) << 2) | (bits & Screen::BIT_MIRROR_Y);
+
+  glSprite(xp, yp, flipMode, spriteSheet->tileGlImage(tile));
 }
 
 void GLScreen::renderPixel(int x, int y, int col)
@@ -90,4 +107,30 @@ void GLScreen::renderTexture(Texture& texture, int x, int y, int scaleX, int sca
   }
 
   glSpriteScaleXY(x, y, scaleY << 12, scaleY << 12, GL_FLIP_NONE, &sprite);
+}
+
+int GLScreen::totalPalettes()
+{
+  return palettes.size();
+}
+
+std::shared_ptr<TilePalette> GLScreen::resolvePalette(int compressedColors)
+{
+  std::shared_ptr<TilePalette> palette;
+
+  auto lowerBound = std::lower_bound(paletteColors.begin(), paletteColors.end(), compressedColors);
+
+  if (lowerBound == paletteColors.end()) {
+    palette = std::make_shared<TilePalette>(compressedColors);
+    palettes.push_back(palette);
+    paletteColors.push_back(compressedColors);
+  } else if (*lowerBound != compressedColors) {
+    palette = std::make_shared<TilePalette>(compressedColors);
+    palettes.insert(palettes.begin() + std::distance(paletteColors.begin(), lowerBound), palette);
+    paletteColors.insert(lowerBound, compressedColors);
+  } else {
+    palette = palettes[std::distance(paletteColors.begin(), lowerBound)];
+  }
+
+  return palette;
 }
