@@ -126,7 +126,7 @@ $(CPPFILES:.cpp=.o) : $$(patsubst %.o,../%.cpp,$$@) $(foreach file,$(HFILES),../
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
-$(SPRITE_FILES:.png=.o) : $$(patsubst %.o,../%.png,$$@)
+$(SPRITE_FILES:.png=.o) : $$(patsubst %.o,../%.png,$$@) $$(patsubst %.o,../%.grit,$$@)
 	@mkdir -p $(dir $@)
 	grit ../$(basename $@).png -ff../$(basename $@).grit -o$(basename $@)
 	$(CXX) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
