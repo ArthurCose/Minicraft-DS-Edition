@@ -25,10 +25,10 @@ void Screen::renderText(std::string_view msg, int x, int y, int col)
     renderBoxFilled(x, y, msg.size() * 8, 8, backgroundColor);
 
   for (size_t i = 0; i < msg.length(); i++) {
-    int ix = chars.find(std::toupper(msg[i]));
+    auto ix = chars.find(std::toupper(msg[i]));
 
-    if (ix >= 0) {
-      renderTile(x + i * 8, y, ix + 30 * 32, col, 0);
+    if (ix != std::string::npos) {
+      renderTile(x + i * 8, y, (int)ix + 30 * 32, col, 0);
     }
   }
 }
