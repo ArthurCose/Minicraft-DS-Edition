@@ -56,14 +56,9 @@ int main()
     game.render();
     glEnd2D();
 
-    // wait until work is done
-    while (dmaBusy(0) || dmaBusy(1) || dmaBusy(2) || dmaBusy(3)) {
-    }
-
-    auto pixelCount = game.bottomScreen.w * game.bottomScreen.h;
-    DC_FlushRange(game.bottomScreen.pixels, pixelCount);
-    dmaCopy(game.bottomScreen.pixels, BG_GFX_SUB, pixelCount);
-    glFlush(0);
+    // GLScreen must be flushed last as it also vsyncs
+    game.bottomScreen.flush(BG_GFX_SUB);
+    game.screen.flush();
 
     auto end = playtime;
     game.tickMs = renderStart - tickStart;

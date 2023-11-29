@@ -32,6 +32,7 @@ void GLScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bi
   int flipMode = ((bits & Screen::BIT_MIRROR_X) << 2) | (bits & Screen::BIT_MIRROR_Y);
 
   glSprite(xp, yp, flipMode, spriteSheet->tileGlImage(tile));
+  glSpriteCalls += 1;
 }
 
 void GLScreen::renderPixel(int x, int y, int col)
@@ -133,4 +134,15 @@ std::shared_ptr<TilePalette> GLScreen::resolvePalette(int compressedColors)
   }
 
   return palette;
+}
+
+int GLScreen::glSpriteCallCount()
+{
+  return glSpriteCalls;
+}
+
+void GLScreen::flush()
+{
+  glFlush(0);
+  glSpriteCalls = 0;;
 }

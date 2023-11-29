@@ -112,12 +112,14 @@ void Game::render()
   if (debugEnabled) {
     const int DEBUG_TEXT_COLOR = Color::get(0, 555, 555, 555);
 
-    int fps = 1000 / totalMs;
     int y = 0;
     auto display = [&](std::string_view message) {
       screen.renderText(message, 0, y, DEBUG_TEXT_COLOR);
       y += 8;
     };
+
+    int fps = 1000 / totalMs;
+    int spriteCount = screen.glSpriteCallCount();
 
     display("fps:" + std::to_string(fps));
     display("total ms:" + std::to_string(totalMs));
@@ -125,6 +127,7 @@ void Game::render()
     display("render ms:" + std::to_string(renderMs));
     display("skips:" + std::to_string(skippedFrames));
     display("palettes:" + std::to_string(screen.totalPalettes()));
+    display("sprites:" + std::to_string(spriteCount));
 
     if ((size_t)currentLevel < levels.size()) {
       display("entities:" + std::to_string(levels[currentLevel].entities.size()));

@@ -148,3 +148,13 @@ void SoftwareScreen::renderBoxFilled(int x, int y, int w, int h, int col)
     }
   }
 }
+
+void SoftwareScreen::flush(void* destination)
+{
+  // wait until work is done
+  while (dmaBusy(0) || dmaBusy(1) || dmaBusy(2) || dmaBusy(3)) {
+  }
+
+  DC_FlushRange(pixels, w * h);
+  dmaCopy(pixels, destination, w * h);
+}

@@ -19,11 +19,15 @@ public:
   std::shared_ptr<Texture> genTexture(void* loadData, int w, int h);
   void renderTexture(Texture& texture, int x, int y, int scaleX, int scaleY) override;
   int totalPalettes();
+  int glSpriteCallCount();
+  void flush();
 
 private:
   static std::vector<int> paletteColors;
   static std::vector<std::shared_ptr<TilePalette>> palettes;
 
   std::shared_ptr<TilePalette> resolvePalette(int colors);
+
+  int glSpriteCalls = 0;
   int lastBoundPalette = -1;
 };

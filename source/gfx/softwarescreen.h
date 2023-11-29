@@ -20,4 +20,5 @@ public:
   void renderPixel(int x, int y, int col) override;
   void renderBox(int x, int y, int w, int h, int col) override;
   void renderBoxFilled(int x, int y, int w, int h, int col) override;
+  void flush(void* destination);
 };
