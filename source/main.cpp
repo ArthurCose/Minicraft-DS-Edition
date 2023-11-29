@@ -27,8 +27,10 @@
 #include "level/tile/oretile.h"
 #include "level/tile/cloudcactustile.h"
 
-// in ms
-static int playtime = 0;
+static int vblankCount = 0;
+static int playtime = 0; // in ms
+
+void incrementVblankCount();
 void incrementTime();
 void initialize();
 void initializePalette();
@@ -47,6 +49,7 @@ int main()
   int lostMs = 0;
 
   auto start = playtime;
+  auto lastVblank = vblankCount;
 
   while (true) {
     int tickStart = playtime;
@@ -57,7 +60,6 @@ int main()
     game.render();
     glEnd2D();
 
-    // GLScreen must be flushed last as it also vsyncs
     game.bottomScreen.flush(BG_GFX_SUB);
     game.screen.flush();
 
@@ -66,6 +68,11 @@ int main()
     game.renderMs = end - renderStart;
     game.totalMs = end - start;
     start = end;
+
+    if (lastVblank == vblankCount) {
+      swiWaitForVBlank();
+    }
+    vblankCount = lastVblank;
 
     if (game.frameSkipEnabled) {
       lostMs = std::clamp(lostMs + game.totalMs - refreshRate, 0, refreshRate * 3);
@@ -88,6 +95,7 @@ int main()
 
 void initialize()
 {
+  irqSet(IRQ_VBLANK, incrementVblankCount);
   timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
 
   fatInitDefault();
@@ -102,6 +110,11 @@ void initialize()
   initializeMainEngine();
   initializeSubEngine();
   initializeResources();
+}
+
+void incrementVblankCount()
+{
+  vblankCount++;
 }
 
 void incrementTime()
