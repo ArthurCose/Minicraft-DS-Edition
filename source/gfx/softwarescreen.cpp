@@ -3,6 +3,7 @@
 #include <nds.h>
 #include <cctype>
 #include "color.h"
+#include "iconsheet.h"
 
 SoftwareScreen::SoftwareScreen()
   : Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -35,7 +36,20 @@ void SoftwareScreen::clear(int color)
   dmaFillWords(word, pixels, size - 3);
 }
 
-void SoftwareScreen::renderTile(int xp, int yp, int tile, int compressedColors, int bits)
+static inline int resolveIconPixelColorIndex(int x, int y, int tile)
+{
+  const int BITMAP_WIDTH = 256;
+
+  int tileX = tile % 32;
+  int tileY = tile / 32;
+  int tileOffset = tileX * 8 + tileY * 8 * BITMAP_WIDTH;
+
+  int bitmapIndex = y * BITMAP_WIDTH + x + tileOffset;
+
+  return iconsheetBitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
+}
+
+void SoftwareScreen::renderIcon(int xp, int yp, int tile, int compressedColors, int bits)
 {
   xp -= xOffset;
   yp -= yOffset;
@@ -65,7 +79,7 @@ void SoftwareScreen::renderTile(int xp, int yp, int tile, int compressedColors, 
       if (mirrorX)
         xs = 7 - x;
 
-      int colorIndex = spriteSheet->resolvePixelColorIndex(xs, ys, tile);
+      int colorIndex = resolveIconPixelColorIndex(xs, ys, tile);
 
       int col = colors[colorIndex];
 

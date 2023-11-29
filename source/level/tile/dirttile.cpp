@@ -15,11 +15,14 @@ int DirtTile::getMapColor(Level& level, int x, int y)
 
 void DirtTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(level.dirtColor, level.dirtColor, level.dirtColor - 111, level.dirtColor - 111);
-  screen.renderTile(x * 16 + 0, y * 16 + 0, 0, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 0, 1, col, 0);
-  screen.renderTile(x * 16 + 0, y * 16 + 8, 2, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 8, 3, col, 0);
+  std::array<uint8_t, 8> colors = {
+    Color::get(level.dirtColor),
+    Color::get(level.dirtColor),
+    Color::get(level.dirtColor - 111),
+    Color::get(level.dirtColor - 111)
+  };
+
+  screen.renderTile(x * 16, y * 16, 0, colors, 0);
 }
 
 bool DirtTile::interact(Level& level, int xt, int yt, Player& player, Item& item, int attackDir)

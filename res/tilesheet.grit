@@ -1,0 +1,11 @@
+# generate a bitmap instead of a tile set
+-gb
+
+# 4 bits per pixel
+-gB4
+
+# byte arrays
+-gu8
+
+# no palette
+-p!

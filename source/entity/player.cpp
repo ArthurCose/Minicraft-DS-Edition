@@ -325,13 +325,13 @@ void Player::render(Screen& screen)
     if (tickTime / 8 % 2 == 0) {
       waterColor = Color::get(-1, 335, 5, 115);
     }
-    screen.renderTile(xo + 0, yo + 3, 5 + 13 * 32, waterColor, 0);
-    screen.renderTile(xo + 8, yo + 3, 5 + 13 * 32, waterColor, 1);
+    screen.renderIcon(xo + 0, yo + 3, 5 + 13 * 32, waterColor, 0);
+    screen.renderIcon(xo + 8, yo + 3, 5 + 13 * 32, waterColor, 1);
   }
 
   if (attackTime > 0 && attackDir == 1) {
-    screen.renderTile(xo + 0, yo - 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 0);
-    screen.renderTile(xo + 8, yo - 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 1);
+    screen.renderIcon(xo + 0, yo - 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 0);
+    screen.renderIcon(xo + 8, yo - 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 1);
     if (attackItem != NULL) {
       attackItem->renderIcon(screen, xo + 4, yo - 4);
     }
@@ -347,30 +347,30 @@ void Player::render(Screen& screen)
     yt += 2;
   }
 
-  screen.renderTile(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
-  screen.renderTile(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
+  screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
+  screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
   if (!swimming) {
-    screen.renderTile(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
-    screen.renderTile(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
+    screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
+    screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
   }
 
   if (attackTime > 0 && attackDir == 2) {
-    screen.renderTile(xo - 4, yo, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 1);
-    screen.renderTile(xo - 4, yo + 8, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 3);
+    screen.renderIcon(xo - 4, yo, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 1);
+    screen.renderIcon(xo - 4, yo + 8, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 3);
     if (attackItem != NULL) {
       attackItem->renderIcon(screen, xo - 4, yo + 4);
     }
   }
   if (attackTime > 0 && attackDir == 3) {
-    screen.renderTile(xo + 8 + 4, yo, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 0);
-    screen.renderTile(xo + 8 + 4, yo + 8, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 2);
+    screen.renderIcon(xo + 8 + 4, yo, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 0);
+    screen.renderIcon(xo + 8 + 4, yo + 8, 7 + 13 * 32, Color::get(-1, 555, 555, 555), 2);
     if (attackItem != NULL) {
       attackItem->renderIcon(screen, xo + 8 + 4, yo + 4);
     }
   }
   if (attackTime > 0 && attackDir == 0) {
-    screen.renderTile(xo + 0, yo + 8 + 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 2);
-    screen.renderTile(xo + 8, yo + 8 + 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 3);
+    screen.renderIcon(xo + 0, yo + 8 + 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 2);
+    screen.renderIcon(xo + 8, yo + 8 + 4, 6 + 13 * 32, Color::get(-1, 555, 555, 555), 3);
     if (attackItem != NULL) {
       attackItem->renderIcon(screen, xo + 4, yo + 8 + 4);
     }

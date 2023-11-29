@@ -22,11 +22,14 @@ void FarmTile::tick(Level& level, int xt, int yt)
 
 void FarmTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(level.dirtColor - 121, level.dirtColor - 11, level.dirtColor, level.dirtColor + 111);
-  screen.renderTile(x * 16 + 0, y * 16 + 0, 2 + 32, col, 1);
-  screen.renderTile(x * 16 + 8, y * 16 + 0, 2 + 32, col, 0);
-  screen.renderTile(x * 16 + 0, y * 16 + 8, 2 + 32, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 8, 2 + 32, col, 1);
+  std::array<uint8_t, 8> colors = {
+    Color::get(level.dirtColor - 121),
+    Color::get(level.dirtColor - 11),
+    Color::get(level.dirtColor),
+    Color::get(level.dirtColor + 111),
+  };
+
+  screen.renderTile(x * 16, y * 16, 6 * 16 + 7, colors, 0);
 }
 
 bool FarmTile::interact(Level& level, int xt, int yt, Player& player, Item& item, int attackDir)

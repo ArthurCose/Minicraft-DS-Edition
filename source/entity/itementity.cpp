@@ -65,8 +65,8 @@ void ItemEntity::render(Screen& screen)
     if (time / 6 % 2 == 0)
       return;
   }
-  screen.renderTile(x - 4, y - 4, item->getSprite(), Color::get(-1, 0, 0, 0), 0);
-  screen.renderTile(x - 4, y - 4 - (int)(zz), item->getSprite(), item->getColor(), 0);
+  screen.renderIcon(x - 4, y - 4, item->getSprite(), Color::get(-1, 0, 0, 0), 0);
+  screen.renderIcon(x - 4, y - 4 - (int)(zz), item->getSprite(), item->getColor(), 0);
 }
 
 void ItemEntity::take(Player& player)

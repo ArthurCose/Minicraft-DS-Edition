@@ -20,33 +20,21 @@ int GrassTile::getMapColor(Level& level, int x, int y)
 
 void GrassTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(level.grassColor, level.grassColor, level.grassColor + 111, level.grassColor + 111);
-  int transitionColor = Color::get(level.grassColor - 111, level.grassColor, level.grassColor + 111, level.dirtColor);
+  std::array<uint8_t, 8> colors = {
+    Color::get(level.grassColor - 111),
+    Color::get(level.grassColor),
+    Color::get(level.grassColor + 111),
+    Color::get(level.dirtColor),
+  };
 
   bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToGrass;
   bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToGrass;
   bool l = !Tile::tiles[level.getTile(x - 1, y)]->connectsToGrass;
   bool r = !Tile::tiles[level.getTile(x + 1, y)]->connectsToGrass;
 
-  if (!u && !l) {
-    screen.renderTile(x * 16 + 0, y * 16 + 0, 0, col, 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 0, (l ? 11 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
+  int offset = (r << 3) | (l << 2) | (d << 1) | u;
 
-  if (!u && !r) {
-    screen.renderTile(x * 16 + 8, y * 16 + 0, 1, col, 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 0, (r ? 13 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
-
-  if (!d && !l) {
-    screen.renderTile(x * 16 + 0, y * 16 + 8, 2, col, 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 11 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
-
-  if (!d && !r) {
-    screen.renderTile(x * 16 + 8, y * 16 + 8, 3, col, 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 8, (r ? 13 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
+  screen.renderTile(x * 16, y * 16, offset, colors, 0);
 }
 
 void GrassTile::tick(Level& level, int xt, int yt)

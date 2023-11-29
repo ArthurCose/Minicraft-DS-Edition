@@ -33,24 +33,32 @@ void HoleTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = l && Tile::tiles[level.getTile(x - 1, y)]->connectsToSand;
   bool sr = r && Tile::tiles[level.getTile(x + 1, y)]->connectsToSand;
 
-  if (!u && !l) {
-    screen.renderTile(x * 16 + 0, y * 16 + 0, 0, col, 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  std::array<uint8_t, 8> colors = {
+    Color::get(111),
+    Color::get(111),
+    Color::get(110),
+    Color::get(110),
+  };
 
-  if (!u && !r) {
-    screen.renderTile(x * 16 + 8, y * 16 + 0, 1, col, 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  if (!(u && d && l && r)) {
+    screen.renderTile(x * 16, y * 16, 0, colors, 0);
+  }
 
-  if (!d && !l) {
-    screen.renderTile(x * 16 + 0, y * 16 + 8, 2, col, 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
-  if (!d && !r) {
-    screen.renderTile(x * 16 + 8, y * 16 + 8, 3, col, 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  if (u || l) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (u || r) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (d || l) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (d || r) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  }
 }
 
 bool HoleTile::mayPass(Level& level, int x, int y, Entity& e)

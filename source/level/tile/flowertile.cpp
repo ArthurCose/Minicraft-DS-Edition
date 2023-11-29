@@ -19,20 +19,18 @@ int FlowerTile::getMapColor(Level& level, int x, int y)
 
 void FlowerTile::render(Screen& screen, Level& level, int x, int y)
 {
-  GrassTile::render(screen, level, x, y);
-
   int data = level.getData(x, y);
   int shape = (data / 16) % 2;
-  int flowerCol = Color::get(10, level.grassColor, 555, 440);
 
-  if (shape == 0)
-    screen.renderTile(x * 16 + 0, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
-  if (shape == 1)
-    screen.renderTile(x * 16 + 8, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
-  if (shape == 1)
-    screen.renderTile(x * 16 + 0, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
-  if (shape == 0)
-    screen.renderTile(x * 16 + 8, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
+  std::array<uint8_t, 8> colors = {
+    Color::get(10),
+    Color::get(level.grassColor),
+    Color::get(level.grassColor + 111),
+    Color::get(555),
+    Color::get(440),
+  };
+
+  screen.renderTile(x * 16, y * 16, 6 * 16 + shape, colors, 0);
 }
 
 bool FlowerTile::interact(Level& level, int x, int y, Player& player, Item& item, int attackDir)

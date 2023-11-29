@@ -80,10 +80,10 @@ void Zombie::render(Screen& screen)
     col = Color::get(-1, 555, 555, 555);
   }
 
-  screen.renderTile(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
-  screen.renderTile(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
-  screen.renderTile(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
-  screen.renderTile(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
+  screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
+  screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
+  screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
+  screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
 }
 
 void Zombie::touchedBy(Level& level, Entity& entity)

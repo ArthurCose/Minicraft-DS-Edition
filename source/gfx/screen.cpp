@@ -4,7 +4,8 @@
 #include "color.h"
 
 unsigned short Screen::palette[256];
-std::unique_ptr<SpriteSheet> Screen::spriteSheet = NULL;
+std::unique_ptr<SpriteSheet> Screen::icons = NULL;
+std::unique_ptr<SpriteSheet> Screen::tiles = NULL;
 
 Screen::Screen(int w, int h) : w(w), h(h) {}
 
@@ -28,7 +29,7 @@ void Screen::renderText(std::string_view msg, int x, int y, int col)
     auto ix = chars.find(std::toupper(msg[i]));
 
     if (ix != std::string::npos) {
-      renderTile(x + i * 8, y, (int)ix + 30 * 32, col, 0);
+      renderIcon(x + i * 8, y, (int)ix + 30 * 32, col, 0);
     }
   }
 }
@@ -43,21 +44,21 @@ void Screen::renderFrame(std::string_view title, int x0, int y0, int x1, int y1)
   int borderColor = Color::get(-1, 1, 5, 445);
 
   // corners
-  renderTile(x0 * 8, y0 * 8, 0 + 13 * 32, borderColor, 0);
-  renderTile(x1 * 8, y0 * 8, 0 + 13 * 32, borderColor, 1);
-  renderTile(x0 * 8, y1 * 8, 0 + 13 * 32, borderColor, 2);
-  renderTile(x1 * 8, y1 * 8, 0 + 13 * 32, borderColor, 3);
+  renderIcon(x0 * 8, y0 * 8, 0 + 13 * 32, borderColor, 0);
+  renderIcon(x1 * 8, y0 * 8, 0 + 13 * 32, borderColor, 1);
+  renderIcon(x0 * 8, y1 * 8, 0 + 13 * 32, borderColor, 2);
+  renderIcon(x1 * 8, y1 * 8, 0 + 13 * 32, borderColor, 3);
 
   // top + bottom side
   for (int y = y0 + 1; y < y1; y++) {
-    renderTile(x0 * 8, y * 8, 2 + 13 * 32, borderColor, 0);
-    renderTile(x1 * 8, y * 8, 2 + 13 * 32, borderColor, 1);
+    renderIcon(x0 * 8, y * 8, 2 + 13 * 32, borderColor, 0);
+    renderIcon(x1 * 8, y * 8, 2 + 13 * 32, borderColor, 1);
   }
 
   // left and right side
   for (int x = x0 + 1; x < x1; x++) {
-    renderTile(x * 8, y0 * 8, 1 + 13 * 32, borderColor, 0);
-    renderTile(x * 8, y1 * 8, 1 + 13 * 32, borderColor, 2);
+    renderIcon(x * 8, y0 * 8, 1 + 13 * 32, borderColor, 0);
+    renderIcon(x * 8, y1 * 8, 1 + 13 * 32, borderColor, 2);
   }
 
   // background

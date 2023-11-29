@@ -19,11 +19,14 @@ int CactusTile::getMapColor(Level& level, int x, int y)
 
 void CactusTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(20, 40, 50, level.sandColor);
-  screen.renderTile(x * 16 + 0, y * 16 + 0, 8 + 2 * 32, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 0, 9 + 2 * 32, col, 0);
-  screen.renderTile(x * 16 + 0, y * 16 + 8, 8 + 3 * 32, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 8, 9 + 3 * 32, col, 0);
+  std::array<uint8_t, 8> colors = {
+    Color::get(20),
+    Color::get(40),
+    Color::get(50),
+    Color::get(level.sandColor),
+  };
+
+  screen.renderTile(x * 16, y * 16, 6 * 16 + 2, colors, 0);
 }
 
 bool CactusTile::mayPass(Level& level, int x, int y, Entity& e)

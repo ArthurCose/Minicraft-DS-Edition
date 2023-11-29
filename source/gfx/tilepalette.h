@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 class TilePalette
 {
 private:
@@ -7,6 +9,7 @@ private:
 
 public:
   TilePalette(int color);
+  TilePalette(uint64_t color);
 
   void assignToActiveTexture();
 

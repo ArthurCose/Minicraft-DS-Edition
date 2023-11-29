@@ -30,14 +30,14 @@ void ResourceItem::renderIcon(Screen& screen, int x, int y)
 {
   auto resource = Resource::resources[resourceId];
 
-  screen.renderTile(x, y, resource->sprite, resource->color, 0);
+  screen.renderIcon(x, y, resource->sprite, resource->color, 0);
 }
 
 void ResourceItem::renderInventory(Screen& screen, int x, int y)
 {
   auto resource = Resource::resources[resourceId];
 
-  screen.renderTile(x, y, resource->sprite, resource->color, 0);
+  screen.renderIcon(x, y, resource->sprite, resource->color, 0);
   screen.renderText(resource->name, x + 32, y, Color::get(-1, 555, 555, 555));
 
   int cc = count;

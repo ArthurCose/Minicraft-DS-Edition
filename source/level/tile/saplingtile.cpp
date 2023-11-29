@@ -35,7 +35,7 @@ void SaplingTile::render(Screen& screen, Level& level, int x, int y)
 {
   Tile::tiles[onType]->render(screen, level, x, y);
   int col = Color::get(10, 40, 50, -1);
-  screen.renderTile(x * 16 + 4, y * 16 + 4, 11 + 3 * 32, col, 0);
+  screen.renderIcon(x * 16 + 4, y * 16 + 4, 11 + 3 * 32, col, 0);
 }
 
 void SaplingTile::hurt(Level& level, int x, int y, Mob& source, int dmg, int attackDir)

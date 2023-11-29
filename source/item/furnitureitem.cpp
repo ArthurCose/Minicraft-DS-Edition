@@ -20,12 +20,12 @@ int FurnitureItem::getSprite() const
 
 void FurnitureItem::renderIcon(Screen& screen, int x, int y)
 {
-  screen.renderTile(x, y, getSprite(), getColor(), 0);
+  screen.renderIcon(x, y, getSprite(), getColor(), 0);
 }
 
 void FurnitureItem::renderInventory(Screen& screen, int x, int y)
 {
-  screen.renderTile(x, y, getSprite(), getColor(), 0);
+  screen.renderIcon(x, y, getSprite(), getColor(), 0);
   screen.renderText(furniture->name, x + 8, y, Color::get(-1, 555, 555, 555));
 }
 

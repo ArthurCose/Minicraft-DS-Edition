@@ -169,23 +169,18 @@ void Level::render(Screen& screen, LightMask& lightMask, Player& player)
 void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 {
   if (depth == 1) {
-    int col = Color::get(20, 20, 121, 121);
+    std::array<uint8_t, 8> colors = {
+      Color::get(20),
+      Color::get(20),
+      Color::get(121),
+      Color::get(121),
+    };
 
-    for (int y = 0; y < screen.h / 8 + 1; y++) {
-      for (int x = 0; x < screen.w / 8 + 1; x++) {
-        int screenX = x * 8 - ((xScroll / 4) & 7);
-        int screenY = y * 8 - ((yScroll / 4) & 7);
-        int worldX = screenX + xScroll;
-        int worldY = screenY + yScroll;
+    screen.setOffset((xScroll / 4) & 7, (yScroll / 4) & 7);
 
-        bool covered =
-          getTile((worldX + 0) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall &&
-          getTile((worldX + 0) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
-          getTile((worldX + 8) >> 4, (worldY + 8) >> 4) != Tile::infiniteFall &&
-          getTile((worldX + 8) >> 4, (worldY + 0) >> 4) != Tile::infiniteFall;
-
-        if (!covered)
-          screen.renderTile(screenX, screenY, 0, col, 0);
+    for (int y = 0; y < screen.h / 16 + 1; y++) {
+      for (int x = 0; x < screen.w / 16 + 1; x++) {
+        screen.renderTile(x * 16, y * 16, 6 * 16 + 6, colors, 0);
       }
     }
   }

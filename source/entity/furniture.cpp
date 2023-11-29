@@ -39,10 +39,10 @@ void Furniture::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 
 void Furniture::render(Screen& screen)
 {
-  screen.renderTile(x - 8, y - 8 - 4, sprite * 2 + 8 * 32, col, 0);
-  screen.renderTile(x - 0, y - 8 - 4, sprite * 2 + 8 * 32 + 1, col, 0);
-  screen.renderTile(x - 8, y - 0 - 4, sprite * 2 + 8 * 32 + 32, col, 0);
-  screen.renderTile(x - 0, y - 0 - 4, sprite * 2 + 8 * 32 + 33, col, 0);
+  screen.renderIcon(x - 8, y - 8 - 4, sprite * 2 + 8 * 32, col, 0);
+  screen.renderIcon(x - 0, y - 8 - 4, sprite * 2 + 8 * 32 + 1, col, 0);
+  screen.renderIcon(x - 8, y - 0 - 4, sprite * 2 + 8 * 32 + 32, col, 0);
+  screen.renderIcon(x - 0, y - 0 - 4, sprite * 2 + 8 * 32 + 33, col, 0);
 }
 
 bool Furniture::blocks(Entity& e)

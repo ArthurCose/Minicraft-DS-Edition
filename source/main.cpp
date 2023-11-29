@@ -3,7 +3,8 @@
 #include <fat.h>
 #include <gl2d.h>
 #include "game.h"
-#include "icons.h"
+#include "iconsheet.h"
+#include "tilesheet.h"
 #include "item/resource/foodresource.h"
 #include "item/resource/plantableresource.h"
 #include "level/tile/grasstile.h"
@@ -157,7 +158,8 @@ void initializeSubEngine()
 // todo: move these variables into non global space?
 void initializeResources()
 {
-  Screen::spriteSheet = std::make_unique<SpriteSheet>(iconsBitmap, 256, 256, 8);
+  Screen::icons = std::make_unique<SpriteSheet>(iconsheetBitmap, 256, 256, 8);
+  Screen::tiles = std::make_unique<SpriteSheet>(tilesheetBitmap, 256, 112, 16);
 
   Tile::tiles[Tile::grass] = new GrassTile(Tile::grass);
   Tile::tiles[Tile::rock] = new RockTile(Tile::rock);

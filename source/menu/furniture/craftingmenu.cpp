@@ -99,13 +99,13 @@ void CraftingMenu::render(Screen& screen, Screen& bottomScreen)
     auto& result = recipe->result;
 
     int xo = 13 * 8;
-    screen.renderTile(xo, 2 * 8, result->getSprite(), result->getColor(), 0);
+    screen.renderIcon(xo, 2 * 8, result->getSprite(), result->getColor(), 0);
     screen.renderText(std::to_string(storedAmount), xo + 8, 2 * 8, Color::get(-1, 555, 555, 555));
 
     for (int i = 0; i < (int)recipe->requirements.size(); i++) {
       const Item& item = recipe->requirements[i];
       int yo = (5 + i) * 8;
-      screen.renderTile(xo, yo, item.getSprite(), item.getColor(), 0);
+      screen.renderIcon(xo, yo, item.getSprite(), item.getColor(), 0);
       int requiredAmount = 1;
 
       if (auto resourceItem = dynamic_cast<const ResourceItem*>(&item)) {

@@ -74,10 +74,10 @@ void Slime::render(Screen& screen)
     col = Color::get(-1, 555, 555, 555);
   }
 
-  screen.renderTile(xo + 0, yo + 0, xt + yt * 32, col, 0);
-  screen.renderTile(xo + 8, yo + 0, xt + 1 + yt * 32, col, 0);
-  screen.renderTile(xo + 0, yo + 8, xt + (yt + 1) * 32, col, 0);
-  screen.renderTile(xo + 8, yo + 8, xt + 1 + (yt + 1) * 32, col, 0);
+  screen.renderIcon(xo + 0, yo + 0, xt + yt * 32, col, 0);
+  screen.renderIcon(xo + 8, yo + 0, xt + 1 + yt * 32, col, 0);
+  screen.renderIcon(xo + 0, yo + 8, xt + (yt + 1) * 32, col, 0);
+  screen.renderIcon(xo + 8, yo + 8, xt + 1 + (yt + 1) * 32, col, 0);
 }
 
 void Slime::touchedBy(Level& level, Entity& entity)

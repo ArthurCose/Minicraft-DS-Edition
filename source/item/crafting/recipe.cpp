@@ -32,7 +32,7 @@ void Recipe::craft(Player& player)
 
 void Recipe::renderInventory(Screen& screen, int x, int y)
 {
-  screen.renderTile(x, y, result->getSprite(), result->getColor(), 0);
+  screen.renderIcon(x, y, result->getSprite(), result->getColor(), 0);
   int textColor = canCraft ? Color::get(-1, 555, 555, 555) : Color::get(-1, 222, 222, 222);
   screen.renderText(result->getName(), x + 8, y, textColor);
 }

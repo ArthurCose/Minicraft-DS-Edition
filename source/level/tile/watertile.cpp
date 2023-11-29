@@ -20,7 +20,6 @@ int WaterTile::getMapColor(Level& level, int x, int y)
 void WaterTile::render(Screen& screen, Level& level, int x, int y)
 {
   wRandom.setSeed((tickCount + (x / 2 - y) * 4311) / 10 * 54687121l + x * 3271612l + y * 3412987161l);
-  int col = Color::get(005, 005, 115, 115);
   int transitionColor1 = Color::get(3, 005, level.dirtColor - 111, level.dirtColor);
   int transitionColor2 = Color::get(3, 005, level.sandColor - 110, level.sandColor);
 
@@ -39,36 +38,32 @@ void WaterTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = wl && l->connectsToSand;
   bool sr = wr && r->connectsToSand;
 
-  int randomInt = wRandom.nextBits(16);
+  int randomInt = wRandom.nextInt(4);
 
-  auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
-    int tile = randomInt & 0b11;
-    randomInt >>= 2;
-    int bits = randomInt & 0b11;
-    randomInt >>= 2;
-
-    screen.renderTile(x, y, tile, col, bits);
+  std::array<uint8_t, 8> colors = {
+    Color::get(005),
+    Color::get(005),
+    Color::get(115),
+    Color::get(115),
   };
 
-  if (!wu && !wl) {
-    renderLiquid(x * 16 + 0, y * 16 + 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 0, (wl ? 14 : 15) + (wu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  screen.renderTile(x * 16, y * 16, 0, colors, randomInt);
 
-  if (!wu && !wr) {
-    renderLiquid(x * 16 + 8, y * 16 + 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 0, (wr ? 16 : 15) + (wu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  if (wu || wl) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 0, (wl ? 14 : 15) + (wu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  }
 
-  if (!wd && !wl) {
-    renderLiquid(x * 16 + 0, y * 16 + 8);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 8, (wl ? 14 : 15) + (wd ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
+  if (wu || wr) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 0, (wr ? 16 : 15) + (wu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  }
 
-  if (!wd && !wr) {
-    renderLiquid(x * 16 + 8, y * 16 + 8);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 8, (wr ? 16 : 15) + (wd ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  if (wd || wl) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 8, (wl ? 14 : 15) + (wd ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (wd || wr) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 8, (wr ? 16 : 15) + (wd ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  }
 }
 
 bool WaterTile::mayPass(Level& level, int x, int y, Entity& e)

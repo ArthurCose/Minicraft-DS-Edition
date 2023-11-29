@@ -20,7 +20,6 @@ int LavaTile::getMapColor(Level& level, int x, int y)
 void LavaTile::render(Screen& screen, Level& level, int x, int y)
 {
   wRandom.setSeed((tickCount + (x / 2 - y) * 4311) / 10 * 54687121l + x * 3271612l + y * 3412987161l);
-  int col = Color::get(500, 500, 520, 550);
   int transitionColor1 = Color::get(3, 500, level.dirtColor - 111, level.dirtColor);
   int transitionColor2 = Color::get(3, 500, level.sandColor - 110, level.sandColor);
 
@@ -39,35 +38,32 @@ void LavaTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = ll && l->connectsToSand;
   bool sr = lr && r->connectsToSand;
 
-  int randomInt = wRandom.nextBits(16);
+  int randomInt = wRandom.nextInt(4);
 
-  auto renderLiquid = [&screen, &randomInt, col](int x, int y) {
-    int tile = randomInt & 0b11;
-    randomInt >>= 2;
-    int bits = randomInt & 0b11;
-    randomInt >>= 2;
-
-    screen.renderTile(x, y, tile, col, bits);
+  std::array<uint8_t, 8> colors = {
+    Color::get(500),
+    Color::get(500),
+    Color::get(520),
+    Color::get(550),
   };
 
-  if (!lu && !ll) {
-    renderLiquid(x * 16 + 0, y * 16 + 0);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 0, (ll ? 14 : 15) + (lu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  screen.renderTile(x * 16, y * 16, 0, colors, randomInt);
 
-  if (!lu && !lr) {
-    renderLiquid(x * 16 + 8, y * 16 + 0);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 0, (lr ? 16 : 15) + (lu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  if (lu || ll) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 0, (ll ? 14 : 15) + (lu ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+  }
 
-  if (!ld && !ll) {
-    renderLiquid(x * 16 + 0, y * 16 + 8);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 8, (ll ? 14 : 15) + (ld ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
-  if (!ld && !lr) {
-    renderLiquid(x * 16 + 8, y * 16 + 8);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 8, (lr ? 16 : 15) + (ld ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  if (lu || lr) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 0, (lr ? 16 : 15) + (lu ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (ld || ll) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 8, (ll ? 14 : 15) + (ld ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
+  }
+
+  if (ld || lr) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 8, (lr ? 16 : 15) + (ld ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+  }
 }
 
 bool LavaTile::mayPass(Level& level, int x, int y, Entity& e)

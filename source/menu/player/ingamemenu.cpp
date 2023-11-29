@@ -167,20 +167,20 @@ void InGameMenu::renderHud(Screen& screen)
 
   for (int i = 0; i < 10; i++) {
     if (i < player->health)
-      screen.renderTile(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 200, 500, 533), 0);
+      screen.renderIcon(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 200, 500, 533), 0);
     else
-      screen.renderTile(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 100, 000, 000), 0);
+      screen.renderIcon(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 100, 000, 000), 0);
 
     if (player->staminaRechargeDelay > 0) {
       if (player->staminaRechargeDelay / 4 % 2 == 0)
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 555, 000, 000), 0);
+        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 555, 000, 000), 0);
       else
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
+        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
     } else {
       if (i < player->stamina)
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 220, 550, 553), 0);
+        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 220, 550, 553), 0);
       else
-        screen.renderTile(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
+        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
     }
   }
 }
@@ -215,7 +215,7 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
 
     auto& item = *items[index];
 
-    bottomScreen.renderTile(x, HOTBAR_Y, item.getSprite(), item.getColor(), 0);
+    bottomScreen.renderIcon(x, HOTBAR_Y, item.getSprite(), item.getColor(), 0);
   }
 
   if (activeItem != NULL) {
@@ -225,7 +225,7 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
     int itemNameLeft = (bottomScreen.w - name.size() * 8) / 2 - iconOffset / 2;
     int itemNameTop = bottomScreen.h - 24;
 
-    bottomScreen.renderTile(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
+    bottomScreen.renderIcon(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
     bottomScreen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
 
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
@@ -237,7 +237,7 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
     auto& item = *items[draggedIndex];
     int x = dragX - ITEM_W / 2;
     int y = dragY - ITEM_H / 2;
-    bottomScreen.renderTile(x, y, item.getSprite(), item.getColor(), 0);
+    bottomScreen.renderIcon(x, y, item.getSprite(), item.getColor(), 0);
   }
 }
 

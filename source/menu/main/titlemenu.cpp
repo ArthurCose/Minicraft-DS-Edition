@@ -77,7 +77,7 @@ void TitleMenu::render(Screen& screen, Screen& bottomScreen)
   int yo = 24;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      screen.renderTile(xo + x * 8, yo + y * 8, x + (y + 6) * 32, titleColor, 0);
+      screen.renderIcon(xo + x * 8, yo + y * 8, x + (y + 6) * 32, titleColor, 0);
     }
   }
 

@@ -19,11 +19,16 @@ int OreTile::getMapColor(Level& level, int x, int y)
 
 void OreTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int color = (Resource::resources[toDrop]->color & 0xffffff00) + Color::get(level.dirtColor);
-  screen.renderTile(x * 16 + 0, y * 16 + 0, 17 + 1 * 32, color, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 0, 18 + 1 * 32, color, 0);
-  screen.renderTile(x * 16 + 0, y * 16 + 8, 17 + 2 * 32, color, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 8, 18 + 2 * 32, color, 0);
+  int resourceColor = Resource::resources[toDrop]->color;
+
+  std::array<uint8_t, 8> colors = {
+    Color::get(level.dirtColor),
+    (uint8_t)(resourceColor >> 8),
+    (uint8_t)(resourceColor >> 16),
+    (uint8_t)(resourceColor >> 24),
+  };
+
+  screen.renderTile(x * 16, y * 16, 6 * 16 + 5, colors, 0);
 }
 
 bool OreTile::mayPass(Level& level, int x, int y, Entity& e)

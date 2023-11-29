@@ -25,20 +25,29 @@ void WheatTile::tick(Level& level, int xt, int yt)
 void WheatTile::render(Screen& screen, Level& level, int x, int y)
 {
   int age = level.getData(x, y);
-  int col = Color::get(level.dirtColor - 121, level.dirtColor - 11, level.dirtColor, 50);
+
+  std::array<uint8_t, 8> colors = {
+    Color::get(level.dirtColor - 121),
+    Color::get(level.dirtColor - 11),
+    Color::get(level.dirtColor),
+    Color::get(50),
+  };
+
   int icon = age / 10;
+
   if (icon >= 3) {
-    col = Color::get(level.dirtColor - 121, level.dirtColor - 11, 50 + (icon) * 100, 40 + (icon - 3) * 2 * 100);
+    colors[2] = Color::get(50 + (icon) * 100);
+    colors[3] = Color::get(40 + (icon - 3) * 2 * 100);
+
     if (age == 50) {
-      col = Color::get(0, 0, 50 + (icon) * 100, 40 + (icon - 3) * 2 * 100);
+      colors[0] = 0;
+      colors[1] = 0;
     }
+
     icon = 3;
   }
 
-  screen.renderTile(x * 16 + 0, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
-  screen.renderTile(x * 16 + 8, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
-  screen.renderTile(x * 16 + 0, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
-  screen.renderTile(x * 16 + 8, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
+  screen.renderTile(x * 16, y * 16, 6 * 16 + 8 + icon, colors, 0);
 }
 
 bool WheatTile::interact(Level& level, int xt, int yt, Player& player, Item& item, int attackDir)
@@ -65,7 +74,6 @@ void WheatTile::steppedOn(Level& level, int xt, int yt, Entity& entity)
 
 void WheatTile::hurt(Level& level, int x, int y, Mob& source, int dmg, int attackDir)
 {
-
   harvest(level, x, y);
 }
 

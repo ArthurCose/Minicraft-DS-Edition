@@ -22,14 +22,4 @@ public:
   const glImage* tileGlImage(int tile) {
     return &tiles[tile];
   }
-
-  int resolvePixelColorIndex(int x, int y, int tile) {
-    int tileX = tile % 32;
-    int tileY = tile / 32;
-    int tileOffset = tileX * 8 + tileY * 8 * w;
-
-    int bitmapIndex = y * w + x + tileOffset;
-
-    return bitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
-  }
 };

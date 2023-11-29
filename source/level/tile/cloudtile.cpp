@@ -15,7 +15,6 @@ int CloudTile::getMapColor(Level& level, int x, int y)
 
 void CloudTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(444, 444, 555, 555);
   int transitionColor = Color::get(333, 444, 555, 20);
 
   bool u = level.getTile(x, y - 1) == Tile::infiniteFall;
@@ -28,36 +27,32 @@ void CloudTile::render(Screen& screen, Level& level, int x, int y)
   bool ur = level.getTile(x + 1, y - 1) == Tile::infiniteFall;
   bool dr = level.getTile(x + 1, y + 1) == Tile::infiniteFall;
 
-  if (!u && !l) {
-    if (!ul)
-      screen.renderTile(x * 16 + 0, y * 16 + 0, 17, col, 0);
-    else
-      screen.renderTile(x * 16 + 0, y * 16 + 0, 7 + 0 * 32, transitionColor, 3);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 0, (l ? 6 : 5) + (u ? 2 : 1) * 32, transitionColor, 3);
+  int offset = (r << 3) | (l << 2) | (d << 1) | u;
 
-  if (!u && !r) {
-    if (!ur)
-      screen.renderTile(x * 16 + 8, y * 16 + 0, 18, col, 0);
-    else
-      screen.renderTile(x * 16 + 8, y * 16 + 0, 8 + 0 * 32, transitionColor, 3);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 0, (r ? 4 : 5) + (u ? 2 : 1) * 32, transitionColor, 3);
+  std::array<uint8_t, 8> colors = {
+    Color::get(333),
+    Color::get(444),
+    Color::get(555),
+    Color::get(20),
+  };
 
-  if (!d && !l) {
-    if (!dl)
-      screen.renderTile(x * 16 + 0, y * 16 + 8, 20, col, 0);
-    else
-      screen.renderTile(x * 16 + 0, y * 16 + 8, 7 + 1 * 32, transitionColor, 3);
-  } else
-    screen.renderTile(x * 16 + 0, y * 16 + 8, (l ? 6 : 5) + (d ? 0 : 1) * 32, transitionColor, 3);
-  if (!d && !r) {
-    if (!dr)
-      screen.renderTile(x * 16 + 8, y * 16 + 8, 19, col, 0);
-    else
-      screen.renderTile(x * 16 + 8, y * 16 + 8, 8 + 1 * 32, transitionColor, 3);
-  } else
-    screen.renderTile(x * 16 + 8, y * 16 + 8, (r ? 4 : 5) + (d ? 0 : 1) * 32, transitionColor, 3);
+  screen.renderTile(x * 16, y * 16, 4 * 16 + offset, colors, 0);
+
+  if (!u && !l && ul) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 0, 7 + 0 * 32, transitionColor, 3);
+  }
+
+  if (!u && !r && ur) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 0, 8 + 0 * 32, transitionColor, 3);
+  }
+
+  if (!d && !l && dl) {
+    screen.renderIcon(x * 16 + 0, y * 16 + 8, 7 + 1 * 32, transitionColor, 3);
+  }
+
+  if (!d && !r && dr) {
+    screen.renderIcon(x * 16 + 8, y * 16 + 8, 8 + 1 * 32, transitionColor, 3);
+  }
 }
 
 bool CloudTile::mayPass(Level& level, int x, int y, Entity& e)

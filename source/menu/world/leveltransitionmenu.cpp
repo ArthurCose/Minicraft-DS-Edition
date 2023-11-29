@@ -47,15 +47,5 @@ void LevelTransitionMenu::render(Screen& screen, Screen& bottomScreen)
     }
 
     screen.renderBoxFilled(x, y, 8, height * 8, 0);
-
-    // for (int y = 0; y < screen.h / 8; y++) {
-    //   int dd = (y + x % 2 * 2 + x / 3) - time;
-    //   if (dd < 0 && dd > -30) {
-    //     if (dir > 0)
-    //       screen.renderTile(x * 8, y * 8, 0, 0, 0);
-    //     else
-    //       screen.renderTile(x * 8, screen.h - y * 8 - 8, 0, 0, 0);
-    //   }
-    // }
   }
 }

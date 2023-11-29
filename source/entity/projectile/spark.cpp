@@ -62,8 +62,8 @@ void Spark::render(Screen& screen)
 
   int r = random.nextBits(4);
 
-  screen.renderTile(x - 4, y - 4 - 2, xt + yt * 32, Color::get(-1, 555, 555, 555), r & 0b11);
-  screen.renderTile(x - 4, y - 4 + 2, xt + yt * 32, Color::get(-1, 000, 000, 000), (r >> 2) & 0b11);
+  screen.renderIcon(x - 4, y - 4 - 2, xt + yt * 32, Color::get(-1, 555, 555, 555), r & 0b11);
+  screen.renderIcon(x - 4, y - 4 + 2, xt + yt * 32, Color::get(-1, 000, 000, 000), (r >> 2) & 0b11);
 }
 
 bool Spark::isBlockableBy(Mob& mob)
