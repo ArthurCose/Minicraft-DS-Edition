@@ -22,6 +22,7 @@ Random::Random(long long int seed)
 void Random::setSeed(long long int seed)
 {
   generator = std::default_random_engine(seed);
+  remainingBits = 0;
 }
 
 inline constexpr auto genMasks() {
