@@ -34,7 +34,7 @@ CFLAGS := -Wall -O3\
     -ffast-math
 
 CFLAGS    += $(INCLUDE) -DARM9
-CXXFLAGS  := $(CFLAGS) -fno-exceptions
+CXXFLAGS  := $(CFLAGS) -fno-exceptions -Wno-psabi
 
 LDFLAGS  = -specs=ds_arm9.specs -Wl,-Map,$(notdir $*.map)
 
