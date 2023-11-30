@@ -125,10 +125,6 @@ void AirWizard::render(Screen& screen)
   }
 
   screen.renderTile(xo, yo, xt + yt * 16, colors, flip);
-  // screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col1, flip1);
-  // screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col1, flip1);
-  // screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col2, flip2);
-  // screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col2, flip2);
 }
 
 void AirWizard::touchedBy(Level& level, Entity& entity)
