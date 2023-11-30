@@ -72,7 +72,7 @@ int main()
     if (lastVblank == vblankCount) {
       swiWaitForVBlank();
     }
-    vblankCount = lastVblank;
+    lastVblank = vblankCount;
 
     if (game.frameSkipEnabled) {
       lostMs = std::clamp(lostMs + game.totalMs - refreshRate, 0, refreshRate * 3);
