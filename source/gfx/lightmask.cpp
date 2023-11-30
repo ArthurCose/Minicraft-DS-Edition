@@ -18,8 +18,8 @@ static inline int nearestPow2(int n)
   return std::pow(2, std::ceil(std::log2(n))) + 1;
 }
 
-static const int MAX_LIGHT_RADIUS = 8 * 8;
 static const int SCALE = 3;
+static const int MAX_LIGHT_RADIUS = 8 * 8 / SCALE;
 static const int TILE_LEN = divCeil(16, SCALE);
 
 static const int dither[16] = {
@@ -42,7 +42,7 @@ static const int dither[16] = {
 };
 
 static inline std::vector<char> precalculateLight(int r) {
-  r /= SCALE;
+  // expects r to be divided by SCALE before being called
 
   int sideLen = r * 2;
   int rSquared = r * r;
@@ -112,12 +112,12 @@ void LightMask::setOffset(int xOffset, int yOffset)
 
 void LightMask::renderLight(int x, int y, int r)
 {
-  r = std::clamp(r, 0, MAX_LIGHT_RADIUS);
-  auto& precalculated = precalculatedLights[r];
-
   x = (x - xOffset) / SCALE;
   y = (y - yOffset) / SCALE;
   r /= SCALE;
+
+  r = std::clamp(r, 0, MAX_LIGHT_RADIUS);
+  auto& precalculated = precalculatedLights[r];
 
   int x0 = x - r;
   int x1 = x + r;
