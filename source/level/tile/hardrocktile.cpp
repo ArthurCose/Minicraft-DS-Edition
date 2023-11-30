@@ -38,13 +38,7 @@ void HardRockTile::render(Screen& screen, Level& level, int x, int y)
 
   int offset = (r << 3) | (l << 2) | (d << 1) | u;
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(001),
-    Color::get(334),
-    Color::get(223),
-    Color::get(445),
-    Color::get(level.dirtColor),
-  };
+  auto colors = Color::getArray<8>({ 001, 334, 223, 445, level.dirtColor });
 
   screen.renderTile(x * 16, y * 16, 3 * 16 + offset, colors, 0);
 

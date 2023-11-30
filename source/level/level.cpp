@@ -169,12 +169,7 @@ void Level::render(Screen& screen, LightMask& lightMask, Player& player)
 void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 {
   if (depth == 1) {
-    std::array<uint8_t, 8> colors = {
-      Color::get(20),
-      Color::get(20),
-      Color::get(121),
-      Color::get(121),
-    };
+    auto colors = Color::getArray<8>({ 20, 20, 121, 121 });
 
     screen.setOffset((xScroll / 4) & 7, (yScroll / 4) & 7);
 

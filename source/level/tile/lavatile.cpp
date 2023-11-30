@@ -40,12 +40,7 @@ void LavaTile::render(Screen& screen, Level& level, int x, int y)
 
   int randomInt = wRandom.nextInt(4);
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(500),
-    Color::get(500),
-    Color::get(520),
-    Color::get(550),
-  };
+  auto colors = Color::getArray<8>({ 500, 500, 520, 550 });
 
   screen.renderTile(x * 16, y * 16, 0, colors, randomInt);
 

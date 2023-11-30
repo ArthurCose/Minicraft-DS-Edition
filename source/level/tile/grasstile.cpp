@@ -20,12 +20,7 @@ int GrassTile::getMapColor(Level& level, int x, int y)
 
 void GrassTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(level.grassColor - 111),
-    Color::get(level.grassColor),
-    Color::get(level.grassColor + 111),
-    Color::get(level.dirtColor),
-  };
+  auto colors = Color::getArray<8>({ level.grassColor - 111, level.grassColor, level.grassColor + 111, level.dirtColor });
 
   bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToGrass;
   bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToGrass;

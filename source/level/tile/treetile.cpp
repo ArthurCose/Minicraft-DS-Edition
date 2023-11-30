@@ -19,14 +19,7 @@ int TreeTile::getMapColor(Level& level, int x, int y)
 
 void TreeTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(10),
-    Color::get(30),
-    Color::get(320),
-    Color::get(430),
-    Color::get(151),
-    Color::get(level.grassColor),
-  };
+  auto colors = Color::getArray<8>({ 10, 30, 320, 430, 151, level.grassColor });
 
   bool u = level.getTile(x, y - 1) == this->id;
   bool l = level.getTile(x - 1, y) == this->id;

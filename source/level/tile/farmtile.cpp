@@ -22,12 +22,7 @@ void FarmTile::tick(Level& level, int xt, int yt)
 
 void FarmTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(level.dirtColor - 121),
-    Color::get(level.dirtColor - 11),
-    Color::get(level.dirtColor),
-    Color::get(level.dirtColor + 111),
-  };
+  auto colors = Color::getArray<8>({ level.dirtColor - 121, level.dirtColor - 11, level.dirtColor, level.dirtColor + 111, });
 
   screen.renderTile(x * 16, y * 16, 6 * 16 + 7, colors, 0);
 }

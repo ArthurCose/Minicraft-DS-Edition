@@ -20,12 +20,7 @@ int CloudCactusTile::getMapColor(Level& level, int x, int y)
 
 void CloudCactusTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(444),
-    Color::get(111),
-    Color::get(333),
-    Color::get(555),
-  };
+  auto colors = Color::getArray<8>({ 444, 111, 333, 555 });
 
   screen.renderTile(x * 16, y * 16, 6 * 16 + 5, colors, 0);
 }

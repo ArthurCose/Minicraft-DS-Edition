@@ -15,12 +15,7 @@ int DirtTile::getMapColor(Level& level, int x, int y)
 
 void DirtTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(level.dirtColor),
-    Color::get(level.dirtColor),
-    Color::get(level.dirtColor - 111),
-    Color::get(level.dirtColor - 111)
-  };
+  auto colors = Color::getArray<8>({ level.dirtColor, level.dirtColor, level.dirtColor - 111, level.dirtColor - 111 });
 
   screen.renderTile(x * 16, y * 16, 0, colors, 0);
 }

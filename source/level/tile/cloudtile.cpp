@@ -29,12 +29,7 @@ void CloudTile::render(Screen& screen, Level& level, int x, int y)
 
   int offset = (r << 3) | (l << 2) | (d << 1) | u;
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(333),
-    Color::get(444),
-    Color::get(555),
-    Color::get(20),
-  };
+  auto colors = Color::getArray<8>({ 333, 444, 555, 20 });
 
   screen.renderTile(x * 16, y * 16, 4 * 16 + offset, colors, 0);
 

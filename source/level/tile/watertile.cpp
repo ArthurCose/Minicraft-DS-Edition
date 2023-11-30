@@ -40,12 +40,7 @@ void WaterTile::render(Screen& screen, Level& level, int x, int y)
 
   int randomInt = wRandom.nextInt(4);
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(005),
-    Color::get(005),
-    Color::get(115),
-    Color::get(115),
-  };
+  auto colors = Color::getArray<8>({ 005, 005, 115, 115 });
 
   screen.renderTile(x * 16, y * 16, 0, colors, randomInt);
 

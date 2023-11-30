@@ -32,12 +32,7 @@ void HoleTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = l && Tile::tiles[level.getTile(x - 1, y)]->connectsToSand;
   bool sr = r && Tile::tiles[level.getTile(x + 1, y)]->connectsToSand;
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(111),
-    Color::get(111),
-    Color::get(110),
-    Color::get(110),
-  };
+  auto colors = Color::getArray<8>({ 111, 111, 110, 110 });
 
   if (!(u && d && l && r)) {
     screen.renderTile(x * 16, y * 16, 0, colors, 0);

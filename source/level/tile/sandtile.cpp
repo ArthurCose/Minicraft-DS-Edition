@@ -17,15 +17,15 @@ int SandTile::getMapColor(Level& level, int x, int y)
 
 void SandTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(level.sandColor - 110),
-    Color::get(level.sandColor),
-    Color::get(level.sandColor - 110),
-    Color::get(level.dirtColor),
-    Color::get(level.sandColor + 2),
-    Color::get(level.sandColor - 110),
-    Color::get(level.sandColor + 110),
-  };
+  auto colors = Color::getArray<8>({
+    level.sandColor - 110,
+    level.sandColor,
+    level.sandColor - 110,
+    level.dirtColor,
+    level.sandColor + 2,
+    level.sandColor - 110,
+    level.sandColor + 110,
+    });
 
   bool u = !Tile::tiles[level.getTile(x, y - 1)]->connectsToSand;
   bool d = !Tile::tiles[level.getTile(x, y + 1)]->connectsToSand;

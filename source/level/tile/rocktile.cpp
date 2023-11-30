@@ -34,13 +34,7 @@ void RockTile::render(Screen& screen, Level& level, int x, int y)
 
   int offset = (r << 3) | (l << 2) | (d << 1) | u;
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(111),
-    Color::get(444),
-    Color::get(333),
-    Color::get(555),
-    Color::get(level.dirtColor),
-  };
+  auto colors = Color::getArray<8>({ 111, 444, 333, 555, level.dirtColor });
 
   screen.renderTile(x * 16, y * 16, 3 * 16 + offset, colors, 0);
 

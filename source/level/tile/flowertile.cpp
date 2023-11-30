@@ -22,13 +22,7 @@ void FlowerTile::render(Screen& screen, Level& level, int x, int y)
   int data = level.getData(x, y);
   int shape = (data / 16) % 2;
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(10),
-    Color::get(level.grassColor),
-    Color::get(level.grassColor + 111),
-    Color::get(555),
-    Color::get(440),
-  };
+  auto colors = Color::getArray<8>({ 10, level.grassColor, level.grassColor + 111, 555, 440 });
 
   screen.renderTile(x * 16, y * 16, 6 * 16 + shape, colors, 0);
 }

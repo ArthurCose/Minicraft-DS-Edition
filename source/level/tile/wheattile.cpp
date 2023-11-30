@@ -26,12 +26,7 @@ void WheatTile::render(Screen& screen, Level& level, int x, int y)
 {
   int age = level.getData(x, y);
 
-  std::array<uint8_t, 8> colors = {
-    Color::get(level.dirtColor - 121),
-    Color::get(level.dirtColor - 11),
-    Color::get(level.dirtColor),
-    Color::get(50),
-  };
+  auto colors = Color::getArray<8>({ level.dirtColor - 121, level.dirtColor - 11, level.dirtColor, 50 });
 
   int icon = age / 10;
 

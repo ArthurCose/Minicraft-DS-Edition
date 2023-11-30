@@ -19,12 +19,7 @@ int CactusTile::getMapColor(Level& level, int x, int y)
 
 void CactusTile::render(Screen& screen, Level& level, int x, int y)
 {
-  std::array<uint8_t, 8> colors = {
-    Color::get(20),
-    Color::get(40),
-    Color::get(50),
-    Color::get(level.sandColor),
-  };
+  auto colors = Color::getArray<8>({ 20, 40, 50, level.sandColor });
 
   screen.renderTile(x * 16, y * 16, 6 * 16 + 2, colors, 0);
 }
