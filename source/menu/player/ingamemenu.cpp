@@ -194,6 +194,32 @@ void InGameMenu::clearOld(Screen& screen) {
     lastDragX = dragX;
     lastDragY = dragY;
   }
+
+  // clear active item text
+  auto activeItem = player->getActiveItem();
+
+  if (previousActiveItem != nullptr && previousActiveItem != activeItem) {
+    int x = calculateActiveItemNameX(*previousActiveItem);
+    int y = ACTIVE_ITEM_NAME_TOP;
+
+    // clear text
+    clearBox(screen, x, y, previousActiveItem->getName().size() * 8, 8);
+
+    // clear icon
+    clearBox(screen, x + ACTIVE_ITEM_ICON_OFFSET, y, 8, 8);
+  }
+
+  // clear active item count
+  int activeItemCount = -1;
+
+  if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
+    activeItemCount = resourceItem->count;
+  }
+
+  if (previousActiveItemCount != -1 && previousActiveItemCount != activeItemCount) {
+    int width = (int)std::log10(std::max(previousActiveItemCount, 1)) * 8;
+    clearBox(screen, (screen.w - width) / 2, ACTIVE_ITEM_COUNT_TOP, width, 8);
+  }
 }
 
 void InGameMenu::renderHud(Screen& screen)
@@ -256,18 +282,26 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   }
 
   if (activeItem != NULL) {
-    auto name = activeItem->getName();
+    if (justOpened || activeItem != previousActiveItem) {
+      auto name = activeItem->getName();
+      int itemNameLeft = calculateActiveItemNameX(*activeItem);
 
-    int itemNameLeft = (bottomScreen.w - name.size() * 8) / 2 - ACTIVE_ITEM_ICON_OFFSET / 2;
-
-    bottomScreen.renderBoxFilled(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, 8, 8, CLEAR_COLOR);
-    bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
-    bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(5, 555, 555, 555));
+      bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
+      bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(-1, 555, 555, 555));
+    }
 
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP, Color::get(5, 222, 222, 222));
+      if (previousActiveItemCount != resourceItem->count) {
+        bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP, Color::get(-1, 222, 222, 222));
+      }
+
+      previousActiveItemCount = resourceItem->count;
+    } else {
+      previousActiveItemCount = -1;
     }
   }
+
+  previousActiveItem = activeItem;
 
   // draw dragged item
   if (hoveredIndex == -1 && draggedIndex != -1 && (uint)draggedIndex < items.size()) {
