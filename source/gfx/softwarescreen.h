@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include "screen.h"
-#include "icons.h"
 
 class SoftwareScreen : public Screen
 {
