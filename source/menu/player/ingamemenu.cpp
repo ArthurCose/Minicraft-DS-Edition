@@ -9,6 +9,16 @@ static const int ITEM_H = 8;
 static const int ITEM_SPACING = 4;
 static const int ROTATE_CHAR_MARGIN = 8;
 static const int ROTATE_BUTTON_W = ROTATE_CHAR_MARGIN * 2 + 8;
+static const int MAP_LEFT = 64;
+static const int MAP_TOP = 32;
+static const int ACTIVE_ITEM_ICON_OFFSET = -12;
+static const int ACTIVE_ITEM_NAME_TOP = SCREEN_HEIGHT - 24;
+static const int ACTIVE_ITEM_COUNT_TOP = ACTIVE_ITEM_NAME_TOP + 12;
+static const int CLEAR_COLOR = Color::get(5);
+
+static inline int calculateActiveItemNameX(Item& item) {
+  return (SCREEN_WIDTH - item.getName().size() * 8) / 2 - ACTIVE_ITEM_ICON_OFFSET / 2;
+}
 
 static inline int calculateItemHotbarX(int i) {
   return ROTATE_BUTTON_W + i * (ITEM_W + ITEM_SPACING * 2) + ITEM_SPACING;
@@ -59,6 +69,9 @@ void InGameMenu::tick(Game& game)
   handleItemDragging(game);
   handleTouchButtons(game);
   clampHotbar(game);
+
+  levelChanged = game.currentLevel != lastLevel;
+  lastLevel = game.currentLevel;
 }
 
 void InGameMenu::handleTouchButtons(Game& game) {
@@ -151,13 +164,36 @@ void InGameMenu::clampHotbar(Game& game) {
   previouslyHoldingItem = player.holdingItem();
 }
 
+void InGameMenu::resume(Game& game)
+{
+  justOpened = true;
+}
+
 void InGameMenu::render(Screen& screen, Screen& bottomScreen)
 {
-  bottomScreen.clear(Color::get(5));
+  clearOld(bottomScreen);
 
   renderHud(screen);
   renderMap(bottomScreen);
   renderInventory(bottomScreen);
+
+  justOpened = false;
+}
+
+void InGameMenu::clearOld(Screen& screen) {
+  if (justOpened) {
+    screen.clear(CLEAR_COLOR);
+    return;
+  }
+
+  // erase previous dragged item
+  if (previouslyDragging) {
+    int x = lastDragX - ITEM_W / 2;
+    int y = lastDragY - ITEM_H / 2;
+    clearBox(screen, x, y, ITEM_W, ITEM_H);
+    lastDragX = dragX;
+    lastDragY = dragY;
+  }
 }
 
 void InGameMenu::renderHud(Screen& screen)
@@ -198,16 +234,17 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
 
   for (int i = 0; i < hotbarLen; i++) {
     int index = startIndex + i;
+    int x = calculateItemHotbarX(i);
+
+    bottomScreen.renderBoxFilled(x, HOTBAR_Y, ITEM_W, ITEM_H, CLEAR_COLOR);
 
     if (index >= itemCount) {
-      break;
+      continue;
     }
 
     if (index == draggedIndex && hoveredIndex != draggedIndex) {
       continue;
     }
-
-    int x = calculateItemHotbarX(i);
 
     if (activeItem != NULL && player->getSelectedItemIndex() == index) {
       bottomScreen.renderBox(x, HOTBAR_Y, ITEM_W, ITEM_H, Color::get(444));
@@ -221,59 +258,115 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   if (activeItem != NULL) {
     auto name = activeItem->getName();
 
-    int iconOffset = -12;
-    int itemNameLeft = (bottomScreen.w - name.size() * 8) / 2 - iconOffset / 2;
-    int itemNameTop = bottomScreen.h - 24;
+    int itemNameLeft = (bottomScreen.w - name.size() * 8) / 2 - ACTIVE_ITEM_ICON_OFFSET / 2;
 
-    bottomScreen.renderIcon(itemNameLeft + iconOffset, itemNameTop, activeItem->getSprite(), activeItem->getColor(), 0);
-    bottomScreen.renderText(name, itemNameLeft, itemNameTop, Color::get(-1, 555, 555, 555));
+    bottomScreen.renderBoxFilled(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, 8, 8, CLEAR_COLOR);
+    bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
+    bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(5, 555, 555, 555));
 
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, itemNameTop + 12, Color::get(-1, 222, 222, 222));
+      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP, Color::get(5, 222, 222, 222));
     }
   }
 
+  // draw dragged item
   if (hoveredIndex == -1 && draggedIndex != -1 && (uint)draggedIndex < items.size()) {
     auto& item = *items[draggedIndex];
     int x = dragX - ITEM_W / 2;
     int y = dragY - ITEM_H / 2;
     bottomScreen.renderIcon(x, y, item.getSprite(), item.getColor(), 0);
   }
+
+  previouslyDragging = draggedIndex != -1;
+  lastDragX = dragX;
+  lastDragY = dragY;
 }
 
 void InGameMenu::renderMap(Screen& screen)
 {
-  int mapLeft = 64;
-  int mapTop = 32;
   int levelSize = 128;
 
-  if (auto sscreen = dynamic_cast<SoftwareScreen*>(&screen)) {
-    DC_FlushRange(&(*map)[0], map->size());
+  auto& map = *this->map;
 
-    for (int y = 0; y < levelSize; y++) {
-      int channel = y % 4;
+  int playerMapX = player->x >> 4;
+  int playerMapY = player->y >> 4;
 
-      while (dmaBusy(channel)) {
-        // wait for channel
+  if (levelChanged || justOpened) {
+    if (auto sscreen = dynamic_cast<SoftwareScreen*>(&screen)) {
+      DC_FlushRange(&map[0], map.size());
+
+      for (int y = 0; y < levelSize; y++) {
+        int channel = y % 4;
+
+        while (dmaBusy(channel)) {
+          // wait for channel
+        }
+
+        dmaCopyWordsAsynch(
+          channel,
+          &map[y * levelSize],
+          &sscreen->pixels[(y + MAP_TOP) * screen.w + MAP_LEFT],
+          levelSize);
       }
-
-      dmaCopyWordsAsynch(
-        channel,
-        &(*map)[y * levelSize],
-        &sscreen->pixels[(y + mapTop) * screen.w + mapLeft],
-        levelSize);
+    } else {
+      for (int y = 0; y < levelSize; y++) {
+        for (int x = 0; x < levelSize; x++) {
+          screen.renderPixel(MAP_LEFT + x, MAP_TOP + y, map[y * levelSize + x]);
+        }
+      }
     }
   } else {
-    for (int y = 0; y < levelSize; y++) {
-      for (int x = 0; x < levelSize; x++) {
-        screen.renderPixel(mapLeft + x, mapTop + y, map->at(y * levelSize + x));
+    int width = 24;
+    int left = playerMapX - width / 2;
+    int top = playerMapY - 19;
+    int bottom = playerMapY + 9;
+
+    int height = bottom - top;
+
+    clearBox(screen, MAP_LEFT + left, MAP_TOP + top, width, height);
+  }
+
+  screen.setOffset(
+    player->x - MAP_LEFT - playerMapX,
+    player->y - MAP_TOP - playerMapY
+  );
+  player->render(screen);
+  screen.setOffset(0, 0);
+}
+
+void InGameMenu::clearBox(Screen& screen, int left, int top, int w, int h)
+{
+  auto& map = *this->map;
+
+  int right = std::clamp(left + w, 0, screen.w);
+  int bottom = std::clamp(top + h, 0, screen.h);
+  left = std::clamp(left, 0, screen.w);
+  top = std::clamp(top, 0, screen.h);
+
+  int levelSize = 128;
+  int mapX0 = std::clamp(left - MAP_LEFT, 0, levelSize);
+  int mapX1 = std::clamp(right - MAP_LEFT, 0, levelSize);
+  int mapY0 = std::clamp(top - MAP_TOP, 0, levelSize);
+  int mapY1 = std::clamp(bottom - MAP_TOP, 0, levelSize);
+
+  if (left < mapX0 || right > mapX1 || top < mapY0 || bottom > mapY1) {
+    // no need to erase with the background color if this range is entirely within the map
+    // the next loop will redraw the map
+
+    for (int y = top; y < bottom; y++) {
+      for (int x = left; x < right; x++) {
+        screen.renderPixel(x, y, CLEAR_COLOR);
       }
     }
   }
 
-  screen.setOffset(
-    player->x - mapLeft - (player->x >> 4),
-    player->y - mapTop - (player->y >> 4));
-  player->render(screen);
-  screen.setOffset(0, 0);
+  if (!levelChanged) {
+    // no need to render the map if the level changes, as the entire map will be redrawn in that case
+
+    for (int y = mapY0; y < mapY1; y++) {
+      for (int x = mapX0; x < mapX1; x++) {
+        screen.renderPixel(MAP_LEFT + x, MAP_TOP + y, map[y * levelSize + x]);
+      }
+    }
+  }
 }

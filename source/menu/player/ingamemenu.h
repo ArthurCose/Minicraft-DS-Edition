@@ -9,6 +9,7 @@ public:
   InGameMenu(std::shared_ptr<Player> player, std::shared_ptr<std::vector<unsigned char>> map);
 
   void tick(Game& game) override;
+  void resume(Game& game) override;
   void render(Screen& screen, Screen& bottomScreen) override;
 
 private:
@@ -22,10 +23,20 @@ private:
   bool previouslyHoldingItem;
   bool settingHeld;
 
+  // used for rendering
+  int lastDragX;
+  int lastDragY;
+  bool previouslyDragging = -1;
+  int lastLevel = -1;
+  bool levelChanged = false;
+  bool justOpened = true;
+
   void handleItemDragging(Game& game);
   void handleTouchButtons(Game& game);
   void clampHotbar(Game& game);
+  void clearOld(Screen& bottomScreen);
   void renderHud(Screen& screen);
   void renderInventory(Screen& bottomScreen);
   void renderMap(Screen& bottomScreen);
+  void clearBox(Screen& screen, int x, int y, int w, int h);
 };

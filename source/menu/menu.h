@@ -16,7 +16,7 @@ public:
   bool blocksGameTick = true;
 
   virtual void tick(Game& game) {};
-
+  virtual void resume(Game& game) {};
   virtual void render(Screen& screen, Screen& bottomScreen) {};
 
   template <class T,

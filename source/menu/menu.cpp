@@ -8,4 +8,5 @@ void Menu::setParent(std::unique_ptr<Menu> menu)
 void Menu::close(Game& game)
 {
   game.setMenu(std::move(parent));
+  game.menu->resume(game);
 }
