@@ -34,6 +34,16 @@ void GrassTile::render(Screen& screen, Level& level, int x, int y)
 
 void GrassTile::tick(Level& level, int xt, int yt)
 {
+  if (
+    level.getTile(xt - 1, yt) != Tile::dirt &&
+    level.getTile(xt + 1, yt) != Tile::dirt &&
+    level.getTile(xt, yt - 1) != Tile::dirt &&
+    level.getTile(xt, yt + 1) != Tile::dirt
+    ) {
+    // check for dirt tiles as random number gen is expensive
+    return;
+  }
+
   if (random.nextInt(40) != 0)
     return;
 

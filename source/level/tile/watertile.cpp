@@ -68,6 +68,16 @@ bool WaterTile::mayPass(Level& level, int x, int y, Entity& e)
 
 void WaterTile::tick(Level& level, int xt, int yt)
 {
+  if (
+    level.getTile(xt - 1, yt) != Tile::hole &&
+    level.getTile(xt + 1, yt) != Tile::hole &&
+    level.getTile(xt, yt - 1) != Tile::hole &&
+    level.getTile(xt, yt + 1) != Tile::hole
+    ) {
+    // check for hole tiles as random number gen is expensive
+    return;
+  }
+
   int xn = xt;
   int yn = yt;
 
