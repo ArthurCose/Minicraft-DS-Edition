@@ -17,6 +17,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
   - Touchscreen can be used for player inventory management
 - Active item name moved to the bottom screen
 - Lighting is lower resolution (1/3)
+- Mobs 48+ tiles away will despawn
 
 ## Internal Differences
 
