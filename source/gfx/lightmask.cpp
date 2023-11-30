@@ -41,14 +41,11 @@ static const int dither[16] = {
     5,
 };
 
-static inline std::vector<uint16_t> precalculateLight(int r) {
+static constexpr void precalculateLight(int r, uint16_t* precalculated) {
   // expects r to be divided by SCALE before being called
 
   int sideLen = r * 2;
   int rSquared = r * r;
-
-  std::vector<uint16_t> precalculated;
-  precalculated.resize(sideLen * sideLen, 0);
 
   for (int y = 0; y < sideLen; y++) {
     int yd = y - r;
@@ -66,9 +63,43 @@ static inline std::vector<uint16_t> precalculateLight(int r) {
       }
     }
   }
-
-  return precalculated;
 }
+
+static constexpr size_t precalculatedLightOffset(int r) {
+  size_t size = 0;
+
+  for (int i = 1; i < r; i++) {
+    size_t sideLen = i + i;
+    size += sideLen * sideLen;
+  }
+
+  return size;
+}
+
+static const int PRECALCULATED_LIGHTS_SIZE = precalculatedLightOffset(MAX_LIGHT_RADIUS + 1);
+
+static constexpr std::array<uint16_t, PRECALCULATED_LIGHTS_SIZE> precalculateLights() {
+  std::array<uint16_t, PRECALCULATED_LIGHTS_SIZE> lights = {};
+
+  for (int i = 0; i <= MAX_LIGHT_RADIUS; i++) {
+    precalculateLight(i, &lights[precalculatedLightOffset(i)]);
+  }
+
+  return lights;
+}
+
+static constexpr std::array<size_t, MAX_LIGHT_RADIUS> precalculateLightOffsets() {
+  std::array<size_t, MAX_LIGHT_RADIUS> offsets = {};
+
+  for (int i = 0; i < MAX_LIGHT_RADIUS; i++) {
+    offsets[i] = precalculatedLightOffset(i + 1);
+  }
+
+  return offsets;
+}
+
+static const std::array<uint16_t, PRECALCULATED_LIGHTS_SIZE> PRECALCULATED_LIGHTS = precalculateLights();
+static const std::array<size_t, MAX_LIGHT_RADIUS> PRECALCULATED_LIGHT_OFFSETS = precalculateLightOffsets();
 
 LightMask::LightMask(Screen& screen)
   : w(screen.w), h(screen.h),
@@ -76,10 +107,6 @@ LightMask::LightMask(Screen& screen)
   brightnessH(divCeil(h, SCALE))
 {
   brightness.resize(brightnessW * brightnessH, 0);
-
-  for (int i = 0; i <= MAX_LIGHT_RADIUS; i++) {
-    precalculatedLights.push_back(precalculateLight(i));
-  }
 
   int textureW = nearestPow2(brightnessW);
   int textureH = nearestPow2(brightnessH);
@@ -116,8 +143,8 @@ void LightMask::renderLight(int x, int y, int r)
   y = (y - yOffset) / SCALE;
   r /= SCALE;
 
-  r = std::clamp(r, 0, MAX_LIGHT_RADIUS);
-  auto& precalculated = precalculatedLights[r];
+  r = std::clamp(r, 1, MAX_LIGHT_RADIUS);
+  auto lightOffset = PRECALCULATED_LIGHT_OFFSETS[r - 1];
 
   int x0 = x - r;
   int x1 = x + r;
@@ -136,7 +163,7 @@ void LightMask::renderLight(int x, int y, int r)
   for (int yy = y0; yy < y1; yy++) {
     for (int xx = x0; xx < x1; xx++) {
       size_t pIndex = (xx + pxOffset) + (yy + pyOffset) * sideLen;
-      int br = precalculated[pIndex];
+      int br = PRECALCULATED_LIGHTS[pIndex + lightOffset];
 
       size_t index = xx + yy * brightnessW;
 

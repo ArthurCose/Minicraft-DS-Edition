@@ -20,7 +20,6 @@ public:
 
 private:
   std::vector<uint16_t> brightness;
-  std::vector<std::vector<uint16_t>> precalculatedLights;
   const int brightnessW, brightnessH;
   int xOffset = 0;
   int yOffset = 0;
