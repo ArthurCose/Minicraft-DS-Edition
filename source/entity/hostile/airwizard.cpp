@@ -92,50 +92,43 @@ void AirWizard::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 
 void AirWizard::render(Screen& screen)
 {
-  int xt = 8;
-  int yt = 14;
+  int xt = 5;
+  int yt = 7;
 
-  int flip1 = (walkDist >> 3) & 1;
-  int flip2 = (walkDist >> 3) & 1;
+  int flip = (walkDist >> 3) & 1;
 
   if (dir == 1) {
-    xt += 2;
-  }
-  if (dir > 1) {
+    xt += 1;
+  } else if (dir > 1) {
+    const int SIDE_ANIMATION[4] = { 0, 1, 0, 2 };
 
-    flip1 = 0;
-    flip2 = ((walkDist >> 4) & 1);
-    if (dir == 2) {
-      flip1 = 1;
-    }
-    xt += 4 + ((walkDist >> 3) & 1) * 2;
+    xt += 2 + SIDE_ANIMATION[(walkDist >> 3) % 4];
+    flip = dir == 2;
   }
 
   int xo = x - 8;
   int yo = y - 11;
 
-  int col1 = Color::get(-1, 100, 500, 555);
-  int col2 = Color::get(-1, 100, 500, 532);
+  auto colors = Color::getArray<8>({ -1, 100, 500, 532, 555 });
+
   if (health < 200) {
     if (tickTime / 3 % 2 == 0) {
-      col1 = Color::get(-1, 500, 100, 555);
-      col2 = Color::get(-1, 500, 100, 532);
+      colors = Color::getArray<8>({ -1, 500, 100, 532, 555 });
     }
   } else if (health < 1000) {
     if (tickTime / 5 % 4 == 0) {
-      col1 = Color::get(-1, 500, 100, 555);
-      col2 = Color::get(-1, 500, 100, 532);
+      colors = Color::getArray<8>({ -1, 500, 100, 532, 555 });
     }
   }
   if (hurtTime > 0) {
-    col1 = Color::get(-1, 555, 555, 555);
-    col2 = Color::get(-1, 555, 555, 555);
+    colors = Color::getArray<8>({ -1, 555, 555, 555, 555 });
   }
 
-  screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col1, flip1);
-  screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col1, flip1);
-  screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col2, flip2);
-  screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col2, flip2);
+  screen.renderTile(xo, yo, xt + yt * 16, colors, flip);
+  // screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col1, flip1);
+  // screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col1, flip1);
+  // screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col2, flip2);
+  // screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col2, flip2);
 }
 
 void AirWizard::touchedBy(Level& level, Entity& entity)

@@ -39,10 +39,9 @@ void Furniture::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 
 void Furniture::render(Screen& screen)
 {
-  screen.renderIcon(x - 8, y - 8 - 4, sprite * 2 + 8 * 32, col, 0);
-  screen.renderIcon(x - 0, y - 8 - 4, sprite * 2 + 8 * 32 + 1, col, 0);
-  screen.renderIcon(x - 8, y - 0 - 4, sprite * 2 + 8 * 32 + 32, col, 0);
-  screen.renderIcon(x - 0, y - 0 - 4, sprite * 2 + 8 * 32 + 33, col, 0);
+  uint64_t compressedColors = this->col;
+  auto colors = *(std::array<uint8_t, 8>*)(&compressedColors);
+  screen.renderTile(x - 8, y - 12, 8 * 16 + 5 + sprite, colors, 0);
 }
 
 bool Furniture::blocks(Entity& e)

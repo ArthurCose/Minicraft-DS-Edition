@@ -1,6 +1,7 @@
 #include "softwarescreen.h"
 
 #include <nds.h>
+#include <algorithm>
 #include <cctype>
 #include "color.h"
 #include "iconsheet.h"
@@ -8,7 +9,7 @@
 SoftwareScreen::SoftwareScreen()
   : Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-  pixels = (unsigned char*)aligned_alloc(4, SCREEN_WIDTH * SCREEN_HEIGHT);
+  pixels = (uint8_t*)aligned_alloc(4, SCREEN_WIDTH * SCREEN_HEIGHT);
 }
 
 SoftwareScreen::~SoftwareScreen()
@@ -36,57 +37,64 @@ void SoftwareScreen::clear(int color)
   dmaFillWords(word, pixels, size - 3);
 }
 
-static inline int resolveIconPixelColorIndex(int x, int y, int tile)
+void SoftwareScreen::renderSpriteSheetTile(SpriteSheet& spritesheet, int xp, int yp, int tile, uint8_t* colors, int bits)
 {
-  const int BITMAP_WIDTH = 256;
-
-  int tileX = tile % 32;
-  int tileY = tile / 32;
-  int tileOffset = tileX * 8 + tileY * 8 * BITMAP_WIDTH;
-
-  int bitmapIndex = y * BITMAP_WIDTH + x + tileOffset;
-
-  return iconsheetBitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
-}
-
-void SoftwareScreen::renderIcon(int xp, int yp, int tile, int compressedColors, int bits)
-{
-  xp -= xOffset;
-  yp -= yOffset;
+  const int TILE_W = spritesheet.tileW;
+  const int BITMAP_W = spritesheet.w;
+  const int ROW_TILE_STRIDE = BITMAP_W / TILE_W;
+  const int TILE_X = tile % ROW_TILE_STRIDE;
+  const int TILE_Y = tile / ROW_TILE_STRIDE;
+  const int TILE_OFFSET = TILE_X * TILE_W + TILE_Y * TILE_W * BITMAP_W;
 
   bool mirrorX = (bits & BIT_MIRROR_X) > 0;
   bool mirrorY = (bits & BIT_MIRROR_Y) > 0;
 
-  int colors[5] = {
-      255,
-      (compressedColors >> (0 * 8)) & 255,
-      (compressedColors >> (1 * 8)) & 255,
-      (compressedColors >> (2 * 8)) & 255,
-      (compressedColors >> (3 * 8)) & 255
-  };
+  xp -= xOffset;
+  yp -= yOffset;
 
-  for (int y = 0; y < 8; y++) {
+  int x0 = std::max(std::max(xp, 0) - xp, 0);
+  int y0 = std::max(std::max(yp, 0) - yp, 0);
+  int x1 = std::min(std::min(xp + TILE_W, w) - xp, TILE_W);
+  int y1 = std::min(std::min(yp + TILE_W, h) - yp, TILE_W);
+
+  for (int y = y0; y < y1; y++) {
     int ys = y;
-    if (mirrorY)
-      ys = 7 - y;
-    if (y + yp < 0 || y + yp >= h)
-      continue;
-    for (int x = 0; x < 8; x++) {
-      if (x + xp < 0 || x + xp >= w)
-        continue;
 
+    if (mirrorY) {
+      ys = TILE_W - y - 1;
+    }
+
+    for (int x = x0; x < x1; x++) {
       int xs = x;
-      if (mirrorX)
-        xs = 7 - x;
 
-      int colorIndex = resolveIconPixelColorIndex(xs, ys, tile);
+      if (mirrorX) {
+        xs = TILE_W - x - 1;
+      }
 
-      int col = colors[colorIndex];
+      int bitmapIndex = ys * BITMAP_W + xs + TILE_OFFSET;
+      int colorIndex = spritesheet.bitmap[bitmapIndex / 2] >> (bitmapIndex % 2 * 4) & 15;
 
-      if (col < 255)
+      if (colorIndex == 0) {
+        continue;
+      }
+
+      int col = colors[colorIndex - 1];
+
+      if (col < 255) {
         pixels[(x + xp) + (y + yp) * w] = col;
+      }
     }
   }
+}
+
+void SoftwareScreen::renderIcon(int x, int y, int tile, int compressedColors, int bits)
+{
+  renderSpriteSheetTile(*icons, x, y, tile, (uint8_t*)&compressedColors, bits);
+}
+
+void SoftwareScreen::renderTile(int x, int y, int tile, std::array<uint8_t, 8> colors, int bits)
+{
+  renderSpriteSheetTile(*tiles, x, y, tile, (uint8_t*)&colors, bits);
 }
 
 void SoftwareScreen::renderPixel(int x, int y, int col)

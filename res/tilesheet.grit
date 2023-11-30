@@ -1,3 +1,6 @@
+# set the transparent color
+-gT0
+
 # generate a bitmap instead of a tile set
 -gb
 

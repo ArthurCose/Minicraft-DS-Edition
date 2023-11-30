@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <nds.h>
 
 class Color
@@ -20,5 +21,23 @@ public:
     uint8_t b = d % 10;
 
     return r * 36 + g * 6 + b;
+  }
+
+  template<size_t size>
+  static inline constexpr std::array<uint8_t, size> getArray(std::initializer_list<int> numbers)
+  {
+    std::array<uint8_t, size> result = {};
+    size_t i = 0;
+
+    for (auto& n : numbers) {
+      if (i >= size) {
+        break;
+      }
+
+      result[i] = Color::get(n);
+      i += 1;
+    }
+
+    return result;
   }
 };

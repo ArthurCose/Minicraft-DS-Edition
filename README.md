@@ -39,6 +39,7 @@ Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/lud
 - Menus and entities are organized into folders
 - Spark entities reference owners using an ID to preserve ownership after reloading
 - Sky level has no random tick
+- A secondary sprite sheet with 16x16 tiles is used to reduce sprite count
 
 ## Screenshots
 

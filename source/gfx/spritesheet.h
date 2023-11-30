@@ -12,9 +12,9 @@ class SpriteSheet
 {
 private:
   std::vector<glImage> tiles;
-  const unsigned char* bitmap;
 
 public:
+  const unsigned char* bitmap;
   const int w, h, tileW, textureId;
 
   SpriteSheet(const unsigned char* bitmap, int width, int height, int tileW);

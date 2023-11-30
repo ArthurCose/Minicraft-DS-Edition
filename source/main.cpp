@@ -172,7 +172,7 @@ void initializeSubEngine()
 void initializeResources()
 {
   Screen::icons = std::make_unique<SpriteSheet>(iconsheetBitmap, 256, 256, 8);
-  Screen::tiles = std::make_unique<SpriteSheet>(tilesheetBitmap, 256, 112, 16);
+  Screen::tiles = std::make_unique<SpriteSheet>(tilesheetBitmap, 256, 144, 16);
 
   Tile::tiles[Tile::grass] = new GrassTile(Tile::grass);
   Tile::tiles[Tile::rock] = new RockTile(Tile::rock);

@@ -46,44 +46,35 @@ void Zombie::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
 void Zombie::render(Screen& screen)
 {
   int xt = 0;
-  int yt = 14;
+  int yt = 7;
 
-  int flip1 = (walkDist >> 3) & 1;
-  int flip2 = (walkDist >> 3) & 1;
+  int flip = (walkDist >> 3) & 1;
 
   if (dir == 1) {
-    xt += 2;
-  }
-  if (dir > 1) {
+    xt += 1;
+  } else if (dir > 1) {
+    const int SIDE_ANIMATION[4] = { 0, 1, 0, 2 };
 
-    flip1 = 0;
-    flip2 = ((walkDist >> 4) & 1);
-    if (dir == 2) {
-      flip1 = 1;
-    }
-    xt += 4 + ((walkDist >> 3) & 1) * 2;
+    xt += 2 + SIDE_ANIMATION[(walkDist >> 3) % 4];
+    flip = dir == 2;
   }
 
   int xo = x - 8;
   int yo = y - 11;
-
-  int col = Color::get(-1, 10, 252, 050);
+  auto colors = Color::getArray<8>({ -1, 10, 252, 050 });
 
   if (lvl == 2)
-    col = Color::get(-1, 100, 522, 050);
+    colors = Color::getArray<8>({ -1, 100, 522, 050 });
   if (lvl == 3)
-    col = Color::get(-1, 111, 444, 050);
+    colors = Color::getArray<8>({ -1, 111, 444, 050 });
   if (lvl == 4)
-    col = Color::get(-1, 000, 111, 020);
+    colors = Color::getArray<8>({ -1, 000, 111, 020 });
 
   if (hurtTime > 0) {
-    col = Color::get(-1, 555, 555, 555);
+    colors = Color::getArray<8>({ -1, 555, 555, 555 });
   }
 
-  screen.renderIcon(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
-  screen.renderIcon(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
-  screen.renderIcon(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
-  screen.renderIcon(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
+  screen.renderTile(xo, yo, xt + yt * 16, colors, flip);
 }
 
 void Zombie::touchedBy(Level& level, Entity& entity)
