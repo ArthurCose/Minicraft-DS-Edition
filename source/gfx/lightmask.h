@@ -16,7 +16,6 @@ public:
   void setOffset(int xOffset, int yOffset);
   void renderLight(int x, int y, int r);
   void fillTile(int x, int y);
-  void updateTexture();
   void render(Screen& render);
 
 private:
