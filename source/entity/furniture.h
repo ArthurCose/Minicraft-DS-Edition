@@ -11,7 +11,6 @@ public:
   std::string name;
 
   Furniture(std::string name);
-  Furniture(Furniture& f);
 
   void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
 
