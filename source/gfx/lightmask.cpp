@@ -41,13 +41,13 @@ static const int dither[16] = {
     5,
 };
 
-static inline std::vector<char> precalculateLight(int r) {
+static inline std::vector<uint16_t> precalculateLight(int r) {
   // expects r to be divided by SCALE before being called
 
   int sideLen = r * 2;
   int rSquared = r * r;
 
-  std::vector<char> precalculated;
+  std::vector<uint16_t> precalculated;
   precalculated.resize(sideLen * sideLen, 0);
 
   for (int y = 0; y < sideLen; y++) {
