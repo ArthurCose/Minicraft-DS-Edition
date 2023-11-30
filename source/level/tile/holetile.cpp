@@ -19,7 +19,6 @@ int HoleTile::getMapColor(Level& level, int x, int y)
 
 void HoleTile::render(Screen& screen, Level& level, int x, int y)
 {
-  int col = Color::get(111, 111, 110, 110);
   int transitionColor1 = Color::get(3, 111, level.dirtColor - 111, level.dirtColor);
   int transitionColor2 = Color::get(3, 111, level.sandColor - 110, level.sandColor);
 
