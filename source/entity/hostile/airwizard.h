@@ -14,6 +14,7 @@ private:
 public:
   AirWizard();
 
+  bool canDespawn(Level& level) override { return false; }
   void tick(Game& game, Level& level, std::shared_ptr<Entity> self) override;
   void render(Screen& screen) override;
 

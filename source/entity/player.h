@@ -24,6 +24,7 @@ public:
   void touchItem(ItemEntity& itemEntity) override;
   bool findStartPos(Level& level);
   bool payStamina(int cost);
+  bool canDespawn(Level& level) override { return false; }
   bool canSwim() override;
   int getLightRadius() override;
   void setSelectedItemIndex(int index);

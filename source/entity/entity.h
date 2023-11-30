@@ -49,6 +49,7 @@ public:
   virtual void touchedBy(Level& level, Entity& entity) {};
   virtual bool isBlockableBy(Mob& mob) { return true; }
   virtual void touchItem(ItemEntity& itemEntity) {}
+  virtual bool canDespawn(Level& level) { return false; }
   virtual bool canSwim() { return false; }
   virtual bool use(Game& game, Level& level, Player& player, int attackDir) { return false; }
   virtual int getLightRadius() { return 0; }

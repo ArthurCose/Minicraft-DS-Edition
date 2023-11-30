@@ -4,6 +4,11 @@
 #include "../level/level.h"
 #include "particle/textparticle.h"
 
+constexpr int SAFE_DIST = 9 * 16;
+constexpr int SAFE_DIST_SQUARED = SAFE_DIST * SAFE_DIST;
+constexpr int DESPAWN_DIST = 48 * 16;
+constexpr int DESPAWN_DIST_SQUARED = DESPAWN_DIST * DESPAWN_DIST;
+
 Mob::Mob()
   : Entity()
 {
@@ -24,6 +29,10 @@ void Mob::tick(Game& game, Level& level, std::shared_ptr<Entity> self)
   }
   if (hurtTime > 0)
     hurtTime--;
+
+  if (!removed && canDespawn(level)) {
+    remove();
+  }
 }
 
 void Mob::die(Game& game, Level& level)
@@ -132,19 +141,25 @@ bool Mob::findStartPos(Level& level)
 {
   int x = Random::globalRandom.nextInt(level.w);
   int y = Random::globalRandom.nextInt(level.h);
+
   int xx = x * 16 + 8;
   int yy = y * 16 + 8;
 
-  if (level.player != NULL) {
+  if (level.player != nullptr) {
     int xd = level.player->x - xx;
     int yd = level.player->y - yy;
-    if (xd * xd + yd * yd < 144 * 144)
+    int distSquared = xd * xd + yd * yd;
+
+    if (distSquared < SAFE_DIST_SQUARED || distSquared > DESPAWN_DIST_SQUARED) {
       return false;
+    }
   }
 
   int r = level.monsterDensity * 16;
-  if (level.countEntities(xx - r, yy - r, xx + r, yy + r) > 0)
+
+  if (level.countEntities(xx - r, yy - r, xx + r, yy + r) > 0) {
     return false;
+  }
 
   if (Tile::tiles[level.getTile(x, y)]->mayPass(level, x, y, *this)) {
     this->x = xx;
@@ -153,6 +168,18 @@ bool Mob::findStartPos(Level& level)
   }
 
   return false;
+}
+
+bool Mob::canDespawn(Level& level)
+{
+  if (!level.player) {
+    return false;
+  }
+
+  int xd = level.player->x - x;
+  int yd = level.player->y - y;
+
+  return xd * xd + yd * yd > DESPAWN_DIST_SQUARED;
 }
 
 void Mob::serializeData(std::ostream& s)
