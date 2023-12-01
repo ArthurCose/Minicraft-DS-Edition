@@ -283,19 +283,14 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
   }
 
   if (activeItem != NULL) {
-    if (justOpened || activeItem != previousActiveItem) {
-      auto name = activeItem->getName();
-      int itemNameLeft = calculateActiveItemNameX(*activeItem);
+    auto name = activeItem->getName();
+    int itemNameLeft = calculateActiveItemNameX(*activeItem);
 
-      bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
-      bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(-1, 555, 555, 555));
-    }
+    bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
+    bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(-1, 555, 555, 555));
 
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-      if (justOpened || previousActiveItemCount != resourceItem->count) {
-        bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP + 4, Color::get(-1, 333, 333, 333));
-      }
-
+      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP + 4, Color::get(-1, 333, 333, 333));
       previousActiveItemCount = resourceItem->count;
     } else {
       previousActiveItemCount = -1;
@@ -353,7 +348,7 @@ void InGameMenu::renderMap(Screen& screen)
   } else {
     int width = 24;
     int left = playerMapX - width / 2;
-    int top = playerMapY - 19;
+    int top = playerMapY - 23;
     int bottom = playerMapY + 9;
 
     int height = bottom - top;
