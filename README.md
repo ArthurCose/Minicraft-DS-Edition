@@ -1,6 +1,6 @@
 # Minicraft DS Edition
 
-Minicraft DS Edition is a fan port of [Minicraft](http://ludumdare.com/compo/ludum-dare-22/?action=preview&uid=398) for the Nintendo DS
+Minicraft DS Edition is a fan port of [Minicraft](https://wikipedia.org/wiki/Minicraft) for the Nintendo DS
 
 ## Notable Version Differences
 
