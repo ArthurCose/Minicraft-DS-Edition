@@ -7,9 +7,6 @@
 
 class ToolItem : public Item
 {
-private:
-  Random random;
-
 public:
   static const int MAX_LEVEL = 5;
   static const std::array<std::string_view, ToolItem::MAX_LEVEL> LEVEL_NAMES;

@@ -14,8 +14,9 @@ class LightMask;
 
 class Level
 {
+protected:
+  static constexpr Random& random = Random::globalRandom;
 private:
-  Random random;
   int depth;
 
   void updateMap(int x, int y, int viewDistance);

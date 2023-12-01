@@ -51,10 +51,10 @@ bool ToolItem::canAttack()
 int ToolItem::getAttackDamageBonus(Entity& e)
 {
   if (type == &ToolType::axe) {
-    return (level + 1) * 2 + random.nextInt(4);
+    return (level + 1) * 2 + Random::globalRandom.nextInt(4);
   }
   if (type == &ToolType::sword) {
-    return (level + 1) * 3 + random.nextInt(2 + level * level * 2);
+    return (level + 1) * 3 + Random::globalRandom.nextInt(2 + level * level * 2);
   }
   return 1;
 }

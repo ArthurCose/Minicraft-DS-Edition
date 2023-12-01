@@ -24,8 +24,6 @@
 #include "../../gfx/screen.h"
 #include "../../item/resource/resource.h"
 
-Random Tile::random(time(NULL));
-
 int Tile::tickCount = 0;
 
 Tile* Tile::tiles[256];

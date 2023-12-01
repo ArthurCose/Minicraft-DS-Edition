@@ -18,7 +18,6 @@
 #include "../item/powergloveitem.h"
 
 std::vector<std::optional<std::weak_ptr<Entity>>> Entity::slots;
-Random Entity::random(time(NULL));
 
 Entity::~Entity()
 {

@@ -19,8 +19,7 @@ class Entity : public nbt::Serializable
 private:
   static std::vector<std::optional<std::weak_ptr<Entity>>> slots;
 protected:
-  static Random random;
-
+  static constexpr Random& random = Random::globalRandom;
   bool move2(Level& level, int xa, int ya);
 
 public:

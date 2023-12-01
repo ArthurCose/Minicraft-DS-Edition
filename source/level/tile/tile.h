@@ -13,9 +13,10 @@ class Item;
 
 class Tile
 {
+protected:
+  static constexpr Random& random = Random::globalRandom;
 public:
   static int tickCount;
-  static Random random;
 
   static Tile* tiles[256]; // raw pointers for static addresses
   enum ID
