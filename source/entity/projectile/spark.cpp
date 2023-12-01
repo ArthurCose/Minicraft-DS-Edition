@@ -58,7 +58,7 @@ void Spark::render(Screen& screen)
   }
 
   int r = random.nextBits(4);
-  int xt = r >> 3;
+  int xt = r >> 1;
   int yt = 9;
 
   screen.renderTile(x - 8, y - 8, xt + yt * 16, Color::getArray<8>({ 000, 555 }), r & 1);
