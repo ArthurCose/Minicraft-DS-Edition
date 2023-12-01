@@ -13,7 +13,7 @@ static const int MAP_LEFT = 64;
 static const int MAP_TOP = 32;
 static const int ACTIVE_ITEM_ICON_OFFSET = -12;
 static const int ACTIVE_ITEM_NAME_TOP = SCREEN_HEIGHT - 24;
-static const int ACTIVE_ITEM_COUNT_TOP = ACTIVE_ITEM_NAME_TOP + 12;
+static const int ACTIVE_ITEM_COUNT_TOP = ACTIVE_ITEM_NAME_TOP + 8;
 static const int CLEAR_COLOR = Color::get(5);
 
 static inline int calculateActiveItemNameX(Item& item) {
@@ -203,10 +203,10 @@ void InGameMenu::clearOld(Screen& screen) {
     int y = ACTIVE_ITEM_NAME_TOP;
 
     // clear text
-    clearBox(screen, x, y, previousActiveItem->getName().size() * 8, 8);
+    screen.renderBoxFilled(x, y, previousActiveItem->getName().size() * 8, 8, CLEAR_COLOR);
 
     // clear icon
-    clearBox(screen, x + ACTIVE_ITEM_ICON_OFFSET, y, 8, 8);
+    screen.renderBoxFilled(x + ACTIVE_ITEM_ICON_OFFSET, y, 8, 8, CLEAR_COLOR);
   }
 
   // clear active item count
@@ -217,8 +217,9 @@ void InGameMenu::clearOld(Screen& screen) {
   }
 
   if (previousActiveItemCount != -1 && previousActiveItemCount != activeItemCount) {
-    int width = (int)std::log10(std::max(previousActiveItemCount, 1)) * 8;
-    clearBox(screen, (screen.w - width) / 2, ACTIVE_ITEM_COUNT_TOP, width, 8);
+    int digits = (int)std::log10(std::max(previousActiveItemCount, 1)) + 1;
+    int width = digits * 8;
+    screen.renderBoxFilled((screen.w - width) / 2, ACTIVE_ITEM_COUNT_TOP, width, 8, CLEAR_COLOR);
   }
 }
 
@@ -291,8 +292,8 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
     }
 
     if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-      if (previousActiveItemCount != resourceItem->count) {
-        bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP, Color::get(-1, 222, 222, 222));
+      if (justOpened || previousActiveItemCount != resourceItem->count) {
+        bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP + 4, Color::get(-1, 333, 333, 333));
       }
 
       previousActiveItemCount = resourceItem->count;
