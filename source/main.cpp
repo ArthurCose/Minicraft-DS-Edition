@@ -43,7 +43,6 @@ int main()
   initialize();
 
   Game game;
-  game.debugEnabled = true;
 
   int refreshRate = 1000 / 59.8261;
   int lostMs = 0;
