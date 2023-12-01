@@ -57,7 +57,7 @@ void Spark::render(Screen& screen)
       return;
   }
 
-  int r = random.nextBits(4);
+  int r = random.nextInt(16);
   int xt = r >> 1;
   int yt = 9;
 

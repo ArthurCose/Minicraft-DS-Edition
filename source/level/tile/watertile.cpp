@@ -38,7 +38,7 @@ void WaterTile::render(Screen& screen, Level& level, int x, int y)
   bool sl = wl && l->connectsToSand;
   bool sr = wr && r->connectsToSand;
 
-  int randomInt = wRandom.nextInt(4);
+  int randomInt = wRandom.nextInt() & 0b11;
 
   auto colors = Color::getArray<8>({ 005, 005, 115, 115 });
 
@@ -81,10 +81,10 @@ void WaterTile::tick(Level& level, int xt, int yt)
   int xn = xt;
   int yn = yt;
 
-  if (random.nextBoolean())
-    xn += random.nextBits(1) * 2 - 1;
+  if (random.nextInt(2))
+    xn += random.nextInt(2) * 2 - 1;
   else
-    yn += random.nextBits(1) * 2 - 1;
+    yn += random.nextInt(2) * 2 - 1;
 
   if (level.getTile(xn, yn) == Tile::hole) {
     level.setTile(xn, yn, this->id, 0);

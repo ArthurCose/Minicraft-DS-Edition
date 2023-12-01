@@ -19,9 +19,5 @@ public:
 
 private:
   std::default_random_engine generator;
-  std::uniform_int_distribution<int> uniform_int_distribution;
-  std::uniform_real_distribution<float> uniform_float_distribution;
-  std::normal_distribution<float> gaussian_distribution;
-  int bitStorage = 0;
-  int remainingBits = 0;
+  std::normal_distribution<float> gaussian_distribution = std::normal_distribution<float>(-1, 1);
 };

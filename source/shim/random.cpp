@@ -8,13 +8,11 @@ static std::uniform_real_distribution<> dis(1.0, 2.0);
 Random Random::globalRandom = Random();
 
 Random::Random()
-  : gaussian_distribution(-1, 1)
 {
   generator = std::default_random_engine(time(NULL));
 }
 
 Random::Random(long long int seed)
-  : gaussian_distribution(-1, 1)
 {
   generator = std::default_random_engine(seed);
 }
@@ -22,7 +20,6 @@ Random::Random(long long int seed)
 void Random::setSeed(long long int seed)
 {
   generator = std::default_random_engine(seed);
-  remainingBits = 0;
 }
 
 inline constexpr auto genMasks() {
@@ -39,50 +36,31 @@ inline constexpr auto genMasks() {
   return masks;
 }
 
-int Random::nextBits(int bits)
-{
-  const auto MASKS = genMasks();
-  int result = 0;
-
-  while (bits >= remainingBits) {
-    result <<= remainingBits;
-    result = bitStorage & MASKS[remainingBits];
-    bitStorage = nextInt();
-    remainingBits = 32;
-    bits -= remainingBits;
-  }
-
-  if (bits > 0) {
-    result <<= bits;
-    result = bitStorage & MASKS[bits];
-    bitStorage >>= bits;
-    remainingBits -= bits;
-  }
-
-  return result;
-}
-
 bool Random::nextBoolean()
 {
-  return nextBits(1);
+  return nextInt(2);
 }
 
 int Random::nextInt()
 {
-  return uniform_int_distribution(generator);
+  auto distribution = std::uniform_int_distribution<int>();
+  return distribution(generator);
 }
 
 int Random::nextInt(int max)
 {
-  return uniform_int_distribution(generator) % max;
+  auto distribution = std::uniform_int_distribution<int>(0, max - 1);
+  return distribution(generator);
 }
 
 float Random::nextFloat()
 {
-  return uniform_float_distribution(generator);
+  auto distribution = std::uniform_real_distribution<float>();
+  return distribution(generator);
 }
 
 float Random::nextGaussian()
 {
-  return gaussian_distribution(generator);
+  auto distribution = std::normal_distribution<float>(-1, 1);
+  return distribution(generator);
 }
