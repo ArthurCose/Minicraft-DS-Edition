@@ -118,13 +118,13 @@ void Game::render()
       y += 8;
     };
 
-    int fps = 1000 / totalMs;
+    int fps = 1024 / totalTime;
     int spriteCount = screen.glSpriteCallCount();
 
     display("fps:" + std::to_string(fps));
-    display("total ms:" + std::to_string(totalMs));
-    display("tick ms:" + std::to_string(tickMs));
-    display("render ms:" + std::to_string(renderMs));
+    display("total ms:" + std::to_string(totalTime * 1000 / 1024));
+    display("tick ms:" + std::to_string(tickTime * 1000 / 1024));
+    display("render ms:" + std::to_string(renderTime * 1000 / 1024));
     display("skips:" + std::to_string(skippedFrames));
     display("palettes:" + std::to_string(screen.totalPalettes()));
     display("sprites:" + std::to_string(spriteCount));

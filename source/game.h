@@ -26,9 +26,9 @@ public:
   std::vector<Level> levels;
   int currentLevel = 3;
   int skippedFrames = 0;
-  int tickMs = 0;
-  int renderMs = 0;
-  int totalMs = 0;
+  int tickTime = 0;
+  int renderTime = 0;
+  int totalTime = 0;
   bool frameSkipEnabled = true;
   bool debugEnabled = false;
 

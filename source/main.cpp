@@ -44,7 +44,7 @@ int main()
 
   Game game;
 
-  int refreshRate = 1000 / 59.8261;
+  int targetTime = 1024 / 59.8261;
   int lostMs = 0;
 
   auto start = playtime;
@@ -63,9 +63,9 @@ int main()
     game.screen.flush();
 
     auto end = playtime;
-    game.tickMs = renderStart - tickStart;
-    game.renderMs = end - renderStart;
-    game.totalMs = end - start;
+    game.tickTime = renderStart - tickStart;
+    game.renderTime = end - renderStart;
+    game.totalTime = end - start;
     start = end;
 
     if (lastVblank == vblankCount) {
@@ -74,13 +74,13 @@ int main()
     lastVblank = vblankCount;
 
     if (game.frameSkipEnabled) {
-      lostMs = std::clamp(lostMs + game.totalMs - refreshRate, 0, refreshRate * 3);
+      lostMs = std::clamp(lostMs + game.totalTime - targetTime, 0, targetTime * 3);
 
       game.skippedFrames = 0;
 
-      while (lostMs >= refreshRate) {
+      while (lostMs >= targetTime) {
         game.tick();
-        lostMs -= refreshRate;
+        lostMs -= targetTime;
         game.skippedFrames++;
       }
     } else {
@@ -95,7 +95,7 @@ int main()
 void initialize()
 {
   irqSet(IRQ_VBLANK, incrementVblankCount);
-  timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1000), incrementTime);
+  timerStart(0, ClockDivider_1024, (u16)TIMER_FREQ_1024(1024), incrementTime);
 
   fatInitDefault();
   vramSetBankA(VRAM_A_TEXTURE);
