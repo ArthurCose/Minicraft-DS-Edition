@@ -22,6 +22,7 @@ static std::vector<std::string> controlInstructions = {
     " X to open the inventory",
     " Y to unequip held item",
     " START to pause the game",
+    " SELECT to move items",
     "",
     "Interact with an item in the",
     "inventory to equip it.",
