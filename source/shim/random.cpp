@@ -3,8 +3,6 @@
 #include <time.h>
 #include <array>
 
-static std::uniform_real_distribution<> dis(1.0, 2.0);
-
 Random Random::globalRandom = Random();
 
 Random::Random()
@@ -61,6 +59,6 @@ float Random::nextFloat()
 
 float Random::nextGaussian()
 {
-  auto distribution = std::normal_distribution<float>(-1, 1);
+  auto distribution = std::normal_distribution<float>(0, 1);
   return distribution(generator);
 }
