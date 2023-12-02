@@ -169,5 +169,5 @@ int GLScreen::glSpriteCallCount()
 void GLScreen::flush()
 {
   glFlush(0);
-  glSpriteCalls = 0;;
+  glSpriteCalls = 0;
 }

@@ -27,8 +27,8 @@
 #include "level/tile/oretile.h"
 #include "level/tile/cloudcactustile.h"
 
-static int vblankCount = 0;
-static int playtime = 0; // in ms
+static volatile int vblankCount = 0;
+static volatile int playtime = 0; // in ms
 
 void incrementVblankCount();
 void incrementTime();
@@ -48,30 +48,37 @@ int main()
   int lostMs = 0;
 
   auto start = playtime;
-  auto lastVblank = vblankCount;
+  auto lastVblankCount = vblankCount;
 
   while (true) {
     int tickStart = playtime;
     game.tick();
-    int renderStart = playtime;
+    int tickEnd = playtime;
 
+    if (vblankCount == lastVblankCount) {
+      // glSprite appears to cause us to wait for VBlank and blocks timer interrupts?
+      // moving this block will cause the loop to appear to take less than 16 ms, while still using up 16 ms
+      swiWaitForVBlank();
+    }
+
+    int renderStart = playtime;
     glBegin2D();
     game.render();
     glEnd2D();
+    int renderEnd = playtime;
 
+    int flushStart = playtime;
     game.bottomScreen.flush(BG_GFX_SUB);
+
+    lastVblankCount = vblankCount; // we want to know the vblankCount just before GL calls are flushed
     game.screen.flush();
+    int flushEnd = playtime;
 
     auto end = playtime;
-    game.tickTime = renderStart - tickStart;
-    game.renderTime = end - renderStart;
+    game.tickTime = tickEnd - tickStart;
+    game.renderTime = (renderEnd - renderStart) + (flushEnd - flushStart);
     game.totalTime = end - start;
     start = end;
-
-    if (lastVblank == vblankCount) {
-      swiWaitForVBlank();
-    }
-    lastVblank = vblankCount;
 
     if (game.frameSkipEnabled) {
       lostMs = std::clamp(lostMs + game.totalTime - targetTime, 0, targetTime * 3);
