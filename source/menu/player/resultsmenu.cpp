@@ -37,12 +37,22 @@ void ResultsMenu::tick(Game& game)
   }
 }
 
-void ResultsMenu::render(Screen& screen, Screen& bottomScreen)
+void ResultsMenu::renderResults(Screen& screen, std::string_view message, std::string_view closeMessage)
 {
-  screen.renderFrame("", 1, 3, 21, 9);
+  int x = 5;
+  int y = 8;
 
-  screen.renderText("Time:", 2 * 8, 5 * 8, Color::get(-1, 555, 555, 555));
-  screen.renderText(timeString, (2 + 5) * 8, 5 * 8, Color::get(-1, 550, 550, 550));
-  screen.renderText("Score:", 2 * 8, 6 * 8, Color::get(-1, 555, 555, 555));
-  screen.renderText(scoreString, (2 + 6) * 8, 6 * 8, Color::get(-1, 550, 550, 550));
+  screen.renderFrame("", x, y, x + 20, y + 6);
+
+  screen.renderText(message, (x + 1) * 8, (y + 1) * 8, Color::get(-1, 555, 555, 555));
+
+  int timeY = (y + 2) * 8;
+  screen.renderText("Time:", (x + 1) * 8, timeY, Color::get(-1, 555, 555, 555));
+  screen.renderText(timeString, (x + 1 + 5) * 8, timeY, Color::get(-1, 550, 550, 550));
+
+  int scoreY = (y + 3) * 8;
+  screen.renderText("Score:", (x + 1) * 8, scoreY, Color::get(-1, 555, 555, 555));
+  screen.renderText(scoreString, (x + 1 + 6) * 8, scoreY, Color::get(-1, 550, 550, 550));
+
+  screen.renderText(closeMessage, (x + 1) * 8, (y + 5) * 8, Color::get(-1, 333, 333, 333));
 }
