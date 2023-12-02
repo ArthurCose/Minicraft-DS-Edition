@@ -11,6 +11,7 @@
 #include "../entity/hostile/zombie.h"
 #include "../gfx/lightmask.h"
 #include "../nbt.h"
+#include "../menu/player/ingamemenu.h"
 
 Level::Level(int w, int h, int depth, Level& parentLevel)
   : Level(w, h, depth)
@@ -148,10 +149,10 @@ void Level::updateMap(int mapX, int mapY, int viewDistance)
 void Level::render(Screen& screen, LightMask& lightMask, Player& player)
 {
   int xScroll = player.x - screen.w / 2;
-  int yScroll = player.y - (screen.h - 8) / 2;
+  int yScroll = player.y - (Game::WORLD_SCREEN_HEIGHT - 8) / 2;
 
   xScroll = std::clamp(xScroll, 16, w * 16 - screen.w - 16);
-  yScroll = std::clamp(yScroll, 16, h * 16 - screen.h - 16);
+  yScroll = std::clamp(yScroll, 16, h * 16 - Game::WORLD_SCREEN_HEIGHT - 16);
 
   renderBackground(screen, xScroll, yScroll);
   renderSprites(screen, xScroll, yScroll);
@@ -170,7 +171,7 @@ void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 
     screen.setOffset((xScroll / 4) & 7, (yScroll / 4) & 7);
 
-    for (int y = 0; y < screen.h / 16 + 1; y++) {
+    for (int y = 0; y < Game::WORLD_SCREEN_HEIGHT / 16 + 1; y++) {
       for (int x = 0; x < screen.w / 16 + 1; x++) {
         screen.renderTile(x * 16, y * 16, 6 * 16 + 6, colors, 0);
       }
@@ -180,7 +181,7 @@ void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
   int xo = xScroll >> 4;
   int yo = yScroll >> 4;
   int w = (screen.w + 15) >> 4;
-  int h = (screen.h + 15) >> 4;
+  int h = (Game::WORLD_SCREEN_HEIGHT + 15) >> 4;
   screen.setOffset(xScroll, yScroll);
   for (int y = yo; y <= h + yo; y++) {
     for (int x = xo; x <= w + xo; x++) {
@@ -193,7 +194,7 @@ void Level::renderBackground(Screen& screen, int xScroll, int yScroll)
 void Level::renderSprites(Screen& screen, int xScroll, int yScroll)
 {
   int w = (screen.w + 15) >> 4;
-  int h = (screen.h + 15) >> 4;
+  int h = (Game::WORLD_SCREEN_HEIGHT + 15) >> 4;
   int x0 = std::max(xScroll >> 4, 0);
   int y0 = std::max(yScroll >> 4, 0);
   int x1 = std::min(x0 + w, this->w - 1);

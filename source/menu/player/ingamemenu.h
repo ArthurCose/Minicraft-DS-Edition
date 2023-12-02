@@ -30,8 +30,6 @@ private:
   int lastLevel = -1;
   bool levelChanged = false;
   bool justOpened = true;
-  std::shared_ptr<Item> previousActiveItem;
-  int previousActiveItemCount = -1;
 
   void handleItemDragging(Game& game);
   void handleTouchButtons(Game& game);

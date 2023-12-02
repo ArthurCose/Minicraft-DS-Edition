@@ -103,6 +103,8 @@ void Game::render()
     Level& level = levels[currentLevel];
 
     level.render(screen, lightMask, *player);
+
+    screen.renderBoxFilled(0, WORLD_SCREEN_HEIGHT, screen.w, screen.h - WORLD_SCREEN_HEIGHT, 0);
   }
 
   if (menu != NULL) {

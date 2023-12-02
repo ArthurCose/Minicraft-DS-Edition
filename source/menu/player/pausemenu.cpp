@@ -74,8 +74,8 @@ void PauseMenu::render(Screen& screen, Screen& bottomScreen)
 {
   bottomScreen.clear(Color::get(0));
 
-  int horizontalTiles = bottomScreen.w / 8;
-  int verticalTiles = bottomScreen.h / 8;
+  int horizontalTiles = screen.w / 8;
+  int verticalTiles = Game::WORLD_SCREEN_HEIGHT / 8;
 
   int totalOptions = options.size();
   int width = 7;
@@ -98,6 +98,6 @@ void PauseMenu::render(Screen& screen, Screen& bottomScreen)
   }
 
   if (saving) {
-    screen.renderTextCentered("SAVING...", screen.w / 2, screen.h - 16, Color::get(-1, 555, 555, 555));
+    screen.renderTextCentered("SAVING...", screen.w / 2, Game::WORLD_SCREEN_HEIGHT + 12, Color::get(-1, 555, 555, 555));
   }
 }

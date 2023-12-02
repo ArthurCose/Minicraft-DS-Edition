@@ -17,6 +17,8 @@ public:
   static const std::string NAME;
   static const std::string SAVE_FOLDER;
   static const std::string SAVE_EXTENSION;
+  // how much space on the screen is used to render the world, the rest is used by InGameMenu's hud
+  static constexpr int WORLD_SCREEN_HEIGHT = SCREEN_HEIGHT - 16;
 
   GLScreen screen;
   SoftwareScreen bottomScreen;

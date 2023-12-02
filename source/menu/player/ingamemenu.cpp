@@ -11,14 +11,7 @@ static const int ROTATE_CHAR_MARGIN = 8;
 static const int ROTATE_BUTTON_W = ROTATE_CHAR_MARGIN * 2 + 8;
 static const int MAP_LEFT = 64;
 static const int MAP_TOP = 32;
-static const int ACTIVE_ITEM_ICON_OFFSET = -12;
-static const int ACTIVE_ITEM_NAME_TOP = SCREEN_HEIGHT - 24;
-static const int ACTIVE_ITEM_COUNT_TOP = ACTIVE_ITEM_NAME_TOP + 8;
 static const int CLEAR_COLOR = Color::get(5);
-
-static inline int calculateActiveItemNameX(Item& item) {
-  return (SCREEN_WIDTH - item.getName().size() * 8) / 2 - ACTIVE_ITEM_ICON_OFFSET / 2;
-}
 
 static inline int calculateItemHotbarX(int i) {
   return ROTATE_BUTTON_W + i * (ITEM_W + ITEM_SPACING * 2) + ITEM_SPACING;
@@ -194,56 +187,47 @@ void InGameMenu::clearOld(Screen& screen) {
     lastDragX = dragX;
     lastDragY = dragY;
   }
-
-  // clear active item text
-  auto activeItem = player->getActiveItem();
-
-  if (previousActiveItem != nullptr && previousActiveItem != activeItem) {
-    int x = calculateActiveItemNameX(*previousActiveItem);
-    int y = ACTIVE_ITEM_NAME_TOP;
-
-    // clear text
-    screen.renderBoxFilled(x, y, previousActiveItem->getName().size() * 8, 8, CLEAR_COLOR);
-
-    // clear icon
-    screen.renderBoxFilled(x + ACTIVE_ITEM_ICON_OFFSET, y, 8, 8, CLEAR_COLOR);
-  }
-
-  // clear active item count
-  int activeItemCount = -1;
-
-  if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-    activeItemCount = resourceItem->count;
-  }
-
-  if (previousActiveItemCount != -1 && previousActiveItemCount != activeItemCount) {
-    int digits = (int)std::log10(std::max(previousActiveItemCount, 1)) + 1;
-    int width = digits * 8;
-    screen.renderBoxFilled((screen.w - width) / 2, ACTIVE_ITEM_COUNT_TOP, width, 8, CLEAR_COLOR);
-  }
 }
 
 void InGameMenu::renderHud(Screen& screen)
 {
-  const int hudTop = screen.h - 8;
-  const int staminaBarLeft = screen.w - 10 * 8;
+  const int HUD_TOP = Game::WORLD_SCREEN_HEIGHT;
+  const int HEARTS_TOP = HUD_TOP;
+  const int STAMINA_TOP = HUD_TOP + 8;
 
   for (int i = 0; i < 10; i++) {
     if (i < player->health)
-      screen.renderIcon(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 200, 500, 533), 0);
+      screen.renderIcon(i * 8, HEARTS_TOP, 0 + 12 * 32, Color::get(000, 200, 500, 533), 0);
     else
-      screen.renderIcon(i * 8, hudTop, 0 + 12 * 32, Color::get(000, 100, 000, 000), 0);
+      screen.renderIcon(i * 8, HEARTS_TOP, 0 + 12 * 32, Color::get(000, 100, 000, 000), 0);
 
     if (player->staminaRechargeDelay > 0) {
       if (player->staminaRechargeDelay / 4 % 2 == 0)
-        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 555, 000, 000), 0);
+        screen.renderIcon(i * 8, STAMINA_TOP, 1 + 12 * 32, Color::get(000, 555, 000, 000), 0);
       else
-        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
+        screen.renderIcon(i * 8, STAMINA_TOP, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
     } else {
       if (i < player->stamina)
-        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 220, 550, 553), 0);
+        screen.renderIcon(i * 8, STAMINA_TOP, 1 + 12 * 32, Color::get(000, 220, 550, 553), 0);
       else
-        screen.renderIcon(staminaBarLeft + i * 8, hudTop, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
+        screen.renderIcon(i * 8, STAMINA_TOP, 1 + 12 * 32, Color::get(000, 110, 000, 000), 0);
+    }
+  }
+
+  auto activeItem = player->getActiveItem();
+
+  if (activeItem != NULL) {
+    constexpr int MAX_WIDTH = 11;
+
+    auto name = activeItem->getName();
+    int itemNameLeft = screen.w - (name.size() + 1) * 4 - MAX_WIDTH * 4;
+
+    screen.renderIcon(itemNameLeft, HUD_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
+    screen.renderText(name, itemNameLeft + 8, HUD_TOP, Color::get(-1, 555, 555, 555));
+
+    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
+      auto countText = std::to_string(resourceItem->count);
+      screen.renderText(countText, screen.w - countText.size() * 4 - MAX_WIDTH * 4, HUD_TOP + 8, Color::get(-1, 333, 333, 333));
     }
   }
 }
@@ -281,23 +265,6 @@ void InGameMenu::renderInventory(Screen& bottomScreen)
 
     bottomScreen.renderIcon(x, HOTBAR_Y, item.getSprite(), item.getColor(), 0);
   }
-
-  if (activeItem != NULL) {
-    auto name = activeItem->getName();
-    int itemNameLeft = calculateActiveItemNameX(*activeItem);
-
-    bottomScreen.renderIcon(itemNameLeft + ACTIVE_ITEM_ICON_OFFSET, ACTIVE_ITEM_NAME_TOP, activeItem->getSprite(), activeItem->getColor(), 0);
-    bottomScreen.renderText(name, itemNameLeft, ACTIVE_ITEM_NAME_TOP, Color::get(-1, 555, 555, 555));
-
-    if (auto resourceItem = std::dynamic_pointer_cast<ResourceItem>(activeItem)) {
-      bottomScreen.renderTextCentered(std::to_string(resourceItem->count), bottomScreen.w / 2, ACTIVE_ITEM_COUNT_TOP + 4, Color::get(-1, 333, 333, 333));
-      previousActiveItemCount = resourceItem->count;
-    } else {
-      previousActiveItemCount = -1;
-    }
-  }
-
-  previousActiveItem = activeItem;
 
   // draw dragged item
   if (hoveredIndex == -1 && draggedIndex != -1 && (uint)draggedIndex < items.size()) {

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <nds.h>
 #include "screen.h"
+#include "../game.h"
 
 // positive numbers only
 static inline int divCeil(int a, int b)
@@ -102,9 +103,9 @@ static const std::array<uint16_t, PRECALCULATED_LIGHTS_SIZE> PRECALCULATED_LIGHT
 static const std::array<size_t, MAX_LIGHT_RADIUS> PRECALCULATED_LIGHT_OFFSETS = precalculateLightOffsets();
 
 LightMask::LightMask(Screen& screen)
-  : w(screen.w), h(screen.h),
-  brightnessW(divCeil(w, SCALE)),
-  brightnessH(divCeil(h, SCALE))
+  : w(screen.w), h(Game::WORLD_SCREEN_HEIGHT),
+  brightnessW(w / SCALE),
+  brightnessH(h / SCALE)
 {
   brightness.resize(brightnessW * brightnessH, 0);
 
