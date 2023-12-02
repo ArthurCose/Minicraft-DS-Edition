@@ -51,14 +51,6 @@ bool FurnitureItem::isDepleted()
   return placed;
 }
 
-bool FurnitureItem::matches(const Item& item)
-{
-  if (auto furnitureItem = dynamic_cast<const FurnitureItem*>(&item)) {
-    return furniture.get() == furnitureItem->furniture.get();
-  }
-  return false;
-}
-
 std::shared_ptr<Item> FurnitureItem::clone()
 {
   return std::make_shared<FurnitureItem>(furniture->clone());

@@ -19,7 +19,6 @@ public:
   bool canAttack() override;
   bool interactOn(Tile& tile, Level& level, int xt, int yt, Player& player, int attackDir) override;
   bool isDepleted() override;
-  bool matches(const Item& item) override;
   std::shared_ptr<Item> clone() override;
   std::string_view serializedClassName() override { return "FurnitureItem"; }
   void serializeData(std::ostream& s) override;
