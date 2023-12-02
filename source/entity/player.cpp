@@ -175,7 +175,7 @@ void Player::attack(Level& level)
         }
       }
       if (attackItem->isDepleted()) {
-        inventory.removeItem(*attackItem);
+        inventory.items.erase(inventory.items.begin() + selectedItemIndex);
         itemHeld = false;
         attackItem = NULL;
       }
