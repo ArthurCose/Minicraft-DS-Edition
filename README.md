@@ -53,8 +53,7 @@ Minicraft DS Edition is a fan port of [Minicraft](https://wikipedia.org/wiki/Min
 ## TODO
 
 - Drop button
-- Instructions in menus
-- Utilize touchscreen
-  - Marking locations?
-- Display something on the bottom screen in the title menus
-- Optimize LightMask
+- Make use of the bottom screen in the title menus
+- More LightMask optimizations
+- Tweak inventory and crafting menus to better fit the DS?
+- Secondary build with custom recipes, tiles, and features
