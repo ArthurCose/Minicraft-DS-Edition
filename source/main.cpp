@@ -45,7 +45,7 @@ int main()
   Game game;
 
   int targetTime = 1024 / 59.8261;
-  int lostMs = 0;
+  int lostTime = 0;
 
   auto start = playtime;
   auto lastVblankCount = vblankCount;
@@ -57,7 +57,8 @@ int main()
 
     if (vblankCount == lastVblankCount) {
       // glSprite appears to cause us to wait for VBlank and blocks timer interrupts?
-      // moving this block will cause the loop to appear to take less than 16 ms, while still using up 16 ms
+      // removing this block will cause the loop to appear to take less than 16 ms, while still iterating only once in 16 ms
+      // removing the check and directly using swiWaitForVBlank can lock us into 30 fps from unnecessary waiting
       swiWaitForVBlank();
     }
 
@@ -81,18 +82,18 @@ int main()
     start = end;
 
     if (game.frameSkipEnabled) {
-      lostMs = std::clamp(lostMs + game.totalTime - targetTime, 0, targetTime * 3);
+      lostTime = std::clamp(lostTime + game.totalTime - targetTime, 0, targetTime * 3);
 
       game.skippedFrames = 0;
 
-      while (lostMs >= targetTime) {
+      while (lostTime >= targetTime) {
         game.tick();
-        lostMs -= targetTime;
+        lostTime -= targetTime;
         game.skippedFrames++;
       }
     } else {
       game.skippedFrames = 0;
-      lostMs = 0;
+      lostTime = 0;
     }
   }
 
