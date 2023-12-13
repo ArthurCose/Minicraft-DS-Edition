@@ -147,7 +147,8 @@ void WorldsMenu::render(Screen& screen, Screen& bottomScreen)
   }
 
   int upperLimit = std::min((int)worldNames.size(), PAGE_LEN);
-  int topIndex = std::clamp(selected - PAGE_LEN / 2, 0, (int)worldNames.size() - PAGE_LEN);
+  int topIndexLimit = std::max((int)worldNames.size() - PAGE_LEN, 0);
+  int topIndex = std::clamp(selected - PAGE_LEN / 2, 0, topIndexLimit);
 
   for (int i = 0; i < upperLimit; i++) {
     int index = topIndex + i;
